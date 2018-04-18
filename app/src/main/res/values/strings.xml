@@ -25,6 +25,7 @@
     <string name="action_start_charge">开始充电</string>
     <string name="action_end_and_pay">结束并且支付</string>
     <string name="action_confirm_pay">确认支付</string>
+    <string name="action_send_comment_">发布评论</string>
 
     <!--各种状态-->
     <string name="statue_free">空闲</string>
@@ -167,4 +168,16 @@
     <string name="pay_try_again">再试试</string>
 
     <!--支付完成-->
+    <string name="pay_complete">支付完成</string>
+    <string name="pay_complete_hint">快开着你的小马达去兜风吧</string>
+    <string name="pay_complete_comment_hint">请对此次充电作出评价</string>
+    <string name="pay_complete_score">电桩评分</string>
+
+    <!--发布评论-->
+    <string name="send_comment">发布评论</string>
+    <string name="send_comment_charge_electronic">充电量</string>
+    <string name="send_comment_electronic_fee">电费</string>
+    <string name="send_comment_service_fee">服务费</string>
+    <string name="send_comment_total">小计</string>
+
 </resources>
