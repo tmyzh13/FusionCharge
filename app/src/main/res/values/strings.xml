@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FusionCharge</string>
     
-
+    <string name="double_press_for_exit">再次点击返回退出程序</string>
     <!--action-->
     <string name="action_get_code">获取验证码</string>
     <string name="action_get_message_code">获取短信验证码</string>
