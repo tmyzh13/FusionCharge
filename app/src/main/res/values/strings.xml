@@ -1,0 +1,170 @@
+<resources>
+    <string name="app_name">FusionCharge</string>
+    
+
+    <!--action-->
+    <string name="action_get_code">获取验证码</string>
+    <string name="action_get_message_code">获取短信验证码</string>
+    <string name="action_next">下一步</string>
+    <string name="action_submit">提交</string>
+    <string name="action_confirm">确定</string>
+    <string name="action_photo">相机</string>
+    <string name="action_gallery">照片</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_scan">扫一扫</string>
+    <string name="action_search">搜索</string>
+    <string name="action_send_comment">发表评价</string>
+    <string name="action_reply">回复</string>
+    <string name="action_appointment">预约</string>
+    <string name="action_complete_appointment">完成预约</string>
+    <string name="action_go">直接前往</string>
+    <string name="action_guild">开始导航</string>
+    <string name="action_cancel_appointment">取消预约</string>
+    <string name="action_re_appointment">重新预约</string>
+    <string name="action_change_map">切换园区地图</string>
+    <string name="action_start_charge">开始充电</string>
+    <string name="action_end_and_pay">结束并且支付</string>
+    <string name="action_confirm_pay">确认支付</string>
+
+    <!--各种状态-->
+    <string name="statue_free">空闲</string>
+    <string name="statue_busy">繁忙</string>
+    <string name="statue_charging_pile_open">对外开发</string>
+    <string name="statue_online">离线</string>
+    <string name="statue_offline">在线</string>
+    <string name="statue_direct_electronic">直流</string>
+    <string name="statue_alternating_electronic">交流</string>
+    <!--输入提示-->
+    <string name="hint">提示</string>
+    <string name="hint_input_phone">请输入手机号</string>
+    <string name="hint_input_code">请输入验证码</string>
+    <string name="hint_input_password">请输入密码</string>
+    <string name="hint_input_message_code">请输入短信中的验证码</string>
+    <string name="hint_input_new_password">输入新密码</string>
+    <string name="hint_confirm_password">确认密码</string>
+    <string name="hint_input_search_key">输入关键词查询</string>
+    <string name="hint_input_device_num">请输入设备号</string>
+
+    <!--登录界面-->
+    <string name="login">登陆</string>
+    <string name="login_type_phone">手机号登陆</string>
+    <string name="login_type_worker">员工账号登陆</string>
+    <string name="login_type_code">验证码登陆</string>
+    <string name="login_regist_account">注册账号</string>
+    <string name="login_forget_password">忘记密码？</string>
+    <string name="login_error">登录失败</string>
+    <!--注册-->
+    <string name="regist">注册</string>
+    <string name="regist_password_hint">请输入6-2位密码，支持字符a-zA-Z0-9以及英文特殊字符</string>
+    <!--重置密码-->
+    <string name="reset_password">重置密码</string>
+    <string name="reset_password_hint">验证码已经发送到您的手机</string>
+    <string name="reset_password_no_message">未收到短信验证码？</string>
+    <string name="reset_password_input_password">输入密码</string>
+
+    <!--个人信息-->
+    <string name="user_info_icon">头像</string>
+    <string name="user_info_name">姓名</string>
+    <string name="user_info_sex">性别</string>
+    <string name="user_info_man">男</string>
+    <string name="user_info_female">女</string>
+    <string name="user_info_nick_name">昵称</string>
+    <string name="user_info_email">邮箱</string>
+    <string name="user_info_birthday">出生日期</string>
+    <string name="user_info_address">地址</string>
+    <string name="user_info_department">部门</string>
+    <string name="user_info_phone">电话</string>
+    <string name="user_info_no">工号</string>
+    <string name="user_info_type">用户类型</string>
+    <string name="user_info_w3_account">w3账号</string>
+    <string name="user_info_alter_photo">修剪照片</string>
+
+    <!--首页-->
+    <string name="home_map">地图</string>
+    <string name="home_list">列表</string>
+    <string name="home_direct_electronic">直流电</string>
+    <string name="home_alternating_electronic">交流电</string>
+    <string name="homr_go_play">去支付</string>
+    <string name="home_not_pay_hint">您有一个交易订单未支付</string>
+    <string name="home_chager_fee">充电费用</string>
+    <string name="home_charging_fee_per">充电费</string>
+    <string name="home_charging_service_fee">服务费</string>
+    <string name="home_pay_style">支付方式：微信，支付宝</string>
+    <string name="home_appointment_hint">您有一个预约请尽快前往</string>
+
+    <!--搜索-->
+    <string name="search_history">搜索历史</string>
+    <string name="search_history_clear">清空搜索历史</string>
+
+    <!--充电桩详情-->
+    <string name="charging_pile_detail">充电站详情</string>
+    <string name="charging_pile_pics">图片</string>
+    <string name="charging_pile_position">桩位</string>
+    <string name="charging_pile_comments">评论</string>
+    <string name="charging_pile_no">电桩编号：</string>
+    <string name="charging_pile_max_power">最大功率：</string>
+    <string name="charging_pile_max_electronic">最大电流：</string>
+    <string name="charging_pile_max_voltage">最大电压：</string>
+    <string name="charging_pile_appointment_warn">由于您恶意预约已超过三次\n您的账号已被锁定</string>
+
+    <!--预约充电-->
+    <string name="appoint_charge_choice_time">选择时间</string>
+    <string name="appoint_charge_choice_time_title">请选择合适的预约时间段</string>
+    <string name="appoint_charge_choice_time_hint">温馨提示：请根据您的实际需要进行预约，恶意预约将受到使用限制</string>
+    <string name="appoint_success">预约成功</string>
+
+    <!--导航中-->
+    <string name="guilding">导航中</string>
+    <string name="guilding_charging_pile_no">电桩编号</string>
+    <string name="guilding_charging_pile_name">电桩名称</string>
+    <string name="guilding_charging_gun">电枪编号</string>
+    <string name="guilding_timeout">很抱歉\n您预置的预约时间已超时 请重新预约</string>
+    <string name="guilding_reach_target">您已到达目的地附近！</string>
+    <string name="guilding_park_map">园区地图</string>
+
+    <!--扫码充电-->
+    <string name="scan_charging">充电</string>
+    <string name="scan_charging_hint">将充电桩上的二维码放入框内，即可享受充电服务</string>
+    <string name="scan_charging_change_keybord">切换至输入设备号充电</string>
+
+    <!--充电详情-->
+    <string name="charging_detail">充电详情</string>
+    <string name="charging_detail_place">充电点</string>
+    <string name="charging_detail_no">充电桩编号：</string>
+    <string name="charging_detail_fee">充电费</string>
+    <string name="changing_detail_choice_gun">选择充电枪</string>
+    <string name="changing_detail_choice_style">选择充电方式</string>
+    <string name="changing_detail_style_electronic">按电量</string>
+    <string name="changing_detail_style_money">按金额</string>
+    <string name="changing_detail_style_time">按时间</string>
+    <string name="changing_detail_style_full">充满</string>
+    <string name="changing_detail_input_electronic">请输入充电度数</string>
+
+    <!--充电状态-->
+    <string name="charging_statue">充电状态</string>
+    <string name="charging_statue_checking">正在检测安全性</string>
+    <string name="charging_statue_hint">您确定要结束充电去支付？</string>
+    <string name="charging_statue_electronic">已充电量</string>
+    <string name="charging_statue_fee">充电费用</string>
+
+    <!--支付-->
+    <string name="pay">支付</string>
+    <string name="pay_electronic">充电量</string>
+    <string name="pay_electronic_fee">充电电费</string>
+    <string name="pay_service_fee">服务费</string>
+    <string name="pay_total">总计</string>
+    <string name="pay_choice_pay">选择支付方式</string>
+    <string name="pay_balance">余额</string>
+    <string name="pay_balance_hint">本账户余额</string>
+    <string name="pay_balance_not_enough">您的账户余额不足\n请选择其他方式付款！</string>
+    <string name="pay_wechat">微信支付</string>
+    <string name="pay_wechat_hint">推荐有微信钱包的用户使用</string>
+    <string name="pay_alipay">支付宝支付</string>
+    <string name="pay_alipay_hint">推荐有支付宝账号的用户使用</string>
+    <string name="pay_success">支付成功</string>
+    <string name="pay_error">不好！您的订单支付出现异常啦</string>
+    <string name="pay_pay_again">请重新支付</string>
+    <string name="pay_try_again">再试试</string>
+
+    <!--支付完成-->
+</resources>
