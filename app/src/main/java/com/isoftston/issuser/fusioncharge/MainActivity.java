@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,6 +41,9 @@ public class MainActivity extends BaseActivity {
     TextView tv_map;
     @Bind(R.id.tv_list)
     TextView tv_list;
+    @Bind(R.id.iv_user_icon)
+    ImageView iv_user_icon;
+
 
     private Context context=MainActivity.this;
 

@@ -18,8 +18,11 @@
                 >
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/icon_guide"
+                    />
                 <TextView
+                    android:layout_marginLeft="7dp"
                     style="@style/text_normal"
                     android:text="南京市雨花台区花神大道17号"/>
             </LinearLayout>
@@ -39,6 +42,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lv_hint"
+                    android:src="@mipmap/pop_ic_down"
+                    android:layout_marginLeft="5dp"
                     />
             </LinearLayout>
         </RelativeLayout>
@@ -58,7 +63,9 @@
                 >
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/pop_icon_no"
+                    />
                 
                 <TextView
                     android:layout_marginLeft="10dp"
@@ -83,7 +90,8 @@
                 >
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/pop_icon_name"/>
                 
                 <TextView
                     style="@style/text_normal"
@@ -108,7 +116,8 @@
                 >
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/pop_icon_no"/>
 
                 <TextView
                     style="@style/text_normal"

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.isoftston.issuser.fusioncharge">
 
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络权限 -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
