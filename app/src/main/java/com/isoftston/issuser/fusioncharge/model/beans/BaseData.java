@@ -17,21 +17,21 @@ public class BaseData<T> implements Serializable,ResponseHandler.IBaseData {
 
     @Override
     public boolean isSuccess() {
-        return false;
+        return code==1;
     }
 
     @Override
     public int status() {
-        return 0;
+        return code;
     }
 
     @Override
     public Object data() {
-        return null;
+        return data;
     }
 
     @Override
     public String msg() {
-        return null;
+        return msg;
     }
 }

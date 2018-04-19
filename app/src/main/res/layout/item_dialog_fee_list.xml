@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/text_normal"
+        android:id="@+id/tv_time"
+        android:text="00:00~06:00"
+        />
+    <TextView
+        style="@style/text_normal"
+        android:id="@+id/tv_unit"
+        android:text="0.0030度"
+        android:layout_alignParentRight="true"
+        />
+</RelativeLayout>
