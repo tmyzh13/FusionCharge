@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.isoftston.issuser.fusioncharge.views.InputNewPwdActivity">
+
+    <com.isoftston.issuser.fusioncharge.weights.NavBar
+        android:id="@+id/nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/input_new_pwd_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/gray_stroke_bg"
+            android:hint="@string/hint_input_new_password"
+            android:paddingLeft="@dimen/dp_20"
+            android:textColorHint="@color/text_gray" />
+
+        <EditText
+            android:id="@+id/confirm_pwd_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/gray_stroke_bg"
+            android:hint="@string/hint_confirm_password"
+            android:paddingLeft="@dimen/dp_20"
+            android:textColorHint="@color/text_gray" />
+
+        <TextView
+            android:id="@+id/submit_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/blue_shape_bg"
+            android:gravity="center"
+            android:text="@string/action_submit"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/text_title" />
+    </LinearLayout>
+</LinearLayout>

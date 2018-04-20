@@ -221,4 +221,31 @@ public class Tools {
         Matcher m = p.matcher(str);
         return m.matches();
     }
+
+    /**
+     * 判断密码是否合法
+     * @param str
+     * @return
+     */
+    public static boolean isPwdRight(String str){
+        boolean isDigit = false;//定义一个boolean值，用来表示是否包含数字
+        boolean isLowerCase = false;//定义一个boolean值，用来表示是否包含字母
+        boolean isUpperCase = false;
+        for (int i = 0; i < str.length(); i++) {
+            if (Character.isDigit(str.charAt(i))) {   //数字
+                isDigit = true;
+            } else if (Character.isLowerCase(str.charAt(i))) {  //小写字母
+                isLowerCase = true;
+            }
+            else if (Character.isUpperCase(str.charAt(i))) {  //大写字母
+                isUpperCase = true;
+            }
+        }
+//        String regex = "^[a-zA-Z0-9]{6,16}$";
+//        String regex = "(?!^[^\\u4E00-\\u9FA5a-zA-Z\\d]+$)^.{6,16}$";
+//        String regex = "^(?![\\d]+$)(?![a-zA-Z]+$)(?![^\\da-zA-Z]+$).{6,20}$";
+        String regex = "([a-zA-Z0-9]+$).{6,20}$";
+        boolean isRight = isDigit && isLowerCase && str.matches(regex);
+        return isRight;
+    }
 }
