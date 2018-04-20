@@ -14,17 +14,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppBaseCompactTheme">
-        <activity android:name=".views.LoginActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".views.ChargeDetailsActivity"></activity>
+        <activity android:name=".views.LoginActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".views.ChagerStatueActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".views.PayActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".views.PayCompleteActivity"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

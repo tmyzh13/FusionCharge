@@ -115,14 +115,14 @@
             android:paddingBottom="15dp"
             >
             <com.corelibs.views.roundedimageview.CircleImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@color/red"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginLeft="15dp"
                 android:id="@+id/iv_user_icon"
                 />
 
             <TextView
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="20dp"
                 style="@style/text_normal"
                 android:textColor="@color/white"
@@ -274,8 +274,10 @@
                 android:layout_width="70dp"
                 android:layout_height="35dp"
                 android:layout_marginLeft="20dp"
+                android:maxLength="4"
                 android:background="@drawable/et_normal_bg"
                 android:inputType="number"
+                android:id="@+id/et_distance"
                 />
         </LinearLayout>
         <View
@@ -311,6 +313,7 @@
                 android:paddingRight="10dp"
                 >
                 <CheckBox
+                    android:id="@+id/cb_charge_direct"
                     style="@style/text_normal"
                     android:text="@string/home_charge_direct"
                     android:background="@drawable/cb_selector"
@@ -321,6 +324,7 @@
                     android:textColor="@drawable/tv_selector"
                     />
                 <CheckBox
+                    android:id="@+id/cb_charge_alternating"
                     android:layout_marginLeft="15dp"
                     style="@style/text_normal"
                     android:text="@string/home_charge_alternating"
@@ -366,6 +370,7 @@
                 android:paddingRight="10dp"
                 >
                 <CheckBox
+                    android:id="@+id/cb_free"
                     style="@style/text_normal"
                     android:text="@string/statue_free"
                     android:background="@drawable/cb_selector"
@@ -376,6 +381,7 @@
                     android:textColor="@drawable/tv_selector"
                     />
                 <CheckBox
+                    android:id="@+id/cb_busy"
                     android:layout_marginLeft="15dp"
                     style="@style/text_normal"
                     android:text="@string/statue_busy"
@@ -409,8 +415,10 @@
                     android:gravity="center"
                     android:text="@string/action_reset"
                     android:background="@drawable/cb_on"
+                    android:id="@+id/tv_reset"
                     />
                 <TextView
+                    android:id="@+id/tv_confirm"
                     android:layout_marginLeft="3dp"
                     style="@style/text_normal"
                     android:textColor="@color/white"

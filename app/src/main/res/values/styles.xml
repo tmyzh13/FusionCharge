@@ -38,6 +38,14 @@
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    <style name="MyDialog1" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
     <!--充电站详情 电桩item style-->
     <style name="charge_pile_item">
         <item name="android:textSize">@dimen/text_title</item>

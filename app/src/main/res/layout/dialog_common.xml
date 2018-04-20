@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300.0dp"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:id="@+id/ll_dialog">
 
     <TextView
         android:id="@+id/textv_title"
@@ -17,7 +18,6 @@
         android:id="@+id/relayout_addview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
     </LinearLayout>
@@ -55,7 +55,7 @@
             android:background="@null"
             android:gravity="center"
             android:text="@string/action_confirm"
-            android:textColor="#3F96F1" />
+            android:textColor="@color/app_blue" />
     </LinearLayout>
 
 </LinearLayout>

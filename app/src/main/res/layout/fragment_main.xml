@@ -164,6 +164,7 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:id="@+id/ll_fee"
                 >
                 <TextView
                    style="@style/text_normal"

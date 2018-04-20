@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/white"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/pay_money"
+            android:id="@+id/iv_pay"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="15dp"
+            >
+            <TextView
+               style="@style/text_normal"
+                android:text="@string/pay_balance"
+                android:id="@+id/tv_name"/>
+            <TextView
+                style="@style/text_normal"
+                android:textSize="@dimen/text_small_small"
+                android:textColor="@color/text_color_shallow"
+                android:text="@string/pay_balance_hint"
+                android:id="@+id/tv_hint"
+                />
+        </LinearLayout>
+        
+    </LinearLayout>
+
+    <CheckBox
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/cb_pay_select"
+        android:clickable="false"
+        android:enabled="false"
+        android:id="@+id/cb_select"
+        />
+</RelativeLayout>

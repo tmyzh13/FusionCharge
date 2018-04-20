@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--<declare-styleable name="a_zhon">-->
+          <!--&lt;!&ndash;每条线的粗细&ndash;&gt;-->
+          <!--<attr name="paintBold" format="dimension" />-->
+          <!--&lt;!&ndash;每条线的长度&ndash;&gt;-->
+          <!--<attr name="lineLength" format="dimension" />-->
+          <!--&lt;!&ndash;线条个数&ndash;&gt;-->
+          <!--<attr name="lines" format="integer" />-->
+          <!--&lt;!&ndash;最大进度&ndash;&gt;-->
+          <!--<attr name="max" format="integer" />-->
+          <!--&lt;!&ndash;当前进度&ndash;&gt;-->
+          <!--<attr name="progress" format="integer" />-->
+          <!--&lt;!&ndash;背景的颜色&ndash;&gt;-->
+          <!--<attr name="backgroundColor" format="reference|color" />-->
+          <!--&lt;!&ndash;前景的颜色&ndash;&gt;-->
+          <!--<attr name="beforeColor" format="reference|color" />-->
+          <!--&lt;!&ndash;进度文字颜色&ndash;&gt;-->
+          <!--<attr name="textColor" format="reference|color" />-->
+      <!--</declare-styleable>-->
+
+</resources>

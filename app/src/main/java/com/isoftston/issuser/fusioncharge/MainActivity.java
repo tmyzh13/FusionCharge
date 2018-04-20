@@ -7,17 +7,22 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.common.AppManager;
+import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.home.HomeListFragment;
 import com.isoftston.issuser.fusioncharge.views.home.MapFragment;
@@ -43,6 +48,16 @@ public class MainActivity extends BaseActivity {
     TextView tv_list;
     @Bind(R.id.iv_user_icon)
     ImageView iv_user_icon;
+    @Bind(R.id.cb_charge_direct)
+    CheckBox cb_charge_direct;
+    @Bind(R.id.cb_charge_alternating)
+    CheckBox cb_charge_alternating;
+    @Bind(R.id.cb_free)
+    CheckBox cb_free;
+    @Bind(R.id.cb_busy)
+    CheckBox cb_busy;
+    @Bind(R.id.et_distance)
+    EditText et_distance;
 
 
     private Context context=MainActivity.this;
@@ -75,6 +90,9 @@ public class MainActivity extends BaseActivity {
 
         FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content,mapFragment).commit();
+
+        Glide.with(context).load("http://imgsrc.baidu.com/baike/pic/item/bd7faf355e43afc1a71e1220.jpg")
+                .override(320,320).into(iv_user_icon);
     }
 
     @OnClick(R.id.iv_user)
@@ -147,6 +165,40 @@ public class MainActivity extends BaseActivity {
         ft.commit();
     }
 
+    @OnClick(R.id.tv_confirm)
+    public void choiceCondition(){
+        if(TextUtils.isEmpty(et_distance.getText().toString().trim())){
+            ChoiceManager.getInstance().setDistance("");
+        }else{
+            ChoiceManager.getInstance().setDistance(et_distance.getText().toString());
+        }
+        String type="";
+        String statue="";
+        if(cb_charge_direct.isChecked()){
+            type+="0";
+        }
+        if(cb_charge_alternating.isChecked()){
+            type+="1";
+        }
+        if(cb_free.isChecked()){
+            statue+="0";
+        }
+        if(cb_busy.isChecked()){
+            statue+="1";
+        }
+        ChoiceManager.getInstance().setStatue(statue);
+        ChoiceManager.getInstance().setType(type);
+    }
+
+    @OnClick(R.id.tv_reset)
+    public void resetCondition(){
+         cb_busy.setChecked(false);
+         cb_free.setChecked(false);
+         cb_charge_direct.setChecked(false);
+         cb_charge_alternating.setChecked(false);
+         et_distance.setText("");
+        ChoiceManager.getInstance().resetChoice();
+    }
 
     @Override
     protected BasePresenter createPresenter() {

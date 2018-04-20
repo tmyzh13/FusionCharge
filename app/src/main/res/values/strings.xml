@@ -10,6 +10,7 @@
 
     <!--单位-->
     <string name="km">KM</string>
+    <string name="yuan">元</string>
 
     <!--action-->
     <string name="action_get_code">获取验证码</string>
@@ -175,6 +176,9 @@
     <string name="charging_statue_hint">您确定要结束充电去支付？</string>
     <string name="charging_statue_electronic">已充电量</string>
     <string name="charging_statue_fee">充电费用</string>
+    <string name="charging_statue_a">电流(A)</string>
+    <string name="charging_statue_v">电压(V)</string>
+    <string name="charging_statue_soc">SOC</string>
 
     <!--支付-->
     <string name="pay">支付</string>

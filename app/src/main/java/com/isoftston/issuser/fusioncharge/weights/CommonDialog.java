@@ -26,6 +26,8 @@ public class CommonDialog extends Dialog {
 	private int status; // 是否带有多个按钮的状态
 	private TextView textView, textv_title, tv_dialog_cut;
 	private Button btn_confir, btn_cancel;
+	private LinearLayout ll_dialog;
+
 
 	/**
 	 * yangqc
@@ -79,6 +81,7 @@ public class CommonDialog extends Dialog {
 		btn_cancel = (Button) findViewById(R.id.btn_dialog_cancel);
 		tv_dialog_cut = (TextView) findViewById(R.id.tv_dialog_cut);
 		textv_title = (TextView) findViewById(R.id.textv_title);
+		ll_dialog=findViewById(R.id.ll_dialog);
 
 		// 设置标题
 		textv_title.setText(title);
@@ -111,6 +114,10 @@ public class CommonDialog extends Dialog {
 			}
 		});
 		setCanceledOnTouchOutside(false);
+	}
+
+	public void setDialogBackground(){
+		ll_dialog.setBackgroundResource(R.drawable.dialog_little_blue_bg);
 	}
 
 	private void setButtonView() {
