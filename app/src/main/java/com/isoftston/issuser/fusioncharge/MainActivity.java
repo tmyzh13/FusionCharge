@@ -55,9 +55,6 @@ public class MainActivity extends BaseActivity {
         return intent;
     }
 
-    public static Intent getLauncher(Context context){
-        return new Intent(context, MainActivity.class);
-    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
