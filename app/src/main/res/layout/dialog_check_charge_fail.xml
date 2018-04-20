@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    >
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="120dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/check_charge_fail"
+            android:layout_centerInParent="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/icn_cancel_white"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
+            android:id="@+id/iv_cancel"
+            />
+    </RelativeLayout>
+    <TextView
+        style="@style/text_normal"
+        android:textColor="@color/white"
+        android:text="@string/charging_statue_fail"/>
+    <TextView
+        android:layout_marginTop="5dp"
+        style="@style/text_normal"
+        android:textColor="@color/white"
+        android:text="@string/charging_statue_please_check"/>
+</LinearLayout>
