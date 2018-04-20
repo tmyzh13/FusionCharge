@@ -1,5 +1,7 @@
 package com.isoftston.issuser.fusioncharge;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,9 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.main_drawer_layout)
     DrawerLayout drawerLayout;
 
+    public static Intent getLauncher(Context context){
+        return new Intent(context, MainActivity.class);
+    }
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;

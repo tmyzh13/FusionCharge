@@ -14,4 +14,7 @@
     <color name="text_main">#666</color>
     <color name="text_light">#999</color>
     <color name="text_gray">#9b9b9b</color>
+    <color name="text_white">#ffffff</color>
+    <color name="black_bg">#000000</color>
+    <color name="color_green">#8ada8a</color>
 </resources>

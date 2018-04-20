@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">FusionCharge</string>
-    
+
     <string name="double_press_for_exit">再次点击返回退出程序</string>
     <!--action-->
     <string name="action_get_code">获取验证码</string>
+    <string name="action_get_code_again">重新获取验证码</string>
     <string name="action_get_message_code">获取短信验证码</string>
     <string name="action_next">下一步</string>
     <string name="action_submit">提交</string>
@@ -30,21 +31,24 @@
     <!--各种状态-->
     <string name="statue_free">空闲</string>
     <string name="statue_busy">繁忙</string>
-    <string name="statue_charging_pile_open">对外开发</string>
-    <string name="statue_online">离线</string>
-    <string name="statue_offline">在线</string>
+    <string name="statue_charging_pile_open">对外开放</string>
+    <string name="statue_online">在线</string>
+    <string name="statue_offline">离线</string>
     <string name="statue_direct_electronic">直流</string>
     <string name="statue_alternating_electronic">交流</string>
     <!--输入提示-->
     <string name="hint">提示</string>
     <string name="hint_input_phone">请输入手机号</string>
+    <string name="input_correct_phone">请输入正确的手机号</string>
     <string name="hint_input_code">请输入验证码</string>
+    <string name="code_incorrect">验证码格式不正确</string>
     <string name="hint_input_password">请输入密码</string>
     <string name="hint_input_message_code">请输入短信中的验证码</string>
     <string name="hint_input_new_password">输入新密码</string>
     <string name="hint_confirm_password">确认密码</string>
     <string name="hint_input_search_key">输入关键词查询</string>
     <string name="hint_input_device_num">请输入设备号</string>
+    <string name="code_error_hint">错误提示：</string>
 
     <!--登录界面-->
     <string name="login">登陆</string>
@@ -107,6 +111,8 @@
     <string name="charging_pile_max_electronic">最大电流：</string>
     <string name="charging_pile_max_voltage">最大电压：</string>
     <string name="charging_pile_appointment_warn">由于您恶意预约已超过三次\n您的账号已被锁定</string>
+    <string name="score">分</string>
+    <string name="electric_gun">充电枪：</string>
 
     <!--预约充电-->
     <string name="appoint_charge_choice_time">选择时间</string>
@@ -179,5 +185,8 @@
     <string name="send_comment_electronic_fee">电费</string>
     <string name="send_comment_service_fee">服务费</string>
     <string name="send_comment_total">小计</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

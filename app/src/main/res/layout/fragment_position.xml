@@ -1,0 +1,13 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.isoftston.issuser.fusioncharge.views.fragments.PositionFragment">
+
+    <!--充电桩 列表-->
+    <ListView
+        android:id="@+id/charge_pile_Lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>
