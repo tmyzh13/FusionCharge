@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <TextView
+           style="@style/text_normal"
+            android:textColor="@color/app_blue"
+            android:text="@string/home_chager_fee"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_centerVertical="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="15dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/pop_ic_del"
+            android:id="@+id/iv_cancel"
+            />
+    </RelativeLayout>
+    <View
+        style="@style/view_line"/>
+
+    <com.corelibs.views.NoScrollingListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="@color/transparent"
+        android:cacheColorHint="@color/transparent"
+        android:divider="@color/transparent"
+        android:dividerHeight="10dp"
+        android:id="@+id/lv"
+        android:scrollbars="none"
+        android:layout_margin="15dp"
+        />
+    
+</LinearLayout>
