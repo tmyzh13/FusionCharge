@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +21,13 @@ import android.widget.TextView;
 
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.utils.SharedPreferencesClassHelper;
 import com.corelibs.utils.ToastMgr;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
 import com.isoftston.issuser.fusioncharge.presenter.LoginPresenter;
+import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.ForgetPwdActivity;
 import com.isoftston.issuser.fusioncharge.views.interfaces.LoginView;
@@ -90,8 +94,10 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                     lockCutLine.setVisibility(View.GONE);
                     typeCodeLl.setVisibility(View.GONE);
                     forgetPwdandRegisterRl.setVisibility(View.VISIBLE);
+                    loginTv.setText(getText(R.string.login));
                     break;
                 case 2://员工账号登录
+                    loginTv.setText(getText(R.string.login));
                     break;
                 case 3://验证码登录
                     phoneDropDownIv.setVisibility(View.GONE);
@@ -99,6 +105,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                     inputPwdLl.setVisibility(View.GONE);
                     forgetPwdandRegisterRl.setVisibility(View.GONE);
                     typeCodeLl.setVisibility(View.VISIBLE);
+                    loginTv.setText(getText(R.string.login));
                     break;
                 case 4://忘记密码
                     startActivity(ForgetPwdActivity.getLaunch(context));
@@ -110,6 +117,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                     inputPwdLl.setVisibility(View.VISIBLE);
                     typeCodeLl.setVisibility(View.VISIBLE);
                     forgetPwdandRegisterRl.setVisibility(View.GONE);
+                    loginTv.setText(getText(R.string.regist));
                     registerUser();
                     break;
             }
@@ -121,6 +129,13 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
      */
     private void registerUser() {
         getUserInput();
+        code = codeEt.getText().toString().trim();
+        if (TextUtils.isEmpty(code)) {
+            ToastMgr.show(getResources().getText(R.string.hint_input_code));
+            return;
+        }
+        //调用注册接口
+        presenter.registerAction(phoneNumber, pwd, code);
     }
 
     @Override
@@ -139,6 +154,11 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         forgetPwdTv.setOnClickListener(this);
         registerTv.setOnClickListener(this);
         loginTv.setOnClickListener(this);
+        getCodeTv.setOnClickListener(this);
+        phoneNumber = SharePrefsUtils.getValue(context, "phone", "1");
+        if (!phoneNumber.equals("1")) {
+            phoneNumberEt.setText(phoneNumber);
+        }
     }
 
     @Override
@@ -146,28 +166,62 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         return new LoginPresenter();
     }
 
-    @OnClick(R.id.get_code_tv)
     public void getCode() {
-        getUserInput();
+        phoneNumber = phoneNumberEt.getText().toString().trim();
         if (Tools.isChinaPhoneLegal(phoneNumber)) {
             MyCountDownTimer timer = new MyCountDownTimer(60000, 1000);
             timer.start();
             ToastMgr.show(context.getString(R.string.reset_password_hint));
         } else {
             ToastMgr.show(context.getString(R.string.input_correct_phone));
+            return;
+        }
+        if (type == 1) {
+            Log.e(TAG, "---获取注册验证码");
+            presenter.getCodeAction(type, phoneNumber);
+        } else if (type == 3) {
+            Log.e(TAG, "---获取登录验证码");
+            presenter.getCodeAction(3, phoneNumber);
         }
     }
 
     private void getUserInput() {
         phoneNumber = phoneNumberEt.getText().toString().trim();
-        code = codeEt.getText().toString().trim();
         pwd = pwdEt.getText().toString().trim();
+        if (TextUtils.isEmpty(phoneNumber) || !Tools.isChinaPhoneLegal(phoneNumber)) {
+            ToastMgr.show(getResources().getText(R.string.input_correct_phone));
+            return;
+        }
+        if (TextUtils.isEmpty(pwd)) {
+            ToastMgr.show(getResources().getText(R.string.hint_input_password));
+            return;
+        }
+        if (!Tools.isPwdRight(pwd)) {
+            ToastMgr.show(getResources().getText(R.string.regist_password_hint));
+            return;
+        }
     }
 
     @Override
     public void loginSuccess() {
         //loginSuccess
-//        startActivity(MainActivity.getLauncher(context));
+        startActivity(MainActivity.getLauncher(context));
+    }
+
+    @Override
+    public void registerSuccess(String result) {
+        Log.e(TAG, "----registerSuccess:" + result);
+        //login
+    }
+
+    @Override
+    public void registerFailure(String result) {
+
+    }
+
+    @Override
+    public void getCodeSuccess(String result) {
+        Log.e(TAG, "----result:" + result);
     }
 
     @Override
@@ -182,13 +236,28 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
             case R.id.register_tv:
                 handler.sendEmptyMessage(5);
                 break;
+            case R.id.get_code_tv:
+                getCode();
+                break;
             case R.id.login_tv:
-                startActivity(ChargeDetailsActivity.getLauncher(context));
-                if (Tools.isPwdRight(pwdEt.getText().toString().trim())) {
-                    Log.e(TAG, "----密码合规," + pwdEt.getText().toString().trim());
-                } else {
-                    Log.e(TAG, "----密码不合规xxx:" + pwdEt.getText().toString().trim());
+//                startActivity(ChargeDetailsActivity.getLauncher(context));
+                if (type == 1) {
+                    getUserInput();
+                    //手机号密码登录
+                    presenter.loginAction(0, phoneNumber, pwd, code);
+                } else if (type == 3) {
+                    code = codeEt.getText().toString().trim();
+                    if (TextUtils.isEmpty(code)) {
+                        ToastMgr.show(getResources().getText(R.string.hint_input_code));
+                        return;
+                    }
+                    //手机号验证码登录
+                    Log.e(TAG, "----手机号+验证码登录");
+                    presenter.loginAction(1, phoneNumber, pwd, code);
                 }
+                break;
+            case R.id.pwd_et:
+                ToastMgr.show(getResources().getText(R.string.regist_password_hint));
                 break;
             default:
                 break;

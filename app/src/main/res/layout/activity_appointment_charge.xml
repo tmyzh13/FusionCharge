@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/line"
+    android:orientation="vertical"
+    tools:context="com.isoftston.issuser.fusioncharge.views.AppointmentChargeActivity">
+
+    <com.isoftston.issuser.fusioncharge.weights.NavBar
+        android:id="@+id/nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_200"
+        android:src="@mipmap/charge_car" />
+
+    <RelativeLayout
+        android:id="@+id/appoint_time_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@drawable/white_appoint_time_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:gravity="center_vertical"
+            android:text="@string/appoint_charge_choice_time_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:text="@string/appoint_time"
+            android:textColor="@color/app_blue" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/dp_10"
+        android:text="@string/appoint_charge_choice_time_hint"
+        android:textSize="@dimen/text_small_small" />
+
+    <TextView
+        android:id="@+id/complete_appoint_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/blue_shape_bg"
+        android:gravity="center"
+        android:text="@string/action_complete_appointment"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/text_title" />
+</LinearLayout>

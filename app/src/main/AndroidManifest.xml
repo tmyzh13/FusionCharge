@@ -3,9 +3,9 @@
     package="com.isoftston.issuser.fusioncharge">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络权限 -->
-
+    <!-- 网络权限 -->
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -32,7 +32,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.InputNewPwdActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".views.AppointmentChargeActivity" />
+        <activity android:name=".views.AppointSuccessActivity" />
+        <activity android:name=".views.interfaces.SearchActivity"></activity>
     </application>
 
 </manifest>

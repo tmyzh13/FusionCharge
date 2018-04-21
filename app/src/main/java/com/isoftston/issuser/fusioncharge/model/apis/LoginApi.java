@@ -16,4 +16,10 @@ public interface LoginApi {
     //login
     @POST(Urls.LOGIN)
     Observable<BaseData> login(@Body LoginRequestBean bean);
+
+    @POST(Urls.REGISTER)
+    Observable<BaseData> register(@Body LoginRequestBean bean);
+
+    @POST(Urls.GET_CODE)
+    Observable<BaseData> getCode(@Body LoginRequestBean bean);
 }

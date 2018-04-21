@@ -216,5 +216,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appoint_charge">预约充电</string>
+    <string name="appoint_time">15分钟</string>
+    <string name="appoint_15m">请您在15分钟内到达</string>
+    <string name="appoint_30m">请您在30分钟内到达</string>
+    <string name="appoint_1h">请您在1小时内到达</string>
+    <string name="appoint_2h">请您在2小时内到达</string>
 
 </resources>

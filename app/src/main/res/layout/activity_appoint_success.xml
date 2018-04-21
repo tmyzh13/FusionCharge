@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.isoftston.issuser.fusioncharge.views.AppointSuccessActivity">
+
+    <com.isoftston.issuser.fusioncharge.weights.NavBar
+        android:id="@+id/nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_200"
+        android:src="@mipmap/car" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/appoint_success"
+        android:textSize="@dimen/text_extra" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/appoint_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="2018年4月21号"
+            android:textSize="@dimen/text_extra" />
+
+        <TextView
+            android:id="@+id/arrive_on_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:text="@string/appoint_15m"
+            android:textSize="@dimen/text_extra" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_marginTop="@dimen/tab_height"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/action_go_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/blue_stroke_bg"
+            android:gravity="center"
+            android:text="@string/action_go"
+            android:textColor="@color/app_blue"
+            android:textSize="@dimen/text_title" />
+
+        <TextView
+            android:id="@+id/action_guild_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_weight="1"
+            android:background="@drawable/blue_shape_bg"
+            android:gravity="center"
+            android:text="@string/action_guild"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_title" />
+    </LinearLayout>
+</LinearLayout>
