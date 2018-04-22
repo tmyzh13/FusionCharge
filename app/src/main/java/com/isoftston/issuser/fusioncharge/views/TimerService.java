@@ -52,20 +52,38 @@ public class TimerService extends Service{
         if(timer==null){
             timer=new Timer();
         }
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                hourTime=Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME));
+//                Log.e("yzh","timerHour----"+PreferencesHelper.getData(Constant.CHARGING_TIME));
+//                hourTime-=60*1000;
+//                PreferencesHelper.saveData(Constant.CHARGING_TIME,hourTime+"");
+//                RxBus.getDefault().send(new Object(),Constant.CHARGING_TIME);
+//                if(hourTime<=0){
+//                    Log.e("yzh","cancel");
+//                    cancelTimerHour();
+//                }
+//            }
+//        },5*1000,5*1000);
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 hourTime=Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME));
                 Log.e("yzh","timerHour----"+PreferencesHelper.getData(Constant.CHARGING_TIME));
-                hourTime-=60*1000;
+                hourTime+=1000;
                 PreferencesHelper.saveData(Constant.CHARGING_TIME,hourTime+"");
-                RxBus.getDefault().send(new Object(),Constant.CHARGING_TIME);
-                if(hourTime<=0){
+                if(hourTime%(60*1000)==0){
+                    //是整分钟 去刷新时间
+
+                    RxBus.getDefault().send(new Object(),Constant.CHARGING_TIME);
+                }
+                if(hourTime>=Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TOTAL))){
                     Log.e("yzh","cancel");
                     cancelTimerHour();
                 }
             }
-        },5*1000,5*1000);
+        },1000,1000);
     }
 
     public void cancelTimerHour(){

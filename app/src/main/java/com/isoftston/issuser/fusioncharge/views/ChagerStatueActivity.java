@@ -74,10 +74,19 @@ public class ChagerStatueActivity extends BaseActivity {
 //                dialog.show();
 //            }
 //        },2000);
-        Log.e("yzh", Tools.getHourValue("03:45")+"--");
-        Log.e("yzh","--"+Tools.formatHour(Tools.getHourValue("03:45")));
-        PreferencesHelper.saveData(Constant.CHARGING_TIME,Tools.getHourValue("03:45")+"");
+        Log.e("yzh","--"+Tools.getHourValue("03:45"));
+        PreferencesHelper.saveData(Constant.CHARGING_TOTAL,Tools.getHourValue("03:45"));
         progressView.setMax(Tools.getHourValue("03:45"));
+        if(Tools.isNull(PreferencesHelper.getData(Constant.CHARGING_TIME))){
+            PreferencesHelper.saveData(Constant.CHARGING_TIME,"0");
+            tv_charge_time.setText("00:00");
+            progressView.setProgress(0);
+        }else{
+            progressView.setProgress(Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME)));
+            tv_charge_time.setText(Tools.formatHour(Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME))));
+        }
+
+
 //        timerService.timerHour();
         RxBus.getDefault().toObservable(Object.class, Constant.CHARGING_TIME)
                 .compose(this.bindToLifecycle())

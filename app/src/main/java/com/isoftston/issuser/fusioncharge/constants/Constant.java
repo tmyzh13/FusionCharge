@@ -16,5 +16,8 @@ public class Constant {
     //是否登录过了
     public static final String LOGIN_STATUE="login_staue";
 
+    //充电时间
     public static final String CHARGING_TIME="charge_time";
+    //充电总长
+    public static final String CHARGING_TOTAL="charge_total";
 }
