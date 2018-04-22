@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.LinearInterpolator;
 
 import com.isoftston.issuser.fusioncharge.R;
 
@@ -65,13 +66,13 @@ public class LoadingView extends View{
     }
 
     private void init(){
-                paintBold =10;
-        lineLength = 25;
+                paintBold =12;
+        lineLength = 35;
         bgPaintColor = Color.GRAY;
         beforePaintColor = Color.YELLOW;
-        lines =  20;
+        lines =  12;
         max = 100;
-        progress =  10;
+        progress =  0;
         textColor = Color.BLACK;
     }
     /**
@@ -95,7 +96,7 @@ public class LoadingView extends View{
      */
     private void initPaint() {
         bgPaint = new Paint();
-        bgPaint.setColor(getResources().getColor(R.color.text_gray));
+        bgPaint.setColor(getResources().getColor(R.color.white));
         bgPaint.setAntiAlias(true);
         bgPaint.setStrokeWidth(paintBold);
         //使得画笔更加圆滑
@@ -149,7 +150,7 @@ public class LoadingView extends View{
         super.onDraw(canvas);
         int x =mWidth/2;
         int y=mHeight/2;
-        int r=x-5;
+        int r=x-50;
         for (int i = 0; i < lines; i++) {
             //绘制下层菊花
             canvas.drawLine(x, y - r, x, y - r + lineLength, bgPaint);
@@ -168,23 +169,29 @@ public class LoadingView extends View{
             canvas.rotate(360 / lines, x, y);
         }
     }
-
+    ValueAnimator progressAnimator;
     public void startAnimation(int start, int current, int duration) {
-        ValueAnimator progressAnimator = ValueAnimator.ofInt(start, current);
+        progressAnimator = ValueAnimator.ofInt(start, current);
         progressAnimator.setDuration(duration);
-//        progressAnimator.setTarget(progress);
-        progressAnimator.setRepeatCount(2);
-        progressAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        progressAnimator.setInterpolator(new BounceInterpolator());
+        progressAnimator.setTarget(progress);
+        progressAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        progressAnimator.setRepeatMode(ValueAnimator.RESTART);
+        progressAnimator.setInterpolator(new LinearInterpolator());
         progressAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.e("yzh","progress---"+progress);
+
                 progress = (int) animation.getAnimatedValue();
                 invalidate();
             }
         });
         progressAnimator.start();
+    }
+
+    public void stopAnimator(){
+        if(progressAnimator!=null){
+            progressAnimator.cancel();
+        }
     }
 
     /*设置进度最大值*/

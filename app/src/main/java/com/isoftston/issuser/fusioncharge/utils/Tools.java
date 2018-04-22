@@ -248,4 +248,31 @@ public class Tools {
         boolean isRight = isDigit && isLowerCase && str.matches(regex);
         return isRight;
     }
+
+    /**
+     * 将毫秒转换时分
+     * @param time
+     * @return
+     */
+    public static String formatHour(long time) {
+        String hour = time / (1000 * 60*60) + "";
+        long min = time % (1000 * 60*60);
+        if (hour.length() < 2) {
+            hour = "0" + hour + "";
+        }
+       String minStr=min/(1000*60)+"";
+        if(minStr.length()<2){
+            minStr="0"+minStr;
+        }
+        return hour + ":" + minStr;
+    }
+
+    public static long getHourValue(String time){
+        long value=0;
+        String s[]=time.split(":");
+        value+=Long.parseLong(s[0])*(1000*60*60);
+        value+=Long.parseLong(s[1])*(1000*60);
+
+        return value;
+    }
 }

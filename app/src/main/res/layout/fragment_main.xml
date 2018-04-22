@@ -28,10 +28,12 @@
             android:text="@string/home_go_pay"
             android:gravity="center"
             android:textColor="@color/app_blue"
+            android:id="@+id/tv_pay"
             />
     </RelativeLayout>
 
     <include layout="@layout/layout_top_hint"
+        android:visibility="gone"
         />
 
     <!--底部详情-->

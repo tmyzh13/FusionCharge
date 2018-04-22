@@ -15,8 +15,6 @@ public class Constant {
 
     //是否登录过了
     public static final String LOGIN_STATUE="login_staue";
-    //检修人员
-    public static final String CHECK_PEOPLE="check_people";
-    //临时图片集合
-    public static final String TEMP_PIC_LIST="temp_pic_list";
+
+    public static final String CHARGING_TIME="charge_time";
 }

@@ -66,10 +66,6 @@
         android:layout_marginTop="30dp"
         android:id="@+id/tv_send_comment"
         />
-    <com.isoftston.issuser.fusioncharge.weights.LoadingView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:id="@+id/view"
-        />
+
 
 </LinearLayout>

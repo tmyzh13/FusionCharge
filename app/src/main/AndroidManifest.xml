@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppBaseCompactTheme">
-        <activity android:name=".views.LoginActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,11 +22,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".views.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.ChargeDetailsActivity"
+            android:name=".views.ChagerStatueActivity"
             android:screenOrientation="portrait" />
+
+                <activity android:name=".views.PayActivity"
+                    android:screenOrientation="portrait"
+                    />
+                <activity android:name=".views.PayCompleteActivity"
+                    android:screenOrientation="portrait"
+                    />
         <activity
             android:name=".views.interfaces.ForgetPwdActivity"
             android:screenOrientation="portrait" />
@@ -36,6 +43,7 @@
         <activity android:name=".views.AppointmentChargeActivity" />
         <activity android:name=".views.AppointSuccessActivity" />
         <activity android:name=".views.interfaces.SearchActivity"></activity>
+        <service android:name=".views.TimerService"/>
     </application>
 
 </manifest>

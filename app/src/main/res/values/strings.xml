@@ -172,15 +172,20 @@
 
     <!--充电状态-->
     <string name="charging_statue">充电状态</string>
-    <string name="charging_statue_checking">正在检测安全性</string>
+    <string name="charging_statue_checking">正在检测安全性....</string>
     <string name="charging_statue_hint">您确定要结束充电去支付？</string>
     <string name="charging_statue_electronic">已充电量</string>
     <string name="charging_statue_fee">充电费用</string>
     <string name="charging_statue_a">电流(A)</string>
     <string name="charging_statue_v">电压(V)</string>
+    <string name="charging_statue_kw">功率</string>
+    <string name="charging_statue_current">当期电量</string>
     <string name="charging_statue_soc">SOC</string>
     <string name="charging_statue_fail">开始充电失败</string>
     <string name="charging_statue_please_check">请检查桩与车的连接状态....</string>
+    <string name="charging_statue_ending">正在结束充电，请耐心等待....</string>
+    <string name="charging_statue_end_go_to_pay">您的充电已结束，请前往支付</string>
+    <string name="charging_statue_time">充电时长（分）</string>
     
     <!--支付-->
     <string name="pay">支付</string>

@@ -22,8 +22,8 @@ public class PayCompleteActivity extends BaseActivity {
 
     @Bind(R.id.nav)
     NavBar nav;
-    @Bind(R.id.view)
-    LoadingView view;
+//    @Bind(R.id.view)
+//    LoadingView view;
 
     public static Intent getLauncher(Context context){
         Intent intent =new Intent(context,PayCompleteActivity.class);
@@ -41,7 +41,7 @@ public class PayCompleteActivity extends BaseActivity {
         nav.setImageBackground(R.drawable.nan_bg);
 
 //        view=new LoadingView(PayCompleteActivity.this);
-        view.startAnimation(0,100,3000);
+//        view.startAnimation(0,100,3000);
     }
 
     @Override
