@@ -1,6 +1,7 @@
 package com.isoftston.issuser.fusioncharge.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -27,6 +28,7 @@ import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
 import com.isoftston.issuser.fusioncharge.presenter.LoginPresenter;
+import com.isoftston.issuser.fusioncharge.utils.MD5Utils;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.ForgetPwdActivity;
@@ -81,6 +83,11 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     private TextView workerTypeTv;
     private TextView codeTypeTv;
     private int type = 1;//登录方式
+
+    public static Intent getLauncher(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        return intent;
+    }
 
     public Handler handler = new Handler() {
         @Override
@@ -169,7 +176,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     public void getCode() {
         phoneNumber = phoneNumberEt.getText().toString().trim();
         if (Tools.isChinaPhoneLegal(phoneNumber)) {
-            MyCountDownTimer timer = new MyCountDownTimer(60000, 1000);
+            MyCountDownTimer timer = new MyCountDownTimer(getCodeTv,60000, 1000);
             timer.start();
             ToastMgr.show(context.getString(R.string.reset_password_hint));
         } else {
@@ -203,8 +210,9 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     }
 
     @Override
-    public void loginSuccess() {
+    public void loginSuccess(String data) {
         //loginSuccess
+        SharePrefsUtils.putValue(context,"token",data);
         startActivity(MainActivity.getLauncher(context));
     }
 
@@ -244,7 +252,9 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                 if (type == 1) {
                     getUserInput();
                     //手机号密码登录
-                    presenter.loginAction(0, phoneNumber, pwd, code);
+                    presenter.loginAction(0, phoneNumber, MD5Utils.encode(pwd), code);
+                    Log.e(TAG, "----手机号密码登录"+",pwd:"+MD5Utils.encode(pwd));
+
                 } else if (type == 3) {
                     code = codeEt.getText().toString().trim();
                     if (TextUtils.isEmpty(code)) {
@@ -252,8 +262,8 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                         return;
                     }
                     //手机号验证码登录
-                    Log.e(TAG, "----手机号+验证码登录");
-                    presenter.loginAction(1, phoneNumber, pwd, code);
+                    presenter.loginAction(1, phoneNumber, MD5Utils.encode(pwd), code);
+                    Log.e(TAG, "----手机号+验证码登录"+",pwd:"+MD5Utils.encode(pwd));
                 }
                 break;
             case R.id.pwd_et:
@@ -310,22 +320,24 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         });
     }
 
-    class MyCountDownTimer extends CountDownTimer {
 
-        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+    public static class MyCountDownTimer extends CountDownTimer {
+        TextView view;
+        public MyCountDownTimer(TextView v,long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
+            this.view = v;
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-            getCodeTv.setClickable(false);
-            getCodeTv.setText(millisUntilFinished / 1000 + "s");
+            view.setClickable(false);
+            view.setText(millisUntilFinished / 1000 + "s");
         }
 
         @Override
         public void onFinish() {
-            getCodeTv.setClickable(true);
-            getCodeTv.setText(R.string.action_get_code_again);
+            view.setClickable(true);
+            view.setText(R.string.action_get_code_again);
         }
     }
 }

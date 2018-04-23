@@ -3,6 +3,7 @@ package com.isoftston.issuser.fusioncharge.views;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.EditText;
 
 import com.corelibs.base.BaseActivity;
@@ -46,7 +47,13 @@ public class InputNewPwdActivity extends BaseActivity {
     @OnClick(R.id.submit_tv)
     public void actionSubmit() {
         //判断密码是否符合要求及两次是否一致
-        finish();
+        newPwd1 = inputNewPwdEt.getText().toString().trim();
+        newPwd2 = confirmPwdEt.getText().toString().trim();
+        if (!TextUtils.isEmpty(newPwd1) && !TextUtils.isEmpty(newPwd2) && newPwd1.equals(newPwd2)) {
+            //todo
+            //提交...
+            finish();
+        }
     }
 
     @Override

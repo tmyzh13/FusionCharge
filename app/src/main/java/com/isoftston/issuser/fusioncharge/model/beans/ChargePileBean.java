@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 public class ChargePileBean implements Serializable {
+    private int status;//1在线or0离线
     private String pileNum;
     private String maxPower;
     private String maxElectric;
@@ -21,6 +22,14 @@ public class ChargePileBean implements Serializable {
 
     public void setGunBeanList(List<ElectricGunBean> gunBeanList) {
         this.gunBeanList = gunBeanList;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getPileNum() {

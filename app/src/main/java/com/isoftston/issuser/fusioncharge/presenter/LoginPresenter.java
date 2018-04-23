@@ -7,8 +7,10 @@ import com.corelibs.api.ApiFactory;
 import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.ToastMgr;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.model.apis.LoginApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
@@ -57,8 +59,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     @Override
                     public void success(BaseData baseData) {
                         Log.e("loginAction","---success");
+                        PreferencesHelper.saveData(Constant.LOGIN_STATUE,"1");
                         SharePrefsUtils.putValue(getContext(),"phone",phone);
-                        view.loginSuccess();
+                        view.loginSuccess((String) baseData.data);
                     }
                 });
     }

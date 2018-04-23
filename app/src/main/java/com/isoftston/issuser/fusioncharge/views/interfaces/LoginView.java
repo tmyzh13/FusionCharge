@@ -7,7 +7,7 @@ import com.corelibs.base.BaseView;
  */
 
 public interface LoginView extends BaseView{
-    void loginSuccess();
+    void loginSuccess(String data);
     void registerSuccess(String result);
     void registerFailure(String result);
     void getCodeSuccess(String result);

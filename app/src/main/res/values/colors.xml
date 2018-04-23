@@ -19,4 +19,6 @@
     <color name="text_white">#ffffff</color>
     <color name="black_bg">#000000</color>
     <color name="color_green">#8ada8a</color>
+    <color name="color_yellow">#eca457</color>
+    <color name="color_red">#ff0000</color>
 </resources>

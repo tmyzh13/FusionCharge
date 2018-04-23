@@ -19,19 +19,23 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:text="@string/reset_password_hint" />
 
         <TextView
-            android:id="@+id/user_phone_num_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_10"
-            android:textColor="@color/black_bg" />
+            android:text="@string/reset_password_hint"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/input_your_phone_et"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@drawable/gray_stroke_bg"
+            android:hint="@string/hint_input_phone"
+            android:paddingLeft="@dimen/dp_15"
+            android:textColorHint="@color/text_gray" />
 
         <EditText
             android:id="@+id/input_message_code_et"
@@ -57,7 +61,8 @@
                 android:paddingLeft="@dimen/dp_15"
                 android:text="@string/reset_password_no_message"
                 android:textColor="@color/text_main"
-                android:textColorHint="@color/text_main" />
+                android:textColorHint="@color/text_main"
+                android:visibility="gone" />
 
 
             <TextView

@@ -227,5 +227,11 @@
     <string name="appoint_30m">请您在30分钟内到达</string>
     <string name="appoint_1h">请您在1小时内到达</string>
     <string name="appoint_2h">请您在2小时内到达</string>
+    <string name="status_fault">故障</string>
+    <string name="time_30m">30分钟</string>
+    <string name="time_1h">1小时</string>
+    <string name="time_2h">2小时</string>
+    <string name="now_have_appointed">您当前已有预约设备</string>
+
 
 </resources>

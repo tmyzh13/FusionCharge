@@ -69,14 +69,20 @@ public class ChargePileAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        if (chargePileBean.getStatus() == 0) {
+            holder.pileStatusIv.setImageResource(R.mipmap.charge_off);
+        } else {
+            holder.pileStatusIv.setImageResource(R.mipmap.charge_on);
+        }
         holder.pileNumTv.setText(chargePileBean.getPileNum());
         holder.maxPowerTv.setText(chargePileBean.getMaxPower());
         holder.maxElectronicTv.setText(chargePileBean.getMaxElectric());
         holder.maxVoltageTv.setText(chargePileBean.getMaxVoltage());
 
         gunList = chargePileBean.getGunBeanList();
-        ElectricGunAdapter adapter = new ElectricGunAdapter(context,gunList);
-        Log.e("dp","---size="+gunList.size());
+
+        ElectricGunAdapter adapter = new ElectricGunAdapter(context, gunList);
         holder.electricGunLv.setAdapter(adapter);
 //        adapter.setData(gunList);
         setListViewHeight(holder.electricGunLv);

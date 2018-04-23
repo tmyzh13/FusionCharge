@@ -15,7 +15,7 @@ public class Urls {
     //注册
     public static final String REGISTER = "user/register";
     public static final String GET_CODE = "user/captcha";
-
-
+    //预约
+    public static final String APPOINT_CHARGE = "user/login";
 
 }

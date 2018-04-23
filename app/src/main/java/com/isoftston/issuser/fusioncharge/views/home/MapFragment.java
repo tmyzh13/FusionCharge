@@ -7,6 +7,7 @@ import com.corelibs.base.BasePresenter;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeFeeBean;
 import com.isoftston.issuser.fusioncharge.views.ChagerStatueActivity;
+import com.isoftston.issuser.fusioncharge.views.ChargeDetailsActivity;
 import com.isoftston.issuser.fusioncharge.weights.ChargeFeeDialog;
 
 import java.util.ArrayList;
@@ -53,5 +54,10 @@ public class MapFragment  extends BaseFragment{
     @OnClick(R.id.tv_pay)
     public void goPay(){
         startActivity(ChagerStatueActivity.getLauncher(getContext()));
+    }
+
+    @OnClick(R.id.enter_charge_station_iv)
+    public void enterChargeStation() {
+        startActivity(ChargeDetailsActivity.getLauncher(getActivity()));
     }
 }

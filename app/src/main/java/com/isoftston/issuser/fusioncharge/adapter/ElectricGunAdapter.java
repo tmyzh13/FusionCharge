@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileBean;
+import com.isoftston.issuser.fusioncharge.views.AppointmentChargeActivity;
 
 import java.util.List;
 
@@ -23,13 +23,13 @@ public class ElectricGunAdapter extends BaseAdapter {
     private List<ChargePileBean.ElectricGunBean> datas;
     private LayoutInflater mInflater;
 
-    public ElectricGunAdapter(Context context,List<ChargePileBean.ElectricGunBean> datas) {
+    public ElectricGunAdapter(Context context, List<ChargePileBean.ElectricGunBean> datas) {
         this.context = context;
         this.datas = datas;
         mInflater = LayoutInflater.from(context);
     }
 
-    public void setData(List<ChargePileBean.ElectricGunBean> datas){
+    public void setData(List<ChargePileBean.ElectricGunBean> datas) {
         this.datas = datas;
     }
 
@@ -65,7 +65,41 @@ public class ElectricGunAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        if (gunBean.getType().equals(context.getString(R.string.statue_alternating_electronic))) {
+            holder.gunTypeIv.setImageResource(R.drawable.dots_green);
+            holder.gunTypeTv.setText(R.string.statue_alternating_electronic);
+        } else if (gunBean.getType().equals(context.getString(R.string.statue_direct_electronic))) {
+            holder.gunTypeIv.setImageResource(R.drawable.dots_yellow);
+            holder.gunTypeTv.setText(R.string.statue_direct_electronic);
+        }
+
+        if (gunBean.getStatus().equals(context.getString(R.string.statue_free))) {
+            holder.gunStatusIv.setImageResource(R.drawable.dots_green);
+            holder.gunStatusTv.setText(R.string.statue_free);
+            holder.gunAppointmentTv.setClickable(true);
+            holder.gunAppointmentTv.setTextColor(context.getResources().getColor(R.color.app_blue));
+            holder.gunAppointmentTv.setBackgroundResource(R.drawable.blue_stroke_90angle_bg);
+        } else if (gunBean.getStatus().equals(context.getString(R.string.statue_busy))) {
+            holder.gunStatusIv.setImageResource(R.drawable.dots_yellow);
+            holder.gunStatusTv.setText(R.string.statue_busy);
+            holder.gunAppointmentTv.setTextColor(context.getResources().getColor(R.color.text_gray));
+            holder.gunAppointmentTv.setBackgroundResource(R.drawable.appoint_gray_bg_shape);
+            holder.gunAppointmentTv.setClickable(false);
+        } else if (gunBean.getStatus().equals(context.getString(R.string.status_fault))) {
+            holder.gunStatusIv.setImageResource(R.drawable.dots_fault_red);
+            holder.gunStatusTv.setText(R.string.status_fault);
+            holder.gunAppointmentTv.setTextColor(context.getResources().getColor(R.color.text_gray));
+            holder.gunAppointmentTv.setBackgroundResource(R.drawable.appoint_gray_bg_shape);
+            holder.gunAppointmentTv.setClickable(false);
+        }
         holder.gunNum.setText(gunBean.getGunNum());
+        holder.gunAppointmentTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(AppointmentChargeActivity.getLauncher(context));
+            }
+        });
         return convertView;
     }
 

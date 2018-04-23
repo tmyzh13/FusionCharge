@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.isoftston.issuser.fusioncharge.views.fragments.PictureFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
+        android:id="@+id/charge_pile_iv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="200dp"
+        android:src="@mipmap/home_bg" />
 
 </FrameLayout>

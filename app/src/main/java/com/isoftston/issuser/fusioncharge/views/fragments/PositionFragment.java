@@ -35,7 +35,7 @@ public class PositionFragment extends BaseFragment {
         chargePileList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             ChargePileBean pileBean = new ChargePileBean();
-            pileBean.setPileNum(321 + "i");
+            pileBean.setPileNum(321 + "i:"+i);
             pileBean.setMaxPower(220 + i + "KW");
             pileBean.setMaxElectric(110 + i + "A");
             pileBean.setMaxVoltage(120 + i + "V");
@@ -43,9 +43,9 @@ public class PositionFragment extends BaseFragment {
             List<ChargePileBean.ElectricGunBean> gunList = new ArrayList<>();
             for (int j = 0; j <3 ; j++) {
                 ChargePileBean.ElectricGunBean gunBean = new ChargePileBean.ElectricGunBean();
-                gunBean.setGunNum(i + "00" + i);
-                gunBean.setType(i + "交流");
-                gunBean.setStatus("22");
+                gunBean.setGunNum(j + "00" + j);
+                gunBean.setType("交流");
+                gunBean.setStatus("空闲");
                 gunList.add(gunBean);
             }
             pileBean.setGunBeanList(gunList);

@@ -40,43 +40,52 @@
             android:name=".views.ChagerStatueActivity"
             android:screenOrientation="portrait" />
 
-                <activity android:name=".views.PayActivity"
-                    android:screenOrientation="portrait"
-                    />
-                <activity android:name=".views.PayCompleteActivity"
-                    android:screenOrientation="portrait"
-                    />
+        <activity
+            android:name=".views.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.PayCompleteActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.interfaces.ForgetPwdActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.InputNewPwdActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".views.AppointmentChargeActivity" />
-        <activity android:name=".views.AppointSuccessActivity" />
-        <activity android:name=".views.interfaces.SearchActivity"></activity>
-        <service android:name=".views.TimerService"/>
+        <activity
+            android:name=".views.AppointmentChargeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.AppointSuccessActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.interfaces.SearchActivity"
+            android:screenOrientation="portrait" />
 
-        <!-- 支付宝 -->
+        <activity
+            android:name=".views.ChargeDetailsActivity"
+            android:screenOrientation="portrait" />
+
+        <service android:name=".views.TimerService" />
+
+        <!-- 支付宝 com.alipay.sdk.app.H5PayActivity-->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <!--微信支付-->
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

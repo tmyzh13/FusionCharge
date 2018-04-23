@@ -22,8 +22,12 @@ import com.bumptech.glide.Glide;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.common.AppManager;
+import com.corelibs.utils.PreferencesHelper;
+import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
+import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
+import com.isoftston.issuser.fusioncharge.views.LoginActivity;
 import com.isoftston.issuser.fusioncharge.views.home.HomeListFragment;
 import com.isoftston.issuser.fusioncharge.views.home.MapFragment;
 
@@ -59,14 +63,13 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.et_distance)
     EditText et_distance;
 
-
-    private Context context=MainActivity.this;
+    private Context context = MainActivity.this;
 
     private MapFragment mapFragment;
     private HomeListFragment homeListFragment;
 
-    public static Intent getLauncher(Context context){
-        Intent intent =new Intent(context,MainActivity.class);
+    public static Intent getLauncher(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
         return intent;
     }
 
@@ -78,34 +81,38 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void init(Bundle savedInstanceState) {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ViewGroup.LayoutParams lp =view_main_statue.getLayoutParams();
-        lp.height= Tools.getStatueHeight(context);
+        ViewGroup.LayoutParams lp = view_main_statue.getLayoutParams();
+        lp.height = Tools.getStatueHeight(context);
         view_main_statue.setLayoutParams(lp);
         view_statue.setLayoutParams(lp);
         view_main_statue.setBackgroundResource(R.drawable.nan_bg);
         view_statue.setBackgroundColor(context.getResources().getColor(R.color.transparent_black));
 
-        mapFragment=new MapFragment();
-        homeListFragment =new HomeListFragment();
+        mapFragment = new MapFragment();
+        homeListFragment = new HomeListFragment();
 
-        FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.content,mapFragment).commit();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.content, mapFragment).commit();
 
         Glide.with(context).load("http://imgsrc.baidu.com/baike/pic/item/bd7faf355e43afc1a71e1220.jpg")
-                .override(320,320).into(iv_user_icon);
+                .override(320, 320).into(iv_user_icon);
     }
 
     @OnClick(R.id.iv_user)
-    public void openLeft(){
+    public void openLeft() {
         if (drawerLayout.isDrawerOpen(main_right_drawer_layout)) {
             drawerLayout.closeDrawer(main_right_drawer_layout);
         }
+        if (TextUtils.isEmpty(PreferencesHelper.getData(Constant.LOGIN_STATUE))) {
+            startActivity(LoginActivity.getLauncher(context));
+        } else {
             drawerLayout.openDrawer(main_left_drawer_layout);
+        }
 
     }
 
     @OnClick(R.id.iv_choice)
-    public void openRight(){
+    public void openRight() {
         if (drawerLayout.isDrawerOpen(main_left_drawer_layout)) {
             drawerLayout.closeDrawer(main_left_drawer_layout);
         }
@@ -113,23 +120,23 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.tv_map)
-    public void choiceMap(){
-        FragmentTransaction ft =getSupportFragmentManager().beginTransaction();
+    public void choiceMap() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tv_map.setTextColor(getResources().getColor(R.color.app_blue));
         tv_list.setTextColor(getResources().getColor(R.color.white));
-        ViewGroup.LayoutParams lp=tv_map.getLayoutParams();
-        lp.width=Tools.dip2px(context,75);
+        ViewGroup.LayoutParams lp = tv_map.getLayoutParams();
+        lp.width = Tools.dip2px(context, 75);
         tv_map.setLayoutParams(lp);
-        ViewGroup.LayoutParams lp1=tv_list.getLayoutParams();
-        lp1.width=Tools.dip2px(context,65);
+        ViewGroup.LayoutParams lp1 = tv_list.getLayoutParams();
+        lp1.width = Tools.dip2px(context, 65);
         tv_list.setLayoutParams(lp1);
         tv_map.setBackgroundResource(R.drawable.tv_corner_white);
         tv_list.setBackgroundColor(getResources().getColor(R.color.transparent));
 
         ft.hide(homeListFragment);
-        if(!mapFragment.isAdded()){
-            ft.add(R.id.content,mapFragment).show(mapFragment);
-        }else{
+        if (!mapFragment.isAdded()) {
+            ft.add(R.id.content, mapFragment).show(mapFragment);
+        } else {
             ft.show(mapFragment);
         }
         ft.commit();
@@ -137,66 +144,66 @@ public class MainActivity extends BaseActivity {
     }
 
     @OnClick(R.id.tv_list)
-    public void choiceList(){
-        FragmentTransaction ft =getSupportFragmentManager().beginTransaction();
+    public void choiceList() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tv_map.setTextColor(getResources().getColor(R.color.white));
         tv_list.setTextColor(getResources().getColor(R.color.app_blue));
-        ViewGroup.LayoutParams lp=tv_map.getLayoutParams();
-        lp.width=Tools.dip2px(context,65);
+        ViewGroup.LayoutParams lp = tv_map.getLayoutParams();
+        lp.width = Tools.dip2px(context, 65);
         tv_map.setLayoutParams(lp);
-        ViewGroup.LayoutParams lp1=tv_list.getLayoutParams();
-        lp1.width=Tools.dip2px(context,75);
+        ViewGroup.LayoutParams lp1 = tv_list.getLayoutParams();
+        lp1.width = Tools.dip2px(context, 75);
         tv_list.setLayoutParams(lp1);
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-                tv_list.setBackgroundResource(R.drawable.tv_corner_white);
-                tv_map.setBackgroundColor(getResources().getColor(R.color.transparent));
+        tv_list.setBackgroundResource(R.drawable.tv_corner_white);
+        tv_map.setBackgroundColor(getResources().getColor(R.color.transparent));
 //            }
 //        },500);
 
 
         ft.hide(mapFragment);
-        if(!homeListFragment.isAdded()){
-            ft.add(R.id.content,homeListFragment).show(homeListFragment);
-        }else{
+        if (!homeListFragment.isAdded()) {
+            ft.add(R.id.content, homeListFragment).show(homeListFragment);
+        } else {
             ft.show(homeListFragment);
         }
         ft.commit();
     }
 
     @OnClick(R.id.tv_confirm)
-    public void choiceCondition(){
-        if(TextUtils.isEmpty(et_distance.getText().toString().trim())){
+    public void choiceCondition() {
+        if (TextUtils.isEmpty(et_distance.getText().toString().trim())) {
             ChoiceManager.getInstance().setDistance("");
-        }else{
+        } else {
             ChoiceManager.getInstance().setDistance(et_distance.getText().toString());
         }
-        String type="";
-        String statue="";
-        if(cb_charge_direct.isChecked()){
-            type+="0";
+        String type = "";
+        String statue = "";
+        if (cb_charge_direct.isChecked()) {
+            type += "0";
         }
-        if(cb_charge_alternating.isChecked()){
-            type+="1";
+        if (cb_charge_alternating.isChecked()) {
+            type += "1";
         }
-        if(cb_free.isChecked()){
-            statue+="0";
+        if (cb_free.isChecked()) {
+            statue += "0";
         }
-        if(cb_busy.isChecked()){
-            statue+="1";
+        if (cb_busy.isChecked()) {
+            statue += "1";
         }
         ChoiceManager.getInstance().setStatue(statue);
         ChoiceManager.getInstance().setType(type);
     }
 
     @OnClick(R.id.tv_reset)
-    public void resetCondition(){
-         cb_busy.setChecked(false);
-         cb_free.setChecked(false);
-         cb_charge_direct.setChecked(false);
-         cb_charge_alternating.setChecked(false);
-         et_distance.setText("");
+    public void resetCondition() {
+        cb_busy.setChecked(false);
+        cb_free.setChecked(false);
+        cb_charge_direct.setChecked(false);
+        cb_charge_alternating.setChecked(false);
+        et_distance.setText("");
         ChoiceManager.getInstance().resetChoice();
     }
 
@@ -215,7 +222,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Log.e("yzh","11111111111");
+            Log.e("yzh", "11111111111");
             doublePressBackToast();
             return true;
         } else {

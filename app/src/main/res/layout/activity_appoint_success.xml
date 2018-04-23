@@ -15,14 +15,16 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_200"
-        android:src="@mipmap/car" />
+        android:layout_marginTop="@dimen/nav_height"
+        android:src="@mipmap/pop_pic" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_20"
         android:text="@string/appoint_success"
-        android:textSize="@dimen/text_extra" />
+        android:textSize="@dimen/text_title" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="2018年4月21号"
-            android:textSize="@dimen/text_extra" />
+            android:textSize="@dimen/text_title" />
 
         <TextView
             android:id="@+id/arrive_on_time_tv"
@@ -46,7 +48,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="@dimen/dp_10"
             android:text="@string/appoint_15m"
-            android:textSize="@dimen/text_extra" />
+            android:textSize="@dimen/text_title" />
     </LinearLayout>
 
     <LinearLayout

@@ -5,15 +5,14 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Xml;
 
-
-import com.corelibs.common.AppManager;
 import com.corelibs.views.LoadingDialog;
 import com.isoftston.issuser.fusioncharge.constants.Urls;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.StringReader;
@@ -22,8 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 
 /**
