@@ -20,4 +20,6 @@ public class Constant {
     public static final String CHARGING_TIME="charge_time";
     //充电总长
     public static final String CHARGING_TOTAL="charge_total";
+    //我的位置
+    public static final String MY_LOCATION="my_location";
 }

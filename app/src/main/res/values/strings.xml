@@ -120,6 +120,9 @@
     <string name="home_charge_type">方式</string>
     <string name="home_charge_direct">直流快充</string>
     <string name="home_charge_alternating">交流慢充</string>
+    <string name="home_charge_direct_">直流：</string>
+    <string name="home_charge_alternating_">交流：</string>
+    <string name="home_charge_hint_">个空闲</string>
     <!--搜索-->
     <string name="search_history">搜索历史</string>
     <string name="search_history_clear">清空搜索历史</string>
@@ -148,7 +151,8 @@
     <string name="guilding_charging_pile_no">电桩编号</string>
     <string name="guilding_charging_pile_name">电桩名称</string>
     <string name="guilding_charging_gun">电枪编号</string>
-    <string name="guilding_timeout">很抱歉\n您预置的预约时间已超时 请重新预约</string>
+    <string name="guilding_timeout">很抱歉</string>
+    <string name="guilding_timeout_hint">您预置的预约时间已超时 请重新预约</string>
     <string name="guilding_reach_target">您已到达目的地附近！</string>
     <string name="guilding_park_map">园区地图</string>
 

@@ -18,6 +18,8 @@
         android:paddingLeft="@dimen/dp_15"
         android:paddingRight="@dimen/dp_15"
         android:id="@+id/rl_not_pay"
+        android:clickable="true"
+        android:visibility="gone"
         >
         <TextView
            style="@style/text_normal"
@@ -48,8 +50,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ll_bottom_detail"
+        android:id="@+id/rl_bottom_detail"
         android:layout_alignParentBottom="true"
+        android:clickable="true"
         >
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -68,12 +71,14 @@
                 <TextView
                    style="@style/text_normal"
                     android:text="园区充电桩"
+                    android:id="@+id/tv_map_info_name"
                     />
                 <TextView
                     android:layout_marginLeft="3dp"
                     style="@style/text_normal"
                     android:text="4.9"
                     android:textColor="@color/app_blue"
+                    android:id="@+id/tv_map_info_score"
                     />
                 <TextView
                    style="@style/text_normal"
@@ -98,6 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/tv_map_info_address"
                     style="@style/text_normal"
                     android:text="南京市雨花台区花神大道117号"
                     />
@@ -105,6 +111,7 @@
                     android:layout_alignParentRight="true"
                     style="@style/text_normal"
                     android:text="14.6KM"
+                    android:id="@+id/tv_map_info_distance"
                     />
             </RelativeLayout>
             <LinearLayout
@@ -113,6 +120,7 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 android:paddingBottom="5dp"
+                android:id="@+id/ll_go_to_detail"
                 >
                 <TextView
                   style="@style/text_normal"
@@ -122,6 +130,7 @@
                    style="@style/text_normal"
                     android:textColor="@color/app_blue"
                     android:text="1"
+                    android:id="@+id/tv_map_info_pile_num"
                     />
                 <TextView
                     style="@style/text_normal"
@@ -136,6 +145,7 @@
                     style="@style/text_normal"
                     android:textColor="@color/app_blue"
                     android:text="3"
+                    android:id="@+id/tv_map_info_gun_num"
                     />
                 <TextView
                     style="@style/text_normal"
@@ -149,11 +159,13 @@
                 <TextView
                     style="@style/text_normal"
                     android:textColor="@color/app_blue"
+                    android:id="@+id/tv_map_info_free_num"
                     android:text="10"
                     />
                 <TextView
                     style="@style/text_normal"
                     android:text="@string/statue_free"
+
                     />
                 <View
                     android:layout_width="0dp"
@@ -172,38 +184,47 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:id="@+id/ll_fee"
-                >
-                <TextView
-                   style="@style/text_normal"
-                    android:text="@string/home_charging_fee_per"
-                    />
-                <TextView
-                   style="@style/text_normal"
-                    android:text="0.0000元/度~0.0030元/度"/>
-                <ImageView
-                    android:layout_marginLeft="2dp"
+                android:orientation="vertical"
+                android:id="@+id/ll_fee_all">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:id="@+id/ll_fee"
+                    >
+                    <TextView
+                        style="@style/text_normal"
+                        android:text="@string/home_charging_fee_per"
+                        />
+                    <TextView
+                        style="@style/text_normal"
+                        android:text="0.0000元/度~0.0030元/度"
+                        android:id="@+id/tv_map_info_current_fee"/>
+                    <ImageView
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/pop_ic_ask"/>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/pop_ic_ask"/>
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        style="@style/text_normal"
+                        android:text="@string/home_charging_service_fee"
+                        />
+                    <TextView
+                        style="@style/text_normal"
+                        android:text="1.6000元/度"
+                        android:id="@+id/tv_map_info_service_fee"
+                        />
+                </LinearLayout>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <TextView
-                   style="@style/text_normal"
-                    android:text="@string/home_charging_service_fee"
-                    />
-                <TextView
-                   style="@style/text_normal"
-                    android:text="1.6000元/度"
-                    />
-            </LinearLayout>
+
             <View
                style="@style/view_line"
                 android:layout_marginTop="5dp"
@@ -220,6 +241,7 @@
             android:src="@mipmap/pop_ic_guide"
             android:layout_alignParentRight="true"
             android:layout_marginRight="25dp"
+            android:id="@+id/iv_guaild"
             />
     </RelativeLayout>
 

@@ -17,7 +17,7 @@ public class BaseData<T> implements Serializable,ResponseHandler.IBaseData {
 
     @Override
     public boolean isSuccess() {
-        return code==1;
+        return code==0;
     }
 
     @Override

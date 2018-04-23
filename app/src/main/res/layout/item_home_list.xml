@@ -26,6 +26,7 @@
                 android:textSize="@dimen/text_title"
                 android:textColor="@color/app_blue"
                 android:text="能瑞餐馆"
+
                 />
             <LinearLayout
                 android:layout_marginTop="15dp"
@@ -35,12 +36,28 @@
                 >
                 <TextView
                     style="@style/text_normal"
-                    android:text="直流:2个空闲"
+                    android:text="@string/home_charge_direct_"
+                    />
+                <TextView
+                    style="@style/text_normal"
+                    android:id="@+id/tv_direct"
+                    />
+                <TextView
+                  style="@style/text_normal"
+                    android:text="@string/home_charge_hint_"
                     />
                 <TextView
                     android:layout_marginLeft="10dp"
+                   style="@style/text_normal"
+                    android:text="@string/home_charge_direct_"
+                    />
+                <TextView
+                    android:id="@+id/tv_alter"
                     style="@style/text_normal"
-                    android:text="交流:3个空闲"
+                    />
+                <TextView
+                    style="@style/text_normal"
+                    android:text="@string/home_charge_hint_"
                     />
             </LinearLayout>
             <RelativeLayout
@@ -51,6 +68,7 @@
                 <TextView
                    style="@style/text_normal"
                     android:text="南京市南瑞路23号"
+                    android:id="@+id/tv_address"
                     />
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -68,6 +86,7 @@
                        style="@style/text_normal"
                         android:layout_marginLeft="5dp"
                         android:text="103.6KM"
+                        android:id="@+id/tv_distance"
                         />
                 </LinearLayout>
             </RelativeLayout>

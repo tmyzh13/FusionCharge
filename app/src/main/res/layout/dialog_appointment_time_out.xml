@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="40dp"
+    android:layout_marginRight="40dp"
+    android:gravity="center_horizontal"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingRight="15dp"
+            android:src="@mipmap/pop_ic_del"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/pop_pic"
+        android:layout_marginTop="15dp"
+        />
+
+    <TextView
+        android:layout_marginTop="25dp"
+        style="@style/text_normal"
+        android:text="@string/guilding_timeout"
+        />
+    <TextView
+        android:layout_marginTop="10dp"
+        style="@style/text_normal"
+        android:text="@string/guilding_timeout_hint"
+        />
+
+    <TextView
+        android:layout_marginTop="40dp"
+        style="@style/text_normal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_height"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="@string/action_re_appointment"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:background="@drawable/tv_corner_blue"
+        android:id="@+id/tv_re_appointment"
+        />
+
+</LinearLayout>

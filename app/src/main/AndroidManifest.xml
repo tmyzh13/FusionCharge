@@ -40,12 +40,12 @@
             android:name=".views.ChagerStatueActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".views.PayActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".views.PayCompleteActivity"
-            android:screenOrientation="portrait" />
+                <activity android:name=".views.PayActivity"
+                    android:screenOrientation="portrait"
+                    />
+                <activity android:name=".views.PayCompleteActivity"
+                    android:screenOrientation="portrait"
+                    />
         <activity
             android:name=".views.interfaces.ForgetPwdActivity"
             android:screenOrientation="portrait" />
@@ -67,7 +67,9 @@
             android:screenOrientation="portrait" />
 
         <service android:name=".views.TimerService" />
-
+        <activity android:name=".views.GuildActivity"
+            android:screenOrientation="portrait"
+            />
         <!-- 支付宝 com.alipay.sdk.app.H5PayActivity-->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"

@@ -48,6 +48,13 @@
             android:layout_height="match_parent"
             android:scaleType="center"
             />
+        <TextView
+            style="@style/text_normal"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:textColor="@color/white"
+            android:text="@string/action_cancel_appointment"
+            />
     </LinearLayout>
 
 

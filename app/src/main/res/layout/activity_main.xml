@@ -202,6 +202,7 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
+            android:visibility="gone"
             >
             <ImageView
                 android:layout_width="wrap_content"

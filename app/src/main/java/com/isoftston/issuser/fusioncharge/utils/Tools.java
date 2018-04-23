@@ -44,7 +44,6 @@ public class Tools {
 
     /**
      * px转dp
-     *
      * @param context
      * @param pxValue
      * @return
@@ -56,7 +55,6 @@ public class Tools {
 
     /**
      * 获取状态栏高度
-     *
      * @param context
      * @return
      */
@@ -92,9 +90,9 @@ public class Tools {
     /**
      * 判断 一个字段的值否为空
      *
+     * @author Michael.Zhang 2013-9-7 下午4:39:00
      * @param s
      * @return
-     * @author Michael.Zhang 2013-9-7 下午4:39:00
      */
     public static boolean isNull(String s) {
         if (null == s || s.equals("") || s.equalsIgnoreCase("null")) {
@@ -120,7 +118,6 @@ public class Tools {
 
     /**
      * 获取当前时间
-     *
      * @return
      */
     public static String getCurrentTime() {
@@ -137,7 +134,6 @@ public class Tools {
 
     /**
      * 获取当前语言 en英语 zh汉语
-     *
      * @param context
      * @return
      */
@@ -149,7 +145,6 @@ public class Tools {
 
     /**
      * 判断全数字
-     *
      * @param str
      * @return
      */
@@ -168,7 +163,6 @@ public class Tools {
 
     /**
      * 获取系统类型 这里只单独区分了小木
-     *
      * @return
      */
     public static String getPhoneType() {
@@ -193,7 +187,6 @@ public class Tools {
 
     /**
      * 获取手机IMEi
-     *
      * @param context
      * @return
      */
@@ -213,7 +206,7 @@ public class Tools {
                 return imei;
             }
 
-        } catch (Exception e) {
+        }catch (Exception e){
             return "";
         }
         return "";
@@ -221,7 +214,6 @@ public class Tools {
 
     /**
      * 判断手机号是否正确
-     *
      * @param str
      * @return
      */
@@ -234,11 +226,10 @@ public class Tools {
 
     /**
      * 判断密码是否合法
-     *
      * @param str
      * @return
      */
-    public static boolean isPwdRight(String str) {
+    public static boolean isPwdRight(String str){
         boolean isDigit = false;//定义一个boolean值，用来表示是否包含数字
         boolean isLowerCase = false;//定义一个boolean值，用来表示是否包含字母
         boolean isUpperCase = false;
@@ -247,7 +238,8 @@ public class Tools {
                 isDigit = true;
             } else if (Character.isLowerCase(str.charAt(i))) {  //小写字母
                 isLowerCase = true;
-            } else if (Character.isUpperCase(str.charAt(i))) {  //大写字母
+            }
+            else if (Character.isUpperCase(str.charAt(i))) {  //大写字母
                 isUpperCase = true;
             }
         }
@@ -261,28 +253,27 @@ public class Tools {
 
     /**
      * 将毫秒转换时分
-     *
      * @param time
      * @return
      */
     public static String formatHour(long time) {
-        String hour = time / (1000 * 60 * 60) + "";
-        long min = time % (1000 * 60 * 60);
+        String hour = time / (1000 * 60*60) + "";
+        long min = time % (1000 * 60*60);
         if (hour.length() < 2) {
             hour = "0" + hour + "";
         }
-        String minStr = min / (1000 * 60) + "";
-        if (minStr.length() < 2) {
-            minStr = "0" + minStr;
+       String minStr=min/(1000*60)+"";
+        if(minStr.length()<2){
+            minStr="0"+minStr;
         }
         return hour + ":" + minStr;
     }
 
-    public static long getHourValue(String time) {
-        long value = 0;
-        String s[] = time.split(":");
-        value += Long.parseLong(s[0]) * (1000 * 60 * 60);
-        value += Long.parseLong(s[1]) * (1000 * 60);
+    public static long getHourValue(String time){
+        long value=0;
+        String s[]=time.split(":");
+        value+=Long.parseLong(s[0])*(1000*60*60);
+        value+=Long.parseLong(s[1])*(1000*60);
 
         return value;
     }
@@ -294,5 +285,23 @@ public class Tools {
         int mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
 
         return mYear + "年" + mMonth + "月" + mDay + "号";
+    }
+    public static double GetDistance(double lat1, double lng1, double lat2, double lng2) {
+        double radLat1 = rad(lat1);
+        double radLat2 = rad(lat2);
+        double a = radLat1 - radLat2;
+        double b = rad(lng1) - rad(lng2);
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2)
+                * Math.pow(Math.sin(b / 2), 2)));
+
+        s = s * EARTH_RADIUS;
+        s = Math.round(s * 10000) / 10000.0;
+        return s * 1000;
+    }
+    /** 经度纬度计算 */
+    private static double EARTH_RADIUS = 6378.137;
+
+    private static double rad(double d) {
+        return d * Math.PI / 180.0;
     }
 }
