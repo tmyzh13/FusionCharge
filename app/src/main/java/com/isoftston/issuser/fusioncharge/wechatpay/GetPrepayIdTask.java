@@ -8,6 +8,7 @@ import android.util.Xml;
 
 import com.corelibs.common.AppManager;
 import com.corelibs.views.LoadingDialog;
+import com.isoftston.issuser.fusioncharge.constants.Urls;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -24,7 +25,6 @@ import java.util.Random;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import bm.com.gmo.constants.Urls;
 
 /**
  * 微信支付

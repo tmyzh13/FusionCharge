@@ -3,6 +3,13 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <com.amap.api.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        />
+
     <!--顶部未支付提示-->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,6 +42,7 @@
     <include layout="@layout/layout_top_hint"
         android:visibility="gone"
         />
+
 
     <!--底部详情-->
     <RelativeLayout
