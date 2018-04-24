@@ -530,6 +530,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         tv_pile_num.setText(bean.runCode);
         tv_pile_name.setText(bean.chargingPileName);
         tv_gun_num.setText(bean.gunCode);
+        tv_appointment_address.setText(bean.chargingAddress);
     }
 
     @OnClick(R.id.iv_guaild)
