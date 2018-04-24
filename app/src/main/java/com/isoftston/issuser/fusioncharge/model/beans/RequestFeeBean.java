@@ -7,5 +7,5 @@ package com.isoftston.issuser.fusioncharge.model.beans;
 public class RequestFeeBean {
 
     //充电桩id
-    public String chargePileId;
+    public long chargePileId;
 }

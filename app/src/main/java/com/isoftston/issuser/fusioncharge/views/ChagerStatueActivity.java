@@ -18,7 +18,9 @@ import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.presenter.ChargeStatuePresenter;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
+import com.isoftston.issuser.fusioncharge.views.interfaces.ChargerStatueView;
 import com.isoftston.issuser.fusioncharge.weights.CheckChargeFailDialog;
 import com.isoftston.issuser.fusioncharge.weights.CheckStatueLoadingView;
 import com.isoftston.issuser.fusioncharge.weights.CircleProgressView;
@@ -34,7 +36,7 @@ import butterknife.OnClick;
  * Created by issuser on 2018/4/20.
  */
 
-public class ChagerStatueActivity extends BaseActivity {
+public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeStatuePresenter> implements ChargerStatueView {
 
     @Bind(R.id.nav)
     NavBar navBar;
@@ -114,8 +116,8 @@ public class ChagerStatueActivity extends BaseActivity {
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected ChargeStatuePresenter createPresenter() {
+        return new ChargeStatuePresenter();
     }
 
 

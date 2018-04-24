@@ -19,6 +19,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.ElectronicPileBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
 import com.isoftston.issuser.fusioncharge.presenter.HomeListPresenter;
+import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.HomeListView;
 
@@ -72,11 +73,30 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
     }
 
     @Override
-    public void rendData(List<MapDataBean> list) {
-        ptrLayout.complete();
+    public void showLoading() {
+        ptrLayout.setRefreshing();
+    }
 
-        adapter.replaceAll(list);
-        MyLocationBean bean= PreferencesHelper.getData(MyLocationBean.class);
+    @Override
+    public void hideLoading() {
+        ptrLayout.complete();
+    }
+
+    @Override
+    public void rendData(List<MapDataBean> list) {
+        //添加一遍距离 并且做一边筛选
+        MyLocationBean bean=PreferencesHelper.getData(MyLocationBean.class);
+        List<MapDataBean> temp=new ArrayList<>();
+        for(int i=0;i<list.size();i++ ){
+            double distance=Tools.GetDistance(bean.latitude,bean.longtitude,list.get(i).latitude,list.get(i).longitude);
+            list.get(i).distance=distance;
+            //如果大于distance范围过滤
+            if(distance<= ChoiceManager.getInstance().getDistance()){
+                temp.add(list.get(i));
+            }
+        }
+        adapter.replaceAll(temp);
+
 //        Log.e("yzh",bean.latitude+"---"+bean.longtitude);
 //        Log.e("yzh","-0---"+ Tools.GetDistance(list.get(0).longitude,list.get(0).latitude,bean.latitude,bean.longtitude));
     }

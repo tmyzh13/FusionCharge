@@ -1,6 +1,7 @@
 package com.isoftston.issuser.fusioncharge.adapters;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.adapter.BaseAdapterHelper;
@@ -18,8 +19,11 @@ import com.isoftston.issuser.fusioncharge.utils.Tools;
 
 public class HomeListAdpter extends QuickAdapter<MapDataBean> {
 
+    MyLocationBean myLocationBean;
+
     public HomeListAdpter(Context context){
         super(context, R.layout.item_home_list);
+        myLocationBean=PreferencesHelper.getData(MyLocationBean.class);
     }
 
     @Override
@@ -28,6 +32,9 @@ public class HomeListAdpter extends QuickAdapter<MapDataBean> {
                 .setText(R.id.tv_address,item.address)
                 .setText(R.id.tv_direct,item.directNum+"")
                 .setText(R.id.tv_alter,item.alterNum+"");
+        TextView tv_distance=helper.getView(R.id.tv_distance);
+
+        tv_distance.setText(item.distance+"KM");
 
     }
 }

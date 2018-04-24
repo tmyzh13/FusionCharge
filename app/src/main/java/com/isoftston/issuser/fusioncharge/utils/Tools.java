@@ -12,10 +12,14 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.services.core.LatLonPoint;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -296,12 +300,26 @@ public class Tools {
 
         s = s * EARTH_RADIUS;
         s = Math.round(s * 10000) / 10000.0;
-        return s * 1000;
+        return getTwoDecimal(s) ;
     }
     /** 经度纬度计算 */
     private static double EARTH_RADIUS = 6378.137;
 
     private static double rad(double d) {
         return d * Math.PI / 180.0;
+    }
+
+    public static LatLng convertToLatLng(LatLonPoint latLonPoint) {
+        return new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude());
+    }
+
+    /**
+     * 将数据保留两位小数
+     */
+    private static double getTwoDecimal(double num) {
+        DecimalFormat dFormat=new DecimalFormat("#.00");
+        String yearString=dFormat.format(num);
+        Double temp= Double.valueOf(yearString);
+        return temp;
     }
 }

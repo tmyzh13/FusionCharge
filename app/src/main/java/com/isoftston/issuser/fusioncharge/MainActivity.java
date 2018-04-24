@@ -175,9 +175,9 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.tv_confirm)
     public void choiceCondition() {
         if (TextUtils.isEmpty(et_distance.getText().toString().trim())) {
-            ChoiceManager.getInstance().setDistance("");
+            ChoiceManager.getInstance().setDistance(Constant.DEFAULT_DISTANCE);
         } else {
-            ChoiceManager.getInstance().setDistance(et_distance.getText().toString());
+            ChoiceManager.getInstance().setDistance(Double.parseDouble(et_distance.getText().toString()));
         }
         String type = "";
         String statue = "";
@@ -195,6 +195,7 @@ public class MainActivity extends BaseActivity {
         }
         ChoiceManager.getInstance().setStatue(statue);
         ChoiceManager.getInstance().setType(type);
+        //发送设置
     }
 
     @OnClick(R.id.tv_reset)

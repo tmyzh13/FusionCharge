@@ -15,5 +15,6 @@ public class MapInfoBean {
     public String openStatus;
     //桩数量
     public int pileNum;
+    public int gunNum;
     public String averageScore;
 }

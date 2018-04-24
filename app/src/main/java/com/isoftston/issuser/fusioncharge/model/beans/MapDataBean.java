@@ -15,4 +15,5 @@ public class MapDataBean {
     public String title;
     //station pile
     public String type;
+    public double distance;
 }

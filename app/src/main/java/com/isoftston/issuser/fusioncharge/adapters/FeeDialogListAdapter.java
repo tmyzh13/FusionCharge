@@ -19,7 +19,7 @@ public class FeeDialogListAdapter extends QuickAdapter<ChargeFeeBean> {
 
     @Override
     protected void convert(BaseAdapterHelper helper, ChargeFeeBean item, int position) {
-        helper.setText(R.id.tv_time,item.time)
-                .setText(R.id.tv_unit,item.unit);
+        helper.setText(R.id.tv_time,item.startTime+"~"+item.endTime)
+                .setText(R.id.tv_unit,item.multiFee+context.getString(R.string.yuan));
     }
 }

@@ -11,6 +11,7 @@
     <!--单位-->
     <string name="km">KM</string>
     <string name="yuan">元</string>
+    <string name="yuan_du">元&#047;度</string>
 
     <!--action-->
     <string name="action_get_code">获取验证码</string>
@@ -155,6 +156,8 @@
     <string name="guilding_timeout_hint">您预置的预约时间已超时 请重新预约</string>
     <string name="guilding_reach_target">您已到达目的地附近！</string>
     <string name="guilding_park_map">园区地图</string>
+    <string name="guilding_get_location">定位中，稍后再试...</string>
+    <string name="guilding_no_end">终点未设置</string>
 
     <!--扫码充电-->
     <string name="scan_charging">充电</string>

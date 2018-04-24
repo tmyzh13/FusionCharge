@@ -1,5 +1,7 @@
 package com.isoftston.issuser.fusioncharge.utils;
 
+import com.isoftston.issuser.fusioncharge.constants.Constant;
+
 /**
  * Created by issuser on 2018/4/20.
  */
@@ -12,8 +14,8 @@ public class ChoiceManager {
     private String type;
     // 状态空 0，1 01
     private String statue;
-    //距离
-    private String distance;
+    //距离 默认距离是100 这里测试改成500
+    private double distance=Constant.DEFAULT_DISTANCE;
 
     private ChoiceManager(){
 
@@ -29,7 +31,7 @@ public class ChoiceManager {
     public void resetChoice(){
         type="";
         statue="";
-        distance="";
+        distance= Constant.DEFAULT_DISTANCE;
     }
 
     public String getType() {
@@ -48,11 +50,11 @@ public class ChoiceManager {
         this.statue = statue;
     }
 
-    public String getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(String distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 }

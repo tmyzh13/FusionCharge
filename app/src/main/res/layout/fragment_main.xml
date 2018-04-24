@@ -10,6 +10,16 @@
         android:id="@+id/map"
         />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/position_sao"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/iv_scan"
+        />
+
     <!--顶部未支付提示-->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -53,6 +63,7 @@
         android:id="@+id/rl_bottom_detail"
         android:layout_alignParentBottom="true"
         android:clickable="true"
+        android:visibility="gone"
         >
         <LinearLayout
             android:layout_marginTop="30dp"
@@ -80,11 +91,7 @@
                     android:textColor="@color/app_blue"
                     android:id="@+id/tv_map_info_score"
                     />
-                <TextView
-                   style="@style/text_normal"
-                    android:text="@string/score"
-                    android:textColor="@color/app_blue"
-                    />
+
                 <ImageView
                     android:layout_marginLeft="15dp"
                     android:layout_width="wrap_content"
@@ -179,13 +186,14 @@
                     android:paddingRight="15dp"
                     />
             </LinearLayout>
-            <View
-                style="@style/view_line"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/ll_fee_all">
+            <View
+                style="@style/view_line"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -223,12 +231,13 @@
                         android:id="@+id/tv_map_info_service_fee"
                         />
                 </LinearLayout>
-            </LinearLayout>
+
 
             <View
                style="@style/view_line"
                 android:layout_marginTop="5dp"
                 />
+            </LinearLayout>
             <TextView
                style="@style/text_normal"
                 android:layout_marginTop="5dp"
@@ -244,5 +253,7 @@
             android:id="@+id/iv_guaild"
             />
     </RelativeLayout>
+    
+
 
 </RelativeLayout>

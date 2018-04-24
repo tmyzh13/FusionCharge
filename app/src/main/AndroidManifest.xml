@@ -70,6 +70,11 @@
         <activity android:name=".views.GuildActivity"
             android:screenOrientation="portrait"
             />
+
+        <activity android:name=".views.ParkActivity"
+            android:screenOrientation="portrait"
+            />
+
         <!-- 支付宝 com.alipay.sdk.app.H5PayActivity-->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -103,6 +108,8 @@
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService">
         </service>
+
+
     </application>
 
 </manifest>

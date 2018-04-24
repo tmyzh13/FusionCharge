@@ -35,17 +35,25 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.corelibs.base.BaseFragment;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.utils.PreferencesHelper;
+import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeFeeBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PileFeeBean;
 import com.isoftston.issuser.fusioncharge.presenter.MapPresenter;
+import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
+import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.ChagerStatueActivity;
 import com.isoftston.issuser.fusioncharge.views.ChargeDetailsActivity;
 import com.isoftston.issuser.fusioncharge.views.GuildActivity;
+import com.isoftston.issuser.fusioncharge.views.ParkActivity;
+import com.isoftston.issuser.fusioncharge.views.PayActivity;
 import com.isoftston.issuser.fusioncharge.views.interfaces.MapHomeView;
 import com.isoftston.issuser.fusioncharge.weights.ChargeFeeDialog;
 
@@ -61,7 +69,7 @@ import butterknife.OnClick;
  * Created by issuser on 2018/4/19.
  */
 
-public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> implements MapHomeView, LocationSource, AMapLocationListener, AMap.OnMapTouchListener {
+public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> implements MapHomeView, LocationSource, AMapLocationListener, AMap.OnMapTouchListener {
 
     @Bind(R.id.map)
     MapView map;
@@ -89,6 +97,8 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     TextView tv_map_info_current_fee;
     @Bind(R.id.tv_map_info_service_fee)
     TextView tv_map_info_service_fee;
+    @Bind(R.id.ll_appointment)
+    LinearLayout ll_appontment;
 
     private AMap aMap;
 
@@ -100,7 +110,7 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     @Override
     protected void init(Bundle savedInstanceState) {
         map.onCreate(savedInstanceState);
-        aMap=map.getMap();
+        aMap = map.getMap();
 
         aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
             @Override
@@ -109,12 +119,16 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
             }
         });
 
-
+        presenter.getUserOrderStatue();
+        presenter.getUserChargeStatue();
+        presenter.getUserAppointment();
         location();
         initMapData();
     }
 
-    private  void initMapData(){
+
+
+    private void initMapData() {
 
 
         presenter.getData();
@@ -126,7 +140,10 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     OnLocationChangedListener mListener;
     AMapLocationClient mlocationClient;
     AMapLocationClientOption mLocationOption;
-    private void location(){
+
+    private MapDataBean currentMapDataBean;
+
+    private void location() {
         // 设置定位监听
         aMap.setLocationSource(this);
         // 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
@@ -134,8 +151,8 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
         // 设置定位的类型为定位模式，有定位、跟随或地图根据面向方向旋转几种
         aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
         aMap.moveCamera(CameraUpdateFactory.zoomTo(14));
-        MyLocationStyle myLocationStyle=new MyLocationStyle();
-        ImageView imageView=new ImageView(getContext());
+        MyLocationStyle myLocationStyle = new MyLocationStyle();
+        ImageView imageView = new ImageView(getContext());
         imageView.setImageResource(R.mipmap.location);
         BitmapDescriptor markerIcon = BitmapDescriptorFactory
 
@@ -151,15 +168,14 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
             // 返回 true 则表示接口已响应事件，否则返回false
             @Override
             public boolean onMarkerClick(Marker marker) {
-
-                MapDataBean bean =list.get(Integer.parseInt(marker.getTitle()));
-                presenter.getInfo(bean.id,bean.type);
+                MapDataBean bean = list.get(Integer.parseInt(marker.getTitle()));
+                currentMapDataBean = bean;
+                presenter.getInfo(bean.id, bean.type);
                 return true;
             }
         };
         // 绑定 Marker 被点击事件
         aMap.setOnMarkerClickListener(markerClickListener);
-
     }
 
     @Override
@@ -168,31 +184,34 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     }
 
     @OnClick(R.id.ll_fee)
-    public void showFee(){
-        ChargeFeeDialog dialog =new ChargeFeeDialog(getContext());
+    public void showFee() {
+        ChargeFeeDialog dialog = new ChargeFeeDialog(getContext());
         dialog.show();
-        List<ChargeFeeBean> list=new ArrayList<>();
-        ChargeFeeBean bean=new ChargeFeeBean();
-        bean.time="00:00~06:00";
-        bean.unit="0.0030度";
-        list.add(bean);
-        list.add(bean);
-        list.add(bean);
-        list.add(bean);
-        dialog.setFeeDatas(list);
+//        List<ChargeFeeBean> list=new ArrayList<>();
+//        ChargeFeeBean bean=new ChargeFeeBean();
+//        bean.time="00:00~06:00";
+//        bean.unit="0.0030度";
+//        list.add(bean);
+//        list.add(bean);
+//        list.add(bean);
+//        list.add(bean);
+        dialog.setFeeDatas(list_fee);
 
     }
 
     @OnClick(R.id.tv_pay)
-    public void goPay(){
-        startActivity(ChagerStatueActivity.getLauncher(getContext()));
+    public void goPay() {
+        startActivity(PayActivity.getLauncher(getContext()));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        map.onDestroy();
-        if(null != mlocationClient){
+        if (map != null) {
+            map.onDestroy();
+        }
+
+        if (null != mlocationClient) {
             mlocationClient.onDestroy();
         }
     }
@@ -201,6 +220,7 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     public void onResume() {
         super.onResume();
         map.onResume();
+        Log.e("yzh","onResume");
         if (Build.VERSION.SDK_INT >= 23
                 && getContext().getApplicationInfo().targetSdkVersion >= 23) {
             if (isNeedCheck) {
@@ -210,10 +230,8 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     }
 
     /**
-     *
      * @param permissions
      * @since 2.5.0
-     *
      */
     private void checkPermissions(String... permissions) {
         try {
@@ -236,14 +254,14 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     private List<String> findDeniedPermissions(String[] permissions) {
         List<String> needRequestPermissonList = new ArrayList<String>();
         if (Build.VERSION.SDK_INT >= 23
-                && getContext().getApplicationInfo().targetSdkVersion >= 23){
+                && getContext().getApplicationInfo().targetSdkVersion >= 23) {
             try {
                 for (String perm : permissions) {
                     Method checkSelfMethod = getClass().getMethod("checkSelfPermission", String.class);
                     Method shouldShowRequestPermissionRationaleMethod = getClass().getMethod("shouldShowRequestPermissionRationale",
                             String.class);
-                    if ((Integer)checkSelfMethod.invoke(this, perm) != PackageManager.PERMISSION_GRANTED
-                            || (Boolean)shouldShowRequestPermissionRationaleMethod.invoke(this, perm)) {
+                    if ((Integer) checkSelfMethod.invoke(this, perm) != PackageManager.PERMISSION_GRANTED
+                            || (Boolean) shouldShowRequestPermissionRationaleMethod.invoke(this, perm)) {
                         needRequestPermissonList.add(perm);
                     }
                 }
@@ -256,10 +274,10 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
 
     /**
      * 检测是否所有的权限都已经授权
+     *
      * @param grantResults
      * @return
      * @since 2.5.0
-     *
      */
     private boolean verifyPermissions(int[] grantResults) {
         for (int result : grantResults) {
@@ -285,7 +303,6 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
      * 显示提示信息
      *
      * @since 2.5.0
-     *
      */
 //    private void showMissingPermissionDialog() {
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -313,7 +330,6 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
 //
 //        builder.show();
 //    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -336,7 +352,7 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
             mLocationOption = new AMapLocationClientOption();
             //设置定位回调监听
             mlocationClient.setLocationListener(this);
-            mLocationOption.setInterval(2000);//设置间隔时间
+            mLocationOption.setInterval(10000);//设置间隔时间
             //设置为高精度定位模式
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //设置定位参数
@@ -359,24 +375,25 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
         mlocationClient = null;
     }
 
-    private boolean followMove=true;
+    private boolean followMove = true;
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
-        if (mListener != null&&aMapLocation != null) {
+        if (mListener != null && aMapLocation != null) {
             if (aMapLocation != null
-                    &&aMapLocation.getErrorCode() == 0) {
+                    && aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
-                MyLocationBean bean =new MyLocationBean();
-                bean.latitude=aMapLocation.getLatitude();
-                bean.longtitude=aMapLocation.getLongitude();
+                MyLocationBean bean = new MyLocationBean();
+                bean.latitude = aMapLocation.getLatitude();
+                bean.longtitude = aMapLocation.getLongitude();
                 PreferencesHelper.saveData(bean);
-                if(followMove){
-                    aMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(aMapLocation.getLatitude(),aMapLocation.getLongitude())));
+                RxBus.getDefault().send(bean, Constant.REFRESH_LOCATION);
+                if (followMove) {
+                    aMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
                 }
             } else {
-                String errText = "定位失败," + aMapLocation.getErrorCode()+ ": " + aMapLocation.getErrorInfo();
-                Log.e("AmapErr",errText);
+                String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
+                Log.e("AmapErr", errText);
             }
         }
     }
@@ -400,7 +417,7 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     }
 
     @OnClick(R.id.ll_go_to_detail)
-    public void goDetail(){
+    public void goDetail() {
         //进入对应的充电桩详情
 
     }
@@ -409,18 +426,22 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
 
     @Override
     public void renderMapData(List<MapDataBean> list) {
-        this.list=list;
-        for(int i=0;i<list.size();i++){
+        this.list = list;
+        MyLocationBean bean =PreferencesHelper.getData(MyLocationBean.class);
+        for (int i = 0; i < list.size(); i++) {
+            //距离筛选
+            if(Tools.GetDistance(list.get(i).latitude,list.get(i).longitude,bean.latitude,bean.longtitude)> ChoiceManager.getInstance().getDistance()){
+                continue;
+            }
+
             MarkerOptions markerOption = new MarkerOptions();
-            LatLng latLng=new LatLng(list.get(i).latitude, list.get(i).longitude);
+            LatLng latLng = new LatLng(list.get(i).latitude, list.get(i).longitude);
             markerOption.position(latLng);
             //点标记的标题和内容；
-
-//            markerOption.title("西安市").snippet("西安市：34.341568, 108.940174");
-            markerOption.title(i+"");
+            markerOption.title(i + "");
             markerOption.draggable(true);//设置Marker可拖动
             markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
-                    .decodeResource(getResources(),R.mipmap.home_ic_position)));
+                    .decodeResource(getResources(), R.mipmap.home_ic_position)));
             // 将Marker设置为贴地显示，可以双指下拉地图查看效果
             markerOption.setFlat(true);//设置marker平贴地图效果
             aMap.addMarker(markerOption);
@@ -428,26 +449,105 @@ public class MapFragment  extends BaseFragment<MapHomeView,MapPresenter> impleme
     }
 
     @Override
-    public void getMarkInfo(MapInfoBean  mapInfoBean) {
+    public void getMarkInfo(long id, MapInfoBean mapInfoBean) {
+        //获取费率数据
+        if (mapInfoBean.objType.equals("pile")) {
+            presenter.getFeeInfo(id);
+        }
         rl_bottom_detail.setVisibility(View.VISIBLE);
-        if(mapInfoBean.objType.equals("station")){
+        if (mapInfoBean.objType.equals("station")) {
             //充电站
-        }else if(mapInfoBean.objType.equals("pile")){
-            //充电桩
             ll_fee_all.setVisibility(View.GONE);
+        } else if (mapInfoBean.objType.equals("pile")) {
+            //充电桩
+            ll_fee_all.setVisibility(View.VISIBLE);
         }
         tv_map_info_name.setText(mapInfoBean.name);
         tv_map_info_address.setText(mapInfoBean.address);
+        if (mapInfoBean.averageScore.equals("-1")) {
+            tv_map_info_score.setText("");
+        } else {
+            tv_map_info_score.setText(mapInfoBean.averageScore + getString(R.string.score));
+        }
+        //要单算距离
+        MyLocationBean bean =PreferencesHelper.getData(MyLocationBean.class);
+        tv_map_info_distance.setText(Tools.GetDistance(currentMapDataBean.latitude,currentMapDataBean.longitude,bean.latitude,bean.longtitude)+"KM");
+        tv_map_info_pile_num.setText(mapInfoBean.pileNum + "");
+        tv_map_info_gun_num.setText(mapInfoBean.gunNum + "");
+        tv_map_info_free_num.setText(mapInfoBean.freeNum + "");
+    }
+
+    private List<ChargeFeeBean> list_fee;
+
+    @Override
+    public void showPileFeeInfo(PileFeeBean bean) {
+        list_fee = bean.feeList;
+        tv_map_info_service_fee.setText(bean.serviceFee + getString(R.string.yuan_du));
+        if (list_fee != null && list_fee.size() != 0) {
+            double min = list_fee.get(0).multiFee;
+            double max = list_fee.get(0).multiFee;
+            for (int i = 1; i < list_fee.size(); i++) {
+                if (list_fee.get(i).multiFee > max) {
+                    max = list_fee.get(i).multiFee;
+                }
+                if (list_fee.get(i).multiFee < min) {
+                    min = list_fee.get(i).multiFee;
+                }
+            }
+            tv_map_info_current_fee.setText(min + getString(R.string.yuan_du) + "~" + max + getString(R.string.yuan_du));
+        }
 
     }
 
+    @Override
+    public void hasNoPayOrder(boolean has, HomeOrderBean bean) {
+        if (has) {
+            rl_not_pay.setVisibility(View.VISIBLE);
+        } else {
+            rl_not_pay.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Bind(R.id.tv_appointment_address)
+    TextView tv_appointment_address;
+    @Bind(R.id.tv_appointment_time)
+    TextView tv_appointment_time;
+    @Bind(R.id.iv_hint)
+    ImageView iv_hint;
+    @Bind(R.id.ll_hint)
+    LinearLayout ll_hint;
+    @Bind(R.id.tv_pile_num)
+    TextView tv_pile_num;
+    @Bind(R.id.tv_pile_name)
+    TextView tv_pile_name;
+    @Bind(R.id.tv_gun_num)
+    TextView tv_gun_num;
+
+    @Override
+    public void renderAppoinmentInfo(HomeAppointmentBean bean) {
+        ll_appontment.setVisibility(View.VISIBLE);
+        tv_pile_num.setText(bean.runCode);
+        tv_pile_name.setText(bean.chargingPileName);
+        tv_gun_num.setText(bean.gunCode);
+    }
+
     @OnClick(R.id.iv_guaild)
-    public void goGuaild(){
-        startActivity(GuildActivity.getLauncher(getContext()));
+    public void goGuaild() {
+        if (currentMapDataBean != null) {
+            startActivity(GuildActivity.getLauncher(getContext(), currentMapDataBean.latitude, currentMapDataBean.longitude));
+//            startActivity(ParkActivity.getLauncher(getContext()));
+        }
+
     }
 
     @OnClick(R.id.enter_charge_station_iv)
     public void enterChargeStation() {
         startActivity(ChargeDetailsActivity.getLauncher(getActivity()));
+    }
+
+    @OnClick(R.id.iv_scan)
+    public void goScan() {
+
     }
 }

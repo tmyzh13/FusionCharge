@@ -54,6 +54,9 @@
             android:paddingLeft="15dp"
             android:textColor="@color/white"
             android:text="@string/action_cancel_appointment"
+            android:gravity="center"
+            android:visibility="gone"
+            android:id="@+id/tv_appointment"
             />
     </LinearLayout>
 

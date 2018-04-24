@@ -25,4 +25,12 @@ public class Urls {
     //查询充电桩费率
     public static final String QUERY_FEE="appMap/queryFee";
 
+    //查询用户是否有未支付的订单
+    public static final String GET_USER_NOT_PAY="http://10.40.143.130:8088/charger/api/v1/appChargeOrder/queryAppChargeOrderNoPay";
+    //查询用户充电状态
+    public static final String GET_USER_CHARGER_STATUE="http://10.40.143.130:8088/charger/api/v1/appChargeOrder/queryAppChargeOrderCharging";
+    //获取充电详情
+    public static final String GET_CHARGE_STATUE="charging/queryChargingState";
+    //获取用户预约记录
+    public static final String GET_USER_APPOINTMENT="charging/getReserveById";
 }

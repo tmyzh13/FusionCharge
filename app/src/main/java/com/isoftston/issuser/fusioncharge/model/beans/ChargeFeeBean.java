@@ -6,6 +6,9 @@ package com.isoftston.issuser.fusioncharge.model.beans;
 
 public class ChargeFeeBean {
 
-    public String time;
+    public String endTime;
+    public String startTime;
     public String unit;
+    public double multiFee;
+
 }
