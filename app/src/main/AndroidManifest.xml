@@ -26,13 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppBaseCompactTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".views.LoginActivity"
             android:screenOrientation="portrait" />
@@ -105,15 +99,22 @@
             android:name="com.amap.api.v2.apikey"
             android:value="5c12e0c2e5dbb47525b3c78fb597685b" />
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name="com.amap.api.location.APSService" />
 
         <activity
             android:name=".views.ChargeOrderDetailsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".views.ChargeCaptureActivity"
+        <activity
+            android:name=".views.ChargeCaptureActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".views.ChargeInputNumberActivity"
             android:screenOrientation="portrait"></activity>
     </application>
 

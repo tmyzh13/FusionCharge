@@ -1,23 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.isoftston.issuser.fusioncharge.views.ChargeCaptureActivity">
 
-    <com.journeyapps.barcodescanner.DecoratedBarcodeView
-        android:id="@+id/dbv"
+    <com.isoftston.issuser.fusioncharge.weights.NavBar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:zxing_preview_scaling_strategy="fitXY"
-        ></com.journeyapps.barcodescanner.DecoratedBarcodeView>
+        android:layout_height="wrap_content"
+        android:id="@+id/nav"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/dbv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:zxing_preview_scaling_strategy="centerCrop"
+            app:zxing_use_texture_view="true"
+            app:zxing_scanner_layout="@layout/charge_capture_barcode_scanner"
+            app:zxing_framing_rect_width="230dp"
+            app:zxing_framing_rect_height="230dp"
+            ></com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:text="123"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="30dp"/>
-</RelativeLayout>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="100dp"
+            android:id="@+id/iv_light"
+            android:src="@mipmap/icon_scanning"/>
+
+        <LinearLayout
+            android:id="@+id/ll_change_erweima_style"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="#88666666"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/ic_keyboard"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/change_enter_erweima_charge"
+                android:textSize="@dimen/text_normal"
+                android:textColor="@color/white"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+
+
+</LinearLayout>

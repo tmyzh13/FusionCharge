@@ -125,8 +125,6 @@
     <string name="home_charge_direct_">直流：</string>
     <string name="home_charge_alternating_">交流：</string>
     <string name="home_charge_hint_">个空闲</string>
-    <string name="home_charge_time_out">您的预约已超时，请重新预约</string>
-
     <!--搜索-->
     <string name="search_history">搜索历史</string>
     <string name="search_history_clear">清空搜索历史</string>
@@ -163,6 +161,7 @@
     <string name="guilding_no_end">终点未设置</string>
     <string name="guilding_cancel_appointment_hint">您确定要取消充电预约？</string>
     <string name="guilding_check_not_appointment">您导航目的地与预约中的目的地不同，是否继续导航？</string>
+
     <!--扫码充电-->
     <string name="scan_charging">充电</string>
     <string name="scan_charging_hint">将充电桩上的二维码放入框内，即可享受充电服务</string>
@@ -260,6 +259,12 @@
     <string name="please_enter_charge_count">  请输入充电度数</string>
     <string name="start_chareg">开始充电</string>
     <string name="choose_charge_full">  已选择充满</string>
+    <string name="charge_capture_hint">将充电桩上的二维码放入框内，即可享受充电服务</string>
+    <string name="charge">充电</string>
+    <string name="change_enter_erweima_charge">切换至输入二维码编号充电</string>
+    <string name="sure">确定</string>
+    <string name="please_input_erweima_number">请输入二维码编号</string>
+
 
 
 </resources>

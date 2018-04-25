@@ -3,6 +3,7 @@ package com.isoftston.issuser.fusioncharge.views;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.utils.ToastMgr;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.isoftston.issuser.fusioncharge.R;
@@ -27,6 +29,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
+
+    private int chargePowerCount = 0;
 
     @Bind(R.id.nav)
     NavBar navBar;
@@ -68,6 +72,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         navBar.setNavTitle(this.getString(R.string.charge_detail));
 
         rgChoosePowerStyle.setOnCheckedChangeListener(this);
+        rbWithPower.setChecked(true);
         setRadioButtonDrawableSize();
     }
 
@@ -102,17 +107,33 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
             case R.id.iv_charge_cost_ask:
                 break;
             case R.id.btn_start_charge:
-                //进入扫一扫界面
-                new IntentIntegrator(this)
-                        .setCaptureActivity(ChargeCaptureActivity.class)
-                        .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)// 扫码的类型,可选：一维码，二维码，一/二维码
-                        .setPrompt("请对准二维码")// 设置提示语
-                        .setCameraId(0)// 选择摄像头,可使用前置或者后置
-                        .setBeepEnabled(true)// 是否开启声音,扫完码之后会"哔"的一声
-                        .setBarcodeImageEnabled(false)// 扫完码之后生成二维码的图片
-                        .initiateScan();// 初始化扫码
+                String count = etChargeCount.getText().toString();
+                if(!TextUtils.isEmpty(count)){
+                    chargePowerCount = Integer.parseInt(count);
+                    if(chargePowerCount > 999 || chargePowerCount <1){
+                        ToastMgr.show("请输入1到999之间的整数");
+                        return;
+                    } else {
+                        enterSaoYiSao();
+                    }
+                } else {
+                    ToastMgr.show("请先输入充电数");
+                }
+
                 break;
         }
+    }
+
+    private void enterSaoYiSao(){
+        //进入扫一扫界面
+        new IntentIntegrator(this)
+                .setCaptureActivity(ChargeCaptureActivity.class)
+                .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)// 扫码的类型,可选：一维码，二维码，一/二维码
+                .setPrompt("请对准二维码")// 设置提示语
+                .setCameraId(0)// 选择摄像头,可使用前置或者后置
+                .setBeepEnabled(true)// 是否开启声音,扫完码之后会"哔"的一声
+                .setBarcodeImageEnabled(false)// 扫完码之后生成二维码的图片
+                .initiateScan();// 初始化扫码
     }
 
 
@@ -145,7 +166,6 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                     etChargeCount.setHint(R.string.please_enter_charge_count);
                 }
                 break;
-
 
         }
     }
