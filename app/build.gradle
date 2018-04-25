@@ -47,4 +47,6 @@ dependencies {
     implementation files('libs/httpclient-4.2.5.jar')
     implementation files('libs/httpcore-4.2.4.jar')
     implementation files('libs/AMap_Search_V6.1.0_20180330.jar')
+
+    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
 }

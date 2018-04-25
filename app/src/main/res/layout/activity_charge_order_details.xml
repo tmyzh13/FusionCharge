@@ -140,9 +140,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!--<RadioButton
+                    <RadioButton
                         style="@style/charge_order_detail_radio_button"
-                        android:text="充电枪：12345" />-->
+                        android:text="充电枪：12345" />
                 </RadioGroup>
 
             </LinearLayout>
@@ -154,9 +154,10 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                android:paddingLeft="10dp">
+                >
 
                 <TextView
+                    android:paddingLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:background="@color/white"
@@ -165,10 +166,13 @@
                     android:textColor="@color/blue" />
 
                 <RadioGroup
+                    android:id="@+id/rg_choose_power_style"
+                    android:paddingLeft="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="vertical">
+
 
                     <RadioButton
                         android:id="@+id/rb_with_power"
@@ -207,6 +211,7 @@
                 android:background="@color/white"
                 android:gravity="center | start"
                 android:paddingLeft="5dp"
+                android:inputType="number"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"

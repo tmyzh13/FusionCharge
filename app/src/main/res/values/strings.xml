@@ -255,6 +255,7 @@
     <string name="charge_enouth">充满</string>
     <string name="please_enter_charge_count">请输入充电度数</string>
     <string name="start_chareg">开始充电</string>
+    <string name="choose_charge_full">已选择充满</string>
 
 
 </resources>
