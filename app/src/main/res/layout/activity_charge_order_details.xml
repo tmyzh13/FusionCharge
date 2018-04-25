@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.isoftston.issuser.fusioncharge.views.ChargeOrderDetailsActivity">
+
+    <com.isoftston.issuser.fusioncharge.weights.NavBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nav"></com.isoftston.issuser.fusioncharge.weights.NavBar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#F3F3F3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        style="@style/charge_order_detail_text"
+                        android:text="@string/charge_station_name" />
+
+                    <TextView
+                        android:id="@+id/charge_station_name"
+                        style="@style/charge_order_detail_text"
+                        android:layout_alignParentRight="true"
+                        android:text="南京市雨花台大道17号" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        style="@style/charge_order_detail_text"
+                        android:text="@string/charge_zhuang_number" />
+
+                    <TextView
+                        android:id="@+id/charge_zhuang_number"
+                        style="@style/charge_order_detail_text"
+                        android:layout_alignParentRight="true"
+                        android:text="284642" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        style="@style/charge_order_detail_text"
+                        android:text="@string/charge_cost" />
+
+                    <ImageView
+                        android:id="@+id/iv_charge_cost_ask"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/pop_ic_ask" />
+
+                    <TextView
+                        android:id="@+id/charge_cost"
+                        style="@style/charge_order_detail_text"
+                        android:layout_marginRight="3dp"
+                        android:layout_toLeftOf="@id/iv_charge_cost_ask"
+                        android:text="0.092元/度" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        style="@style/charge_order_detail_text"
+                        android:text="@string/charge_service_cost" />
+
+                    <TextView
+                        android:id="@+id/charge_service_cost"
+                        style="@style/charge_order_detail_text"
+                        android:layout_alignParentRight="true"
+                        android:text="0.54元/度" />
+                </RelativeLayout>
+
+            </LinearLayout>
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
+                
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center|start"
+                    android:text="@string/choose_charge_gun"
+                    android:textColor="@color/blue"
+                    android:background="@color/white"
+                    />
+
+                <RadioGroup
+                    android:id="@+id/rg_choose_gun"
+                    android:paddingLeft="10dp"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!--<RadioButton
+                        style="@style/charge_order_detail_radio_button"
+                        android:text="充电枪：12345" />-->
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/white"
+                    android:gravity="center|start"
+                    android:text="@string/choose_charge_style"
+                    android:textColor="@color/blue" />
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/rb_with_power"
+                        style="@style/charge_order_detail_radio_button"
+                        android:drawableLeft="@mipmap/list_ic_dian"
+                        android:drawablePadding="10dp"
+                        android:text="@string/with_power" />
+
+                    <RadioButton
+                        android:id="@+id/rb_with_money"
+                        style="@style/charge_order_detail_radio_button"
+                        android:drawableLeft="@mipmap/list_ic_money"
+                        android:drawablePadding="10dp"
+                        android:text="@string/with_money" />
+
+                    <RadioButton
+                        android:id="@+id/rb_with_time"
+                        style="@style/charge_order_detail_radio_button"
+                        android:drawableLeft="@mipmap/list_ic_hour"
+                        android:drawablePadding="10dp"
+                        android:text="@string/with_time" />
+
+                    <RadioButton
+                        android:id="@+id/rb_with_full"
+                        style="@style/charge_order_detail_radio_button"
+                        android:drawableLeft="@mipmap/list_ic_man"
+                        android:drawablePadding="10dp"
+                        android:text="@string/charge_enouth" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_charge_count"
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:gravity="center | start"
+                android:paddingLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textSize="@dimen/text_normal"
+                android:layout_height="40dp"
+                android:hint="@string/please_enter_charge_count"/>
+
+            <Button
+                android:id="@+id/btn_start_charge"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="@dimen/text_normal"
+                android:textColor="@color/white"
+                android:background="@drawable/shape_charge_detail_btn_normal"
+                android:text="@string/start_chareg"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

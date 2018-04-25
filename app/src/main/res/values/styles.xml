@@ -51,4 +51,23 @@
         <item name="android:textSize">@dimen/text_title</item>
         <item name="android:textColor">@color/black_bg</item>
     </style>
+
+
+    <style name="charge_order_detail_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/text_normal</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="charge_order_detail_radio_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:drawableRight">@drawable/selector_charge_order_details_item</item>
+
+    </style>
 </resources>

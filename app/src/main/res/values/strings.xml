@@ -241,4 +241,20 @@
     <string name="now_have_appointed">您当前已有预约设备</string>
 
 
+    <!--充电详情-->
+    <string name="charge_detail">充电详情</string>
+    <string name="charge_station_name">充电站：</string>
+    <string name="charge_zhuang_number">充电桩编号：</string>
+    <string name="charge_cost">充电费：</string>
+    <string name="charge_service_cost">服务费：</string>
+    <string name="choose_charge_gun">选择充电枪</string>
+    <string name="choose_charge_style">选择充电方式</string>
+    <string name="with_power">按电量</string>
+    <string name="with_money">按金额</string>
+    <string name="with_time">按时间</string>
+    <string name="charge_enouth">充满</string>
+    <string name="please_enter_charge_count">请输入充电度数</string>
+    <string name="start_chareg">开始充电</string>
+
+
 </resources>
