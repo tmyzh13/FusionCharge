@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#22000000"
+    tools:context="com.isoftston.issuser.fusioncharge.views.ChargeInputNumberActivity">
+
+    <com.isoftston.issuser.fusioncharge.weights.NavBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/nav"></com.isoftston.issuser.fusioncharge.weights.NavBar>
+
+    <EditText
+        android:paddingLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:textSize="@dimen/text_normal"
+        android:background="@drawable/shape_charge_input_number"
+        android:hint="@string/please_input_erweima_number"
+        android:inputType="number"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/sure"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_normal"
+        android:background="@drawable/shape_charge_input_ok"/>
+
+</LinearLayout>
