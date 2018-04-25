@@ -9,6 +9,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PileFeeBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequesHomeMapInfo;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestChargeStateBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestFeeBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestHomeAppointment;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestMapBean;
@@ -43,7 +44,11 @@ public interface MapApi {
     Observable<BaseData<HomeOrderBean>> getUserOrderStatue(@Header("AccessToken") String token);
 
     @POST(Urls.GET_USER_CHARGER_STATUE)
-    Observable<BaseData> getUserChargerStatue(@Body RequestOnlyUserId bean);
+    Observable<BaseData> getUserChargerStatue(@Header("AccessToken") String token);
+
+    @POST(Urls.GET_CHECK_STATUE)
+    Observable<BaseData> getCheckStatue(@Header("AccessToken") String token, @Body RequestChargeStateBean bean);
+
 
     @POST(Urls.GET_USER_APPOINTMENT)
     Observable<BaseData<HomeAppointmentBean>> getUserAppointmentRecord(@Body RequestHomeAppointment bean);

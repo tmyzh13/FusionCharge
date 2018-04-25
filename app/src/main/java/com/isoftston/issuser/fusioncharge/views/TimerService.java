@@ -24,6 +24,7 @@ public class TimerService extends Service{
     private Timer timer;
     private Timer timerSec;
     private boolean isStartCharge=false;
+    private boolean isAppointmentCharge=false;
 
     @Nullable
     @Override
@@ -39,7 +40,38 @@ public class TimerService extends Service{
     }
 
     private Long hourTime;
+    private long appointmentTime;
+    //更新预约时间
+    private void timeAppointment(){
+        if(isAppointmentCharge){
+            return;
+        }else{
+            isAppointmentCharge=true;
+        }
+        if(timerSec==null){
+            timerSec=new Timer();
+        }
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
+                appointmentTime-=1000;
+                PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,appointmentTime+"");
 
+                if(appointmentTime<=0){
+                    Log.e("yzh","cancel");
+                    cancelTimerAppointment();
+                }
+            }
+        },1000,1000);
+    }
+    public void cancelTimerAppointment(){
+        if(timer!=null){
+            timerSec.cancel();
+            timerSec=null;
+            isAppointmentCharge=false;
+        }
+    }
     //更新充电时间
     public void timerHour(){
         //一分钟更新一次时间
@@ -95,7 +127,7 @@ public class TimerService extends Service{
     }
 
     public class ServiceBinder extends Binder{
-        TimerService getService(){
+        public TimerService getService(){
             return TimerService.this;
         }
     }

@@ -255,6 +255,19 @@ public class Tools {
         return isRight;
     }
 
+    public static String formatMinute(long time){
+        String min = time / (1000 * 60*60) + "";
+        long sec = time % (1000 * 60*60);
+        if (min.length() < 2) {
+            min = "0" + min + "";
+        }
+        String secStr=sec/(1000*60)+"";
+        if(secStr.length()<2){
+            secStr="0"+secStr;
+        }
+        return min + ":" + secStr;
+    }
+
     /**
      * 将毫秒转换时分
      * @param time

@@ -25,4 +25,11 @@ public class Constant {
     public static final String MY_LOCATION="my_location";
     //导航刷新自己的位子
     public static final String REFRESH_LOCATION="refresh_location";
+    //预约计时
+    public static final String TIME_APPOINTMENT="time_appointment";
+    //预约时长
+    public static final String APPOINTMENT_DURING="appointment_during";
+    //首页刷新
+    public static final String HOME_STATUE_REFRESH="HOME_STATUE_REFRESH";
+
 }

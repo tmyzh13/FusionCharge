@@ -12,19 +12,29 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.common.AppManager;
 import com.corelibs.utils.ToastMgr;
+import com.corelibs.utils.rxbus.RxBus;
 import com.corelibs.views.NoScrollingListView;
+import com.isoftston.issuser.fusioncharge.App;
+import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapters.PayStyleAdpter;
+import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeRefreshBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PayStyleBean;
+import com.isoftston.issuser.fusioncharge.presenter.PayPresenter;
 import com.isoftston.issuser.fusioncharge.utils.alipay.AuthResult;
 import com.isoftston.issuser.fusioncharge.utils.alipay.OrderInfoUtil2_0;
 import com.isoftston.issuser.fusioncharge.utils.alipay.PayResult;
+import com.isoftston.issuser.fusioncharge.views.interfaces.PayView;
 import com.isoftston.issuser.fusioncharge.weights.CommonDialog;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 import com.isoftston.issuser.fusioncharge.weights.PayFailDialog;
@@ -40,21 +50,32 @@ import butterknife.OnClick;
  * Created by issuser on 2018/4/20.
  */
 
-public class PayActivity extends BaseActivity {
+public class PayActivity extends BaseActivity<PayView,PayPresenter> implements PayView {
 
     @Bind(R.id.nav)
     NavBar nav;
     @Bind(R.id.list)
     NoScrollingListView listView;
+    @Bind(R.id.tv_charger_enegry)
+    TextView tv_charger_enegry;
+    @Bind(R.id.tv_charger_fee)
+    TextView tv_charger_fee;
+    @Bind(R.id.tv_charge_service_fee)
+    TextView tv_charge_service_fee;
+    @Bind(R.id.tv_total_fee)
+    TextView tv_total_fee;
+
 
     private PayStyleAdpter adapter;
     private Context context=PayActivity.this;
     private List<PayStyleBean> list;
     private CommonDialog commonDialog;
     private PayFailDialog dialog;
+    private String orderNum;
 
-    public static Intent getLauncher(Context context){
+    public static Intent getLauncher(Context context,String orderNum){
         Intent intent =new Intent(context,PayActivity.class);
+        intent.putExtra("num",orderNum);
         return intent;
     }
 
@@ -67,6 +88,8 @@ public class PayActivity extends BaseActivity {
     protected void init(Bundle savedInstanceState) {
         nav.setNavTitle(getString(R.string.pay));
         nav.setImageBackground(R.drawable.nan_bg);
+
+        orderNum=getIntent().getStringExtra("num");
 
         adapter=new PayStyleAdpter(context);
         list =new ArrayList<>();
@@ -101,11 +124,13 @@ public class PayActivity extends BaseActivity {
 
         commonDialog =new CommonDialog(context,"",getString(R.string.pay_balance_not_enough),1);
         dialog=new PayFailDialog(context);
+
+        presenter.getPayDetailInfo(orderNum);
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected PayPresenter createPresenter() {
+        return new PayPresenter();
     }
 
     @OnClick(R.id.tv_pay)
@@ -113,18 +138,20 @@ public class PayActivity extends BaseActivity {
         //选中的支付类型
         String type=list.get(adapter.getCurrentPosition()).type;
         if(type.equals("0")){
-            commonDialog.show();
-            commonDialog.setDialogBackground();
+//            commonDialog.show();
+//            commonDialog.setDialogBackground();
+            presenter.payAction(orderNum,payInfoBean.consumeTotalMoney,3);
+
         }else if(type.equals("1")){
-            dialog.show();
-            dialog.setTryAgainListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
+//            dialog.show();
+//            dialog.setTryAgainListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    dialog.dismiss();
+//                }
+//            });
         }else if(type.equals("2")){
-            startActivity(PayCompleteActivity.getLauncher(context));
+//            startActivity(PayCompleteActivity.getLauncher(context));
         }
     }
 
@@ -277,4 +304,33 @@ public class PayActivity extends BaseActivity {
             }
         };
     };
+
+    private PayInfoBean payInfoBean;
+
+    @Override
+    public void renderData(PayInfoBean bean) {
+        this.payInfoBean=bean;
+        tv_charger_enegry.setText(bean.chargePowerAmount+getString(R.string.du));
+        tv_charger_fee.setText(bean.eneryCharge+getString(R.string.yuan));
+        tv_charge_service_fee.setText(bean.serviceCharge+getString(R.string.yuan));
+        tv_total_fee.setText("￥"+bean.consumeTotalMoney);
+    }
+
+    @Override
+    public void paySuccess() {
+        while(!AppManager.getAppManager().currentActivity().getClass().equals( MainActivity.class)){
+            AppManager.getAppManager().finishActivity();
+        }
+        //给首页发送一个消息去掉未支付提示栏
+        HomeRefreshBean bean =new HomeRefreshBean();
+        bean.type=0;
+        RxBus.getDefault().send(bean, Constant.HOME_STATUE_REFRESH);
+        startActivity(PayCompleteActivity.getLauncher(context));
+    }
+
+    @Override
+    public void payBalanceNotEnough() {
+            commonDialog.show();
+            commonDialog.setDialogBackground();
+    }
 }

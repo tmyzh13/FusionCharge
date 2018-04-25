@@ -3,13 +3,18 @@ package com.isoftston.issuser.fusioncharge.views.home;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,9 +37,13 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.route.RouteSearch;
 import com.corelibs.base.BaseFragment;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
+import com.corelibs.utils.ToastMgr;
 import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
@@ -42,6 +51,7 @@ import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeFeeBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeOrderBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeRefreshBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
@@ -54,6 +64,7 @@ import com.isoftston.issuser.fusioncharge.views.ChargeDetailsActivity;
 import com.isoftston.issuser.fusioncharge.views.GuildActivity;
 import com.isoftston.issuser.fusioncharge.views.ParkActivity;
 import com.isoftston.issuser.fusioncharge.views.PayActivity;
+import com.isoftston.issuser.fusioncharge.views.TimerService;
 import com.isoftston.issuser.fusioncharge.views.interfaces.MapHomeView;
 import com.isoftston.issuser.fusioncharge.weights.ChargeFeeDialog;
 
@@ -119,11 +130,44 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             }
         });
 
-        presenter.getUserOrderStatue();
+//        presenter.getUserOrderStatue();
         presenter.getUserChargeStatue();
-        presenter.getUserAppointment();
+//        presenter.getUserAppointment();
+        presenter.getCheckStatue("","");
         location();
         initMapData();
+
+        ll_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ll_hint.getVisibility()==View.VISIBLE){
+                    ll_hint.setVisibility(View.GONE);
+                    tv_appointment_address.setText(getString(R.string.home_appointment_hint));
+                }else{
+                    ll_hint.setVisibility(View.VISIBLE);
+                    if(homeAppointmentBean!=null){
+                        tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
+                    }
+
+                }
+            }
+        });
+        RxBus.getDefault().toObservable(HomeRefreshBean.class, Constant.HOME_STATUE_REFRESH)
+                .compose(this.<HomeRefreshBean>bindToLifecycle())
+                .subscribe(new RxBusSubscriber<HomeRefreshBean>() {
+
+                    @Override
+                    public void receive(HomeRefreshBean data) {
+
+                        //支付成功了 屏蔽未支付提示
+                        if(data.type==0){
+                            rl_not_pay.setVisibility(View.GONE);
+                        }else if(data.type==1){
+                            ll_appontment.setVisibility(View.GONE);
+                        }
+
+                    }
+                });
     }
 
 
@@ -201,7 +245,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     @OnClick(R.id.tv_pay)
     public void goPay() {
-        startActivity(PayActivity.getLauncher(getContext()));
+        startActivity(PayActivity.getLauncher(getContext(),homeOrderBean.orderRecordNum));
     }
 
     @Override
@@ -499,13 +543,17 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     }
 
+    private HomeOrderBean homeOrderBean;
+
     @Override
     public void hasNoPayOrder(boolean has, HomeOrderBean bean) {
         if (has) {
             rl_not_pay.setVisibility(View.VISIBLE);
+            homeOrderBean=bean;
         } else {
             rl_not_pay.setVisibility(View.GONE);
         }
+
     }
 
 
@@ -523,20 +571,69 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     TextView tv_pile_name;
     @Bind(R.id.tv_gun_num)
     TextView tv_gun_num;
+    @Bind(R.id.ll_time)
+    LinearLayout ll_time;
+
+    private HomeAppointmentBean homeAppointmentBean;
 
     @Override
     public void renderAppoinmentInfo(HomeAppointmentBean bean) {
-        ll_appontment.setVisibility(View.VISIBLE);
+
+        homeAppointmentBean=bean;
+
+//        ll_appontment.setVisibility(View.VISIBLE);
         tv_pile_num.setText(bean.runCode);
         tv_pile_name.setText(bean.chargingPileName);
         tv_gun_num.setText(bean.gunCode);
-        tv_appointment_address.setText(bean.chargingAddress);
+        tv_appointment_address.setText(getString(R.string.home_appointment_hint));
+
+        if(bean.reserveEndTime<=bean.nowTime){
+            ll_appontment.setVisibility(View.VISIBLE);
+        }else{
+            ll_appontment.setVisibility(View.VISIBLE);
+            long surplusTime=bean.reserveEndTime-bean.nowTime;
+            PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,surplusTime+"");
+            PreferencesHelper.saveData(Constant.APPOINTMENT_DURING,bean.reserveDuration);
+            tv_appointment_time.setText(Tools.formatMinute(surplusTime));
+            Intent intent = new Intent(getContext(), TimerService.class);
+            getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
+    private TimerService timerService;
+    private ServiceConnection mConnection =new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TimerService.ServiceBinder binder =(TimerService.ServiceBinder)service;
+            timerService=binder.getService();
+            timerService.timerHour();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            timerService.cancelTimerAppointment();
+            timerService=null;
+        }
+    };
+
+    @OnClick(R.id.iv_appointment_guaild)
+    public void goAppointmentGuaild(){
+        startActivity(GuildActivity.getLauncher(getContext(), homeAppointmentBean.latitude, homeAppointmentBean.longitude,homeAppointmentBean,false));
     }
 
     @OnClick(R.id.iv_guaild)
     public void goGuaild() {
         if (currentMapDataBean != null) {
-            startActivity(GuildActivity.getLauncher(getContext(), currentMapDataBean.latitude, currentMapDataBean.longitude));
+            boolean choiceNotAppointment=false;
+            if(homeAppointmentBean!=null){
+                if(homeAppointmentBean.latitude!=currentMapDataBean.latitude||homeAppointmentBean.longitude!=currentMapDataBean.longitude){
+                    choiceNotAppointment=true;
+                }else{
+                    choiceNotAppointment=false;
+                }
+            }else{
+                choiceNotAppointment=false;
+            }
+            startActivity(GuildActivity.getLauncher(getContext(), currentMapDataBean.latitude, currentMapDataBean.longitude,null,choiceNotAppointment));
 //            startActivity(ParkActivity.getLauncher(getContext()));
         }
 

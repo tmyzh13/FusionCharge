@@ -8,11 +8,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/nav"
         />
-
-    <com.amap.api.maps.MapView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/map"
-        />
+        android:layout_height="match_parent">
+        <com.amap.api.maps.MapView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            />
+        <include layout="@layout/layout_top_hint"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+
 
 </LinearLayout>

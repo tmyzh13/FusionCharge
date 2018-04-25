@@ -28,6 +28,8 @@ public class NavBar extends TranslucentNavBar {
     ImageView iv_seach;
     @Bind(R.id.iv_add)
     ImageView iv_add;
+    @Bind(R.id.tv_appointment)
+    TextView tv_appointment;
 
 
     public NavBar(Context context, AttributeSet attrs) {
@@ -123,6 +125,10 @@ public class NavBar extends TranslucentNavBar {
 
     }
 
+    public void showCancelAppointment(OnClickListener listener){
+        tv_appointment.setVisibility(VISIBLE);
+        tv_appointment.setOnClickListener(listener);
 
+    }
 
 }

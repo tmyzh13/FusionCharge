@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -29,23 +32,47 @@ import com.corelibs.utils.ToastMgr;
 import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeRefreshBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
+import com.isoftston.issuser.fusioncharge.presenter.GuaildPresenter;
 import com.isoftston.issuser.fusioncharge.utils.DrivingRouteOverLay;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
+import com.isoftston.issuser.fusioncharge.views.interfaces.GuaildView;
+import com.isoftston.issuser.fusioncharge.weights.CommonDialog;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by issuser on 2018/4/23.
  */
 
-public class GuildActivity  extends BaseActivity implements RouteSearch.OnRouteSearchListener {
+public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> implements GuaildView, RouteSearch.OnRouteSearchListener {
 
     @Bind(R.id.nav)
     NavBar navBar;
     @Bind(R.id.map)
     MapView map;
+    @Bind(R.id.ll_appointment)
+    LinearLayout ll_appointment;
+    @Bind(R.id.tv_appointment_address)
+    TextView tv_appointment_address;
+    @Bind(R.id.tv_appointment_time)
+    TextView tv_appointment_time;
+    @Bind(R.id.iv_hint)
+    ImageView iv_hint;
+    @Bind(R.id.ll_hint)
+    LinearLayout ll_hint;
+    @Bind(R.id.tv_pile_num)
+    TextView tv_pile_num;
+    @Bind(R.id.tv_pile_name)
+    TextView tv_pile_name;
+    @Bind(R.id.tv_gun_num)
+    TextView tv_gun_num;
+    @Bind(R.id.ll_time)
+    LinearLayout ll_time;
 
     private AMap aMap;
     private RouteSearch mRouteSearch;
@@ -58,10 +85,18 @@ public class GuildActivity  extends BaseActivity implements RouteSearch.OnRouteS
     private DrivingRouteOverLay drivingRouteOverlay;
     private double endLatitude,endLongitude;
 
-    public static Intent getLauncher(Context context,double latitude,double longitude){
+    private HomeAppointmentBean homeAppointmentBean;
+    private CommonDialog commonDialog;
+    private boolean choiceNotAppointment;
+
+    public static Intent getLauncher(Context context,double latitude,double longitude,HomeAppointmentBean bean,boolean choiceNotAppoinment){
         Intent intent =new Intent(context,GuildActivity.class);
         intent.putExtra("la",latitude);
         intent.putExtra("ln",longitude);
+        Bundle bundle =new Bundle();
+        bundle.putSerializable("bean",bean);
+        intent.putExtra("bundle",bundle);
+        intent.putExtra("choice",choiceNotAppoinment);
         return intent;
     }
 
@@ -75,8 +110,57 @@ public class GuildActivity  extends BaseActivity implements RouteSearch.OnRouteS
         navBar.setNavTitle(getString(R.string.guilding));
         navBar.setImageBackground(R.drawable.nan_bg);
 
+        commonDialog=new CommonDialog(context,"",2);
+
         endLatitude=getIntent().getDoubleExtra("la",0);
         endLongitude=getIntent().getDoubleExtra("ln",0);
+        homeAppointmentBean=(HomeAppointmentBean) getIntent().getBundleExtra("bundle").getSerializable("bean");
+        choiceNotAppointment=getIntent().getBooleanExtra("choice",false);
+
+        if(choiceNotAppointment){
+            //提示是否继续导航
+            commonDialog=new CommonDialog(context,"",2);
+            commonDialog.show();
+            commonDialog.setMsg(getString(R.string.guilding_check_not_appointment));
+            commonDialog.setNagitiveListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    commonDialog.dismiss();
+                    finish();
+                }
+            });
+        }else{
+
+        }
+
+        if(homeAppointmentBean!=null){
+            navBar.showCancelAppointment(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    commonDialog=new CommonDialog(context,"",2);
+                    commonDialog.show();
+                    commonDialog.setDialogBackground();
+                    commonDialog.setMsg(getString(R.string.guilding_cancel_appointment_hint));
+                    commonDialog.setPositiveListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            commonDialog.dismiss();
+                            //调用接口
+                            presenter.cancelAppointment("1","1","1","1");
+                        }
+                    });
+                }
+            });
+            ll_appointment.setVisibility(View.VISIBLE);
+
+            tv_pile_num.setText(homeAppointmentBean.runCode);
+            tv_pile_name.setText(homeAppointmentBean.chargingPileName);
+            tv_gun_num.setText(homeAppointmentBean.gunCode);
+            tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
+
+        }else{
+
+        }
 
         map.onCreate(savedInstanceState);
         if (aMap == null) {
@@ -127,6 +211,15 @@ public class GuildActivity  extends BaseActivity implements RouteSearch.OnRouteS
 
     }
 
+    @OnClick(R.id.ll_time)
+    public void hideOrShowInfo(){
+        if(ll_hint.getVisibility()==View.VISIBLE){
+            ll_hint.setVisibility(View.GONE);
+        }else{
+            ll_hint.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     /**
      * 开始搜索路径规划方案
@@ -153,8 +246,8 @@ public class GuildActivity  extends BaseActivity implements RouteSearch.OnRouteS
 
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected GuaildPresenter createPresenter() {
+        return new GuaildPresenter();
     }
 
     @Override
@@ -230,5 +323,14 @@ public class GuildActivity  extends BaseActivity implements RouteSearch.OnRouteS
     @Override
     public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
 
+    }
+
+    @Override
+    public void cancelAppointmentSuccess() {
+        //取消成功
+        HomeRefreshBean bean =new HomeRefreshBean();
+        bean.type=1;
+        RxBus.getDefault().send(bean,Constant.HOME_STATUE_REFRESH);
+        finish();
     }
 }

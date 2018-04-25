@@ -6,6 +6,8 @@ import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
 import com.isoftston.issuser.fusioncharge.model.apis.ChargeStatueApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestEndChargerBean;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestStartChargerBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequstChargeStatueBean;
 import com.isoftston.issuser.fusioncharge.views.interfaces.ChargerStatueView;
 import com.trello.rxlifecycle.ActivityEvent;
@@ -35,6 +37,30 @@ public class ChargeStatuePresenter extends BasePresenter<ChargerStatueView> {
         bean.gunCode="1";
         api.getChargeStatue(bean)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData>() {
+                    @Override
+                    public void success(BaseData baseData) {
+
+                    }
+                });
+    }
+
+    public void startCharging(){
+        RequestStartChargerBean bean =new RequestStartChargerBean();
+        api.startCharge(bean)
+                .compose(new ResponseTransformer<>(this.<BaseData>bindToLifeCycle()))
+                .subscribe(new ResponseSubscriber<BaseData>() {
+                    @Override
+                    public void success(BaseData baseData) {
+
+                    }
+                });
+    }
+
+    public void endCharging(){
+        RequestEndChargerBean bean =new RequestEndChargerBean();
+        api.stopCharge(bean)
+                .compose(new ResponseTransformer<>(this.<BaseData>bindToLifeCycle()))
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override
                     public void success(BaseData baseData) {

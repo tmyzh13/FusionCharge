@@ -9,4 +9,5 @@ public class HomeOrderBean {
     public String orderRecordNum;
     public long chargeId;
     public long id;
+    public String chargeGunNum;
 }

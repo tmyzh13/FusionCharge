@@ -82,6 +82,7 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
         ptrLayout.complete();
     }
 
+
     @Override
     public void rendData(List<MapDataBean> list) {
         //添加一遍距离 并且做一边筛选
@@ -103,8 +104,10 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
 
     @Override
     public void onRefreshing(PtrFrameLayout frame) {
-        presenter.setOtherLoading(true);
-        presenter.getDatas();
+        if(!frame.isAutoRefresh()){
+            presenter.setOtherLoading(true);
+            presenter.getDatas();
+        }
 
     }
 

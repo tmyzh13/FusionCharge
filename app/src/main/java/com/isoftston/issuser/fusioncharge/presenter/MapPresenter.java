@@ -15,6 +15,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PileFeeBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequesHomeMapInfo;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestChargeStateBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestFeeBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestHomeAppointment;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestOnlyUserId;
@@ -101,9 +102,9 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
 
     public void getUserOrderStatue(){
 
-        RequestOnlyUserId bean =new RequestOnlyUserId();
-        bean.userId=1;
-        api.getUserOrderStatue("4871c7ceefac4e48b611460513418f9b")
+//        RequestOnlyUserId bean =new RequestOnlyUserId();
+//        bean.userId=1;
+        api.getUserOrderStatue(token)
                 .compose(new ResponseTransformer<>(this.<BaseData<HomeOrderBean>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<HomeOrderBean>>() {
                     @Override
@@ -122,7 +123,7 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
     public void getUserChargeStatue(){
         RequestOnlyUserId bean =new RequestOnlyUserId();
         bean.userId=1;
-        api.getUserChargerStatue(bean)
+        api.getUserChargerStatue(token)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override
@@ -143,6 +144,20 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
                         if(baseData.data!=null){
                             view.renderAppoinmentInfo(baseData.data);
                         }
+                    }
+                });
+    }
+    public static String token="536f99d2d8a04ff3a837d6a1048bf64f";
+    public void getCheckStatue(String virtualId,String gunCode){
+        RequestChargeStateBean bean =new RequestChargeStateBean();
+        bean.virtualId="000001";
+        bean.gunCode="1";
+        api.getCheckStatue(token,bean)
+                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData>() {
+                    @Override
+                    public void success(BaseData baseData) {
+
                     }
                 });
     }

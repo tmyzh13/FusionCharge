@@ -106,6 +106,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
 
                     }
                 });
+        presenter.getChargeStatue();
     }
 
     @Override
@@ -141,7 +142,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
                         commonDialog.setPositiveListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                startActivity(PayActivity.getLauncher(context));
+                                startActivity(PayActivity.getLauncher(context,""));
                             }
                         });
                     }
