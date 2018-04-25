@@ -5,17 +5,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--允许程序打开网络套接字-->
+    <!-- 允许程序打开网络套接字 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--允许程序设置内置sd卡的写权限-->
+    <!-- 允许程序设置内置sd卡的写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--允许程序获取网络状态-->
+    <!-- 允许程序获取网络状态 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--允许程序访问WiFi网络信息-->
+    <!-- 允许程序访问WiFi网络信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!--允许程序读写手机状态和身份-->
+    <!-- 允许程序读写手机状态和身份 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
+    <!-- 允许程序访问CellID或WiFi热点来获取粗略的位置 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -26,22 +26,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppBaseCompactTheme">
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity
             android:name=".views.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.ChagerStatueActivity"
             android:screenOrientation="portrait" />
-
-                <activity android:name=".views.PayActivity"
-                    android:screenOrientation="portrait"
-                    />
-                <activity android:name=".views.PayCompleteActivity"
-                    android:screenOrientation="portrait"
-                    />
+        <activity
+            android:name=".views.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.PayCompleteActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.interfaces.ForgetPwdActivity"
             android:screenOrientation="portrait" />
@@ -57,34 +54,33 @@
         <activity
             android:name=".views.interfaces.SearchActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".views.ChargeDetailsActivity"
             android:screenOrientation="portrait" />
 
         <service android:name=".views.TimerService" />
-        <activity android:name=".views.GuildActivity"
-            android:screenOrientation="portrait"
-            />
 
-        <activity android:name=".views.ParkActivity"
-            android:screenOrientation="portrait"
-            />
+        <activity
+            android:name=".views.GuildActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".views.ParkActivity"
+            android:screenOrientation="portrait" />
 
-        <!-- 支付宝 com.alipay.sdk.app.H5PayActivity-->
+        <!-- 支付宝 com.alipay.sdk.app.H5PayActivity -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
-        <!--微信支付-->
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <!-- 微信支付 -->
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
@@ -93,19 +89,20 @@
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="wx5e9afde80150f0e0" />
             </intent-filter>
         </activity>
-        <!--高德地图-->
+        <!-- 高德地图 -->
         <!-- 设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="5c12e0c2e5dbb47525b3c78fb597685b"/>
+            android:value="5c12e0c2e5dbb47525b3c78fb597685b" />
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService">
-        </service>
+        <service android:name="com.amap.api.location.APSService"></service>
 
-        <activity android:name=".views.ChargeOrderDetailsActivity"
+        <activity
+            android:name=".views.ChargeOrderDetailsActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -114,8 +111,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
+        <activity android:name=".views.ChargeCaptureActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

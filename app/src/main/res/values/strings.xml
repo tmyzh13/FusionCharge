@@ -193,7 +193,7 @@
     <string name="charging_statue_ending">正在结束充电，请耐心等待....</string>
     <string name="charging_statue_end_go_to_pay">您的充电已结束，请前往支付</string>
     <string name="charging_statue_time">充电时长（分）</string>
-    
+
     <!--支付-->
     <string name="pay">支付</string>
     <string name="pay_electronic">充电量</string>
@@ -253,9 +253,9 @@
     <string name="with_money">按金额</string>
     <string name="with_time">按时间</string>
     <string name="charge_enouth">充满</string>
-    <string name="please_enter_charge_count">请输入充电度数</string>
+    <string name="please_enter_charge_count">  请输入充电度数</string>
     <string name="start_chareg">开始充电</string>
-    <string name="choose_charge_full">已选择充满</string>
+    <string name="choose_charge_full">  已选择充满</string>
 
 
 </resources>
