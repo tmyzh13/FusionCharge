@@ -43,4 +43,8 @@ public class AppointmentTimeOutDialog extends Dialog {
         tv_re_appointment.setOnClickListener(listener);
     }
 
+    public void setIvDeleteListener(View.OnClickListener listener){
+        iv_delete.setOnClickListener(listener);
+    }
+
 }

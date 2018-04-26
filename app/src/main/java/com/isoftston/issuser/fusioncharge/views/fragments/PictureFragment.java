@@ -29,4 +29,9 @@ public class PictureFragment extends BaseFragment {
     protected BasePresenter createPresenter() {
         return null;
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

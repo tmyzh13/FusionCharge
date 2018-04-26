@@ -11,9 +11,11 @@ import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.ToastMgr;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.LoginApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
+import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.LoginView;
@@ -54,14 +56,16 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             bean.captcha = captcha;
         }
         api.login(bean)
-                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
-                .subscribe(new ResponseSubscriber<BaseData>(view) {
+                .compose(new ResponseTransformer<>(this.<BaseData<UserBean>>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData<UserBean>>(view) {
                     @Override
-                    public void success(BaseData baseData) {
+                    public void success(BaseData<UserBean> baseData) {
                         Log.e("loginAction","---success");
                         PreferencesHelper.saveData(Constant.LOGIN_STATUE,"1");
                         SharePrefsUtils.putValue(getContext(),"phone",phone);
-                        view.loginSuccess((String) baseData.data);
+                        UserHelper.saveUser(baseData.data);
+                        view.loginSuccess();
+
                     }
                 });
     }

@@ -59,4 +59,9 @@ public class PositionFragment extends BaseFragment {
     protected BasePresenter createPresenter() {
         return null;
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

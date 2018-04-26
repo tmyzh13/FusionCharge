@@ -1,5 +1,7 @@
 package com.corelibs.subscriber;
 
+import android.util.Log;
+
 import com.corelibs.R;
 import com.corelibs.base.BasePaginationView;
 import com.corelibs.base.BaseView;
@@ -60,8 +62,15 @@ public class ResponseHandler<T> {
             if (data.isSuccess()) {
                 handler.success(t);
             } else {
+                Log.e("yzh","000000000");
                 if (!handler.operationError(t, data.status(), data.msg())) {
-                    handleOperationError(data.msg());
+                    if(data.status()==403){
+                        Log.e("yzh","sdsadas40300");
+                        handlerGoLogin();
+                    }else{
+                        handleOperationError(data.msg());
+                    }
+
                 }
             }
         } else {
@@ -102,6 +111,15 @@ public class ResponseHandler<T> {
     public void handleOperationError(String message) {
         if (view != null)
             view.showToastMessage(message);
+    }
+
+    public void handlerGoLogin(){
+        if (view != null){
+            Log.e("yzh","ssssssssdsadasd");
+            view.showToastMessage("登录失效");
+            view.goLogin();
+        }
+
     }
 
     public BaseView getView() {

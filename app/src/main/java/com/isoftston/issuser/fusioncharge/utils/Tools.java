@@ -335,4 +335,24 @@ public class Tools {
         Double temp= Double.valueOf(yearString);
         return temp;
     }
+
+    /**
+     * 将时间转换毫秒
+     * @param time
+     * @return
+     */
+    public static long getTimeValue(String time){
+        long value=0;
+        String[] times=time.split(":");
+        for(int i=0;i<times.length;i++){
+            if(i==0){
+                value+=Long.parseLong(times[i])*(3600*1000);
+            }else if(i==1){
+                value+=Long.parseLong(times[i])*(60*1000);
+            }else if(i==2){
+                value+=Long.parseLong(times[i])*1000;
+            }
+        }
+        return value;
+    }
 }

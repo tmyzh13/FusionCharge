@@ -83,4 +83,9 @@ public class ParkActivity extends BaseActivity {
     public void actionScan(){
 
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

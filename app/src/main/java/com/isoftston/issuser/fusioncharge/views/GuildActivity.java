@@ -1,8 +1,11 @@
 package com.isoftston.issuser.fusioncharge.views;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +29,7 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.subscriber.ResponseSubscriber;
 import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.ToastMgr;
@@ -39,6 +43,7 @@ import com.isoftston.issuser.fusioncharge.presenter.GuaildPresenter;
 import com.isoftston.issuser.fusioncharge.utils.DrivingRouteOverLay;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.GuaildView;
+import com.isoftston.issuser.fusioncharge.weights.AppointmentTimeOutDialog;
 import com.isoftston.issuser.fusioncharge.weights.CommonDialog;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
@@ -88,6 +93,7 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
     private HomeAppointmentBean homeAppointmentBean;
     private CommonDialog commonDialog;
     private boolean choiceNotAppointment;
+    private AppointmentTimeOutDialog appointmentTimeOutDialog;
 
     public static Intent getLauncher(Context context,double latitude,double longitude,HomeAppointmentBean bean,boolean choiceNotAppoinment){
         Intent intent =new Intent(context,GuildActivity.class);
@@ -116,6 +122,8 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
         endLongitude=getIntent().getDoubleExtra("ln",0);
         homeAppointmentBean=(HomeAppointmentBean) getIntent().getBundleExtra("bundle").getSerializable("bean");
         choiceNotAppointment=getIntent().getBooleanExtra("choice",false);
+
+        appointmentTimeOutDialog=new AppointmentTimeOutDialog(context);
 
         if(choiceNotAppointment){
             //提示是否继续导航
@@ -157,6 +165,10 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
             tv_pile_name.setText(homeAppointmentBean.chargingPileName);
             tv_gun_num.setText(homeAppointmentBean.gunCode);
             tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
+            tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
+            //设置时间开始计时
+            Intent intent = new Intent(this, TimerService.class);
+            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
         }else{
 
@@ -207,8 +219,36 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
                 return true;
             }
         });
-
-
+        RxBus.getDefault().toObservable(Object.class,Constant.REFRESH_APPOINTMENT_TIME)
+                .compose(this.<Object>bindToLifecycle())
+                .subscribe(new RxBusSubscriber<Object>() {
+                    @Override
+                    public void receive(Object data) {
+                        tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
+                    }
+                });
+        RxBus.getDefault().toObservable(Object.class,Constant.APPOINTMENT_TIME_OUT)
+                .compose(this.bindToLifecycle())
+                .subscribe(new RxBusSubscriber<Object>() {
+                    @Override
+                    public void receive(Object data) {
+                        appointmentTimeOutDialog.show();
+                        appointmentTimeOutDialog.setIvDeleteListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                appointmentTimeOutDialog.dismiss();
+                                finish();
+                            }
+                        });
+                        appointmentTimeOutDialog.setReAppointment(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                appointmentTimeOutDialog.dismiss();
+                                finish();
+                            }
+                        });
+                    }
+                });
     }
 
     @OnClick(R.id.ll_time)
@@ -306,7 +346,6 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
                 } else if (driveRouteResult != null && driveRouteResult.getPaths() == null) {
 //                    ToastUtil.show(mContext, R.string.no_result);
                 }
-
             } else {
 //                ToastUtil.show(mContext, R.string.no_result);
             }
@@ -332,5 +371,27 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
         bean.type=1;
         RxBus.getDefault().send(bean,Constant.HOME_STATUE_REFRESH);
         finish();
+    }
+
+    private TimerService timerService;
+
+    private ServiceConnection mConnection =new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TimerService.ServiceBinder binder =(TimerService.ServiceBinder)service;
+            timerService=binder.getService();
+            timerService.timeAppointment();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            timerService.cancelTimerAppointment();
+            timerService=null;
+        }
+    };
+
+    @Override
+    public void goLogin() {
+
     }
 }

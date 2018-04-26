@@ -40,6 +40,11 @@ public interface BaseView {
     void showEmptyHint();
 
     /**
+     * 403去重新登录
+     */
+    void goLogin();
+
+    /**
      * 获取Context对象
      */
     Context getViewContext();

@@ -2,22 +2,28 @@ package com.isoftston.issuser.fusioncharge.views;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.common.AppManager;
 import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.rxbus.RxBus;
+import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargerStatueBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.presenter.ChargeStatuePresenter;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.ChargerStatueView;
@@ -28,6 +34,7 @@ import com.isoftston.issuser.fusioncharge.weights.CommonDialog;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
 import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -36,7 +43,7 @@ import butterknife.OnClick;
  * Created by issuser on 2018/4/20.
  */
 
-public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeStatuePresenter> implements ChargerStatueView {
+public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, ChargeStatuePresenter> implements ChargerStatueView {
 
     @Bind(R.id.nav)
     NavBar navBar;
@@ -44,15 +51,31 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
     TextView tv_charge_time;
     @Bind(R.id.progress)
     CircleProgressView progressView;
+    @Bind(R.id.tv_address_name)
+    TextView tv_address_name;
+    @Bind(R.id.tv_kw)
+    TextView tv_kw;
+    @Bind(R.id.tv_current_charger)
+    TextView tv_current_charge;
+    @Bind(R.id.tv_charged_enegy)
+    TextView tv_charged_enegy;
+    @Bind(R.id.tv_charged_money)
+    TextView tv_charged_money;
 
-    private Context context=ChagerStatueActivity.this;
+    private Context context = ChagerStatueActivity.this;
     private CommonDialog commonDialog;
     private CheckStatueLoadingView checkStatueLoadingView;
     private CheckChargeFailDialog dialog;
     private TimerService timerService;
+    private HomeChargeOrderBean homeChargeOrderBean;
+    private Timer timer;
+    private Handler handler;
 
-    public static Intent getLauncher(Context context){
-        Intent intent =new Intent(context,ChagerStatueActivity.class);
+    public static Intent getLauncher(Context context, HomeChargeOrderBean bean) {
+        Intent intent = new Intent(context, ChagerStatueActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", bean);
+        intent.putExtra("bundle", bundle);
         return intent;
     }
 
@@ -65,9 +88,13 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
     protected void init(Bundle savedInstanceState) {
         navBar.setNavTitle(getString(R.string.charging_statue));
         navBar.setImageBackground(R.drawable.nan_bg);
-        commonDialog=new CommonDialog(context,getString(R.string.hint),getString(R.string.charging_statue_hint),2);
-        dialog=new CheckChargeFailDialog(context);
-        checkStatueLoadingView=new CheckStatueLoadingView(context,getString(R.string.charging_statue_checking));
+
+        handler=new Handler();
+        commonDialog = new CommonDialog(context, getString(R.string.hint), getString(R.string.charging_statue_hint), 2);
+        dialog = new CheckChargeFailDialog(context);
+        checkStatueLoadingView = new CheckStatueLoadingView(context, getString(R.string.charging_statue_checking));
+        Bundle bundle = getIntent().getBundleExtra("bundle");
+        homeChargeOrderBean = (HomeChargeOrderBean) bundle.getSerializable("data");
 //        checkStatueLoadingView.show();
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
@@ -76,17 +103,17 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
 //                dialog.show();
 //            }
 //        },2000);
-        Log.e("yzh","--"+Tools.getHourValue("03:45"));
-        PreferencesHelper.saveData(Constant.CHARGING_TOTAL,Tools.getHourValue("03:45"));
-        progressView.setMax(Tools.getHourValue("03:45"));
-        if(Tools.isNull(PreferencesHelper.getData(Constant.CHARGING_TIME))){
-            PreferencesHelper.saveData(Constant.CHARGING_TIME,"0");
-            tv_charge_time.setText("00:00");
-            progressView.setProgress(0);
-        }else{
-            progressView.setProgress(Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME)));
-            tv_charge_time.setText(Tools.formatHour(Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME))));
-        }
+//        PreferencesHelper.saveData(Constant.CHARGING_TOTAL,Tools.getHourValue("03:45"));
+        //进度设置100  进度给对应的百分比
+        progressView.setMax(100);
+//        if(Tools.isNull(PreferencesHelper.getData(Constant.CHARGING_TIME))){
+//            PreferencesHelper.saveData(Constant.CHARGING_TIME,"0");
+//            tv_charge_time.setText("00:00");
+//            progressView.setProgress(0);
+//        }else{
+//            progressView.setProgress(Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME)));
+//            tv_charge_time.setText(Tools.formatHour(Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME))));
+//        }
 
 
 //        timerService.timerHour();
@@ -95,7 +122,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
                 .subscribe(new RxBusSubscriber<Object>() {
                     @Override
                     public void receive(Object data) {
-                        Log.e("yzh","receiver");
+                        Log.e("yzh", "receiver");
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -106,7 +133,11 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
 
                     }
                 });
-        presenter.getChargeStatue();
+        if (homeChargeOrderBean != null) {
+            presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
+        }
+        timer = new Timer();
+
     }
 
     @Override
@@ -123,7 +154,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
 
 
     @OnClick(R.id.tv_pay)
-    public void goPay(){
+    public void goPay() {
         commonDialog.show();
         commonDialog.setPositiveListener(new View.OnClickListener() {
             @Override
@@ -131,40 +162,203 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView,ChargeS
                 commonDialog.dismiss();
                 //进入支付界面
 //                startActivity(PayActivity.getLauncher(context));
+                //结束充电 成功之后在选择进入支付
                 checkStatueLoadingView.setMessage(getString(R.string.charging_statue_ending));
                 checkStatueLoadingView.show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkStatueLoadingView.dismiss();
-                        commonDialog.setMsg(getString(R.string.charging_statue_end_go_to_pay));
-                        commonDialog.show();
-                        commonDialog.setPositiveListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                startActivity(PayActivity.getLauncher(context,""));
-                            }
-                        });
-                    }
-                },2000);
+                presenter.endCharging(chargerStatueBean.chargingPileId,chargerStatueBean.chargingPileName,chargerStatueBean.virtualId,chargerStatueBean.gunCode,homeChargeOrderBean.orderRecordNum);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        checkStatueLoadingView.dismiss();
+//                        commonDialog.setMsg(getString(R.string.charging_statue_end_go_to_pay));
+//                        commonDialog.show();
+//                        commonDialog.setPositiveListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+////                                orderNum 是在传参里面有
+////                                presenter.endCharging();
+////                                startActivity(PayActivity.getLauncher(context,""));
+//                            }
+//                        });
+//                    }
+//                },2000);
             }
         });
     }
 
-    private ServiceConnection mConnection =new ServiceConnection() {
+    private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            TimerService.ServiceBinder binder =(TimerService.ServiceBinder)service;
-            Log.e("yzh","11111111111");
-            timerService=binder.getService();
-            timerService.timerHour();
+            TimerService.ServiceBinder binder = (TimerService.ServiceBinder) service;
+            Log.e("yzh", "11111111111");
+            timerService = binder.getService();
+
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.e("yzh","22222222222222");
+            Log.e("yzh", "22222222222222");
             timerService.cancelTimerHour();
-            timerService=null;
+            timerService = null;
         }
     };
+
+    private ChargerStatueBean chargerStatueBean;
+
+    @Override
+    public void renderChargerStatueData(ChargerStatueBean bean) {
+        chargerStatueBean=bean;
+        if (bean.isStart == 0) {
+            //检测失败
+            final CheckChargeFailDialog dialog = new CheckChargeFailDialog(context);
+            dialog.show();
+            dialog.setCancelOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    finish();
+                }
+            });
+            dialog.setOnKeyListener(new DialogInterface.OnKeyListener()
+            {
+                public boolean onKey(DialogInterface dialog,
+                                     int keyCode, KeyEvent event)
+                {
+                    if (keyCode == KeyEvent.KEYCODE_BACK)
+                    {
+                        finish();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            });
+        } else if (bean.isStart == 1) {
+            checkStatueLoadingView.dismiss();
+            //检测中的定时结束
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
+                }
+            },5000);
+//            timer.cancel();
+//            timer = new Timer();
+//            //开始5s刷新一个数据的定时
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
+//                }
+//            }, 1000, 5000);
+
+            //成功
+            tv_kw.setText(bean.kwh);
+            tv_charged_money.setText(bean.money + getString(R.string.yuan));
+            tv_current_charge.setText(bean.soc+"%");
+            tv_charged_enegy.setText(bean.power + getString(R.string.du));
+            //05:04:25
+            tv_charge_time.setText(bean.alreadyTime.substring(0,5));
+            PreferencesHelper.saveData(Constant.CHARGING_TIME, Tools.getTimeValue(bean.alreadyTime)+"");
+            timerService.timerHour();
+            if (Tools.isNull(bean.soc)) {
+                progressView.setProgress(0);
+            } else {
+                progressView.setProgress(Long.parseLong(bean.soc));
+            }
+            if (bean.isStop != 0) {
+                timerService.cancelTimerHour();
+                //弹框提示充电结束去支付
+                final CommonDialog dialog = new CommonDialog(context, getString(R.string.hint), getString(R.string.charging_statue_end_go_to_pay), 2);
+                dialog.show();
+                dialog.setPositiveListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        startActivity(PayActivity.getLauncher(context, homeChargeOrderBean.orderRecordNum));
+                    }
+                });
+
+                dialog.setNagitiveListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                        while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)) {
+                            AppManager.getAppManager().finishActivity();
+                        }
+                    }
+                });
+            }
+
+        } else if (bean.isStart == 2) {
+            //检测中
+            checkStatueLoadingView.show();
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
+//                }
+//            }, 1000, 3000);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
+                }
+            },3000);
+        }
+    }
+
+    @Override
+    public void endChargeSuccess() {
+        checkStatueLoadingView.dismiss();
+        commonDialog.setMsg(getString(R.string.charging_statue_end_go_to_pay));
+        commonDialog.show();
+        commonDialog.setPositiveListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                                orderNum 是在传参里面有
+//                                presenter.endCharging();
+            startActivity(PayActivity.getLauncher(context,homeChargeOrderBean.orderRecordNum));
+            }
+        });
+        commonDialog.setNagitiveListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkStatueLoadingView.dismiss();
+                while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)) {
+                    AppManager.getAppManager().finishActivity();
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void endChargeFail() {
+        checkStatueLoadingView.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
+        timer = null;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+           finish();
+            return true;
+        } else {
+            return super.onKeyUp(keyCode, event);
+        }
+    }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

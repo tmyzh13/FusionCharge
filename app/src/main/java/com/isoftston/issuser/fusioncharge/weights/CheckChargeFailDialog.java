@@ -37,5 +37,10 @@ public class CheckChargeFailDialog extends Dialog{
                 dismiss();
             }
         });
+        setCanceledOnTouchOutside(false);
+    }
+
+    public void setCancelOnClickListener(View.OnClickListener listener){
+        iv_cancel.setOnClickListener(listener);
     }
 }

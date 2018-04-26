@@ -104,7 +104,9 @@
     <string name="home_direct_electronic">直流电</string>
     <string name="home_alternating_electronic">交流电</string>
     <string name="home_go_pay">去支付</string>
+    <string name="home_go_charger">去充电</string>
     <string name="home_not_pay_hint">您有一个交易订单未支付</string>
+    <string name="home_start_charging">您有一个开启充电的订单</string>
     <string name="home_charging">您的车正在充电</string>
     <string name="home_checking">正在检测充电安全</string>
     <string name="home_checked_fail">检测充电安全失败</string>

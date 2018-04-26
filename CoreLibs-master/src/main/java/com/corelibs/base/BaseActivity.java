@@ -118,6 +118,8 @@ public abstract class BaseActivity<V extends BaseView, T extends BasePresenter<V
         startActivity(callIntent);
     }
 
+
+
     @Override
     protected void onStart() {
         super.onStart();

@@ -6,6 +6,16 @@ package com.isoftston.issuser.fusioncharge.model.beans;
 public class UserBean {
 
     public long id;
+    public long appUserId;
+    public String photoUrl;
+    public String name;
+    public String phone;
+    public String nickName;
+    public int sex;
+    public String sexName;
+    public String email;
+    public String token;
+    public String type;
     /**
      * 用户名
      */
@@ -38,7 +48,6 @@ public class UserBean {
     public String gender = "0";
 
 
-    public String token = "";
 
 
 }

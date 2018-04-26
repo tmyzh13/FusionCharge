@@ -2,6 +2,7 @@ package com.isoftston.issuser.fusioncharge.views.interfaces;
 
 import com.corelibs.base.BaseView;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
@@ -24,4 +25,6 @@ public interface MapHomeView extends BaseView{
     void hasNoPayOrder(boolean has, HomeOrderBean bean);
 
     void renderAppoinmentInfo(HomeAppointmentBean bean);
+
+    void renderHomeChargerOrder(HomeChargeOrderBean bean);
 }

@@ -4,8 +4,10 @@ import com.corelibs.api.ApiFactory;
 import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.ChargeStatueApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargerStatueBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestEndChargerBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestStartChargerBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequstChargeStatueBean;
@@ -31,15 +33,18 @@ public class ChargeStatuePresenter extends BasePresenter<ChargerStatueView> {
 
     }
 
-    public void getChargeStatue(){
+    public void getChargeStatue(String virtualId,String gunCode){
         RequstChargeStatueBean bean =new RequstChargeStatueBean();
-        bean.virtualId="000001";
-        bean.gunCode="1";
-        api.getChargeStatue(bean)
-                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
-                .subscribe(new ResponseSubscriber<BaseData>() {
+        bean.virtualId=virtualId;
+        bean.gunCode=gunCode;
+        api.getChargeStatue(UserHelper.getSavedUser().token,bean)
+                .compose(new ResponseTransformer<>(this.<BaseData<ChargerStatueBean>>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData<ChargerStatueBean>>(view) {
                     @Override
-                    public void success(BaseData baseData) {
+                    public void success(BaseData<ChargerStatueBean> baseData) {
+                        if(baseData.data!=null){
+                            view.renderChargerStatueData(baseData.data);
+                        }
 
                     }
                 });
@@ -57,14 +62,32 @@ public class ChargeStatuePresenter extends BasePresenter<ChargerStatueView> {
                 });
     }
 
-    public void endCharging(){
+    public void endCharging(long chargeingPileId,String chargingPileName,String virtualId,
+                            String gunCode,String orderRecordNum){
         RequestEndChargerBean bean =new RequestEndChargerBean();
+        bean.chargingPileId=chargeingPileId;
+        bean.chargingPileName=chargingPileName;
+        bean.virtualId=virtualId;
+        bean.appUserId=67;
+        bean.gunCode=gunCode;
+        bean.stopReason="1";
+        bean.orderRecordNum=orderRecordNum;
         api.stopCharge(bean)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindToLifeCycle()))
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override
                     public void success(BaseData baseData) {
+                        if(baseData!=null&&baseData.data!=null){
+                            view.endChargeSuccess();
+                        }else{
+                            view.endChargeFail();
+                        }
+                    }
 
+                    @Override
+                    public boolean operationError(BaseData baseData, int status, String message) {
+                        view.endChargeFail();
+                        return super.operationError(baseData, status, message);
                     }
                 });
     }

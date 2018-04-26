@@ -218,4 +218,9 @@ public class ChargeCaptureActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

@@ -1,5 +1,7 @@
 package com.corelibs.subscriber;
 
+import android.util.Log;
+
 import com.corelibs.base.BaseView;
 import com.corelibs.subscriber.ResponseHandler.IBaseData;
 
@@ -37,9 +39,20 @@ public abstract class ResponseAction<T, R> implements Func1<T, R>,
             if (data.isSuccess()) {
                 return successCall(t);
             } else {
-                if (!operationError(t, data.status(), data.msg())) {
-                    handler.handleOperationError(data.msg());
+                if(data.status()==403){
+                    handler.handlerGoLogin();
+                }else{
+                    if (!operationError(t, data.status(), data.msg())) {
+//                    if(data.status()==403){
+//                        Log.e("yzh","ssssss");
+//                        handler.handlerGoLogin();
+//                    }else{
+                        handler.handleOperationError(data.msg());
+//                    }
+
+                    }
                 }
+
                 return errorCall();
             }
         } else {

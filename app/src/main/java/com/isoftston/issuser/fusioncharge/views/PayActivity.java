@@ -333,4 +333,9 @@ public class PayActivity extends BaseActivity<PayView,PayPresenter> implements P
             commonDialog.show();
             commonDialog.setDialogBackground();
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

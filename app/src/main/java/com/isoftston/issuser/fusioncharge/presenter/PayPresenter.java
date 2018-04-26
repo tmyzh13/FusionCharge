@@ -6,6 +6,7 @@ import com.corelibs.api.ApiFactory;
 import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.MapApi;
 import com.isoftston.issuser.fusioncharge.model.apis.PayApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
@@ -37,7 +38,7 @@ public class PayPresenter extends BasePresenter<PayView> {
         RequestPayDetailBean bean=new RequestPayDetailBean();
         bean.orderRecordNum=orderNum;
         view.showLoading();
-        api.getPayDetail(MapPresenter.token,bean)
+        api.getPayDetail(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<PayInfoBean>>bindToLifeCycle()))
                 .subscribe(new ResponseSubscriber<BaseData<PayInfoBean>>(view) {
                     @Override
@@ -53,7 +54,7 @@ public class PayPresenter extends BasePresenter<PayView> {
         bean.payType=payType;
         bean.totalFee=total;
         view.showLoading();
-        api.balancePay(MapPresenter.token,bean)
+        api.balancePay(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindToLifeCycle()))
                 .subscribe(new ResponseSubscriber<BaseData>(view) {
                     @Override

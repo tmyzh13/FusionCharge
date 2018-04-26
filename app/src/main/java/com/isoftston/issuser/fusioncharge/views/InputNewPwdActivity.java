@@ -60,4 +60,9 @@ public class InputNewPwdActivity extends BaseActivity {
     protected BasePresenter createPresenter() {
         return null;
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }
