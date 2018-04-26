@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.corelibs.api.ApiFactory;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.utils.ToastMgr;
@@ -19,6 +20,8 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
+import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -31,6 +34,8 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class ChargeCaptureActivity extends BaseActivity {
+
+    private ScanApi api;
 
     @Bind(R.id.nav)
     NavBar navBar;
@@ -53,6 +58,8 @@ public class ChargeCaptureActivity extends BaseActivity {
     protected void init(Bundle savedInstanceState) {
         navBar.setColorRes(R.color.app_blue);
         navBar.setNavTitle(this.getString(R.string.charge));
+
+        api = ApiFactory.getFactory().create(ScanApi.class);
 
         capture = new CaptureManager(this, dbv);
         capture.initializeFromIntent(getIntent(), savedInstanceState);

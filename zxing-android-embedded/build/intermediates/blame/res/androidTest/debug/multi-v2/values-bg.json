@@ -1,6 +1,21 @@
 {
     "logs": [
         {
+            "outputFile": "C:\\Users\\issuser\\AndroidStudioProjects\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-bg\\values-bg.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\issuser\\AndroidStudioProjects\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\bundles\\debug\\res\\values-bg\\values-bg.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,112,159,311",
+                        "endColumns": "56,46,151,110",
+                        "endOffsets": "107,154,306,417"
+                    }
+                }
+            ]
+        },
+        {
             "outputFile": "C:\\Users\\Administrator\\Desktop\\Android_project\\FusionCharge\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-bg\\values-bg.xml",
             "map": [
                 {

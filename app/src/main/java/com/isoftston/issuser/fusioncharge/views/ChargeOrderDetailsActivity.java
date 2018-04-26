@@ -125,15 +125,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
     }
 
     private void enterSaoYiSao(){
-        //进入扫一扫界面
-        new IntentIntegrator(this)
-                .setCaptureActivity(ChargeCaptureActivity.class)
-                .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)// 扫码的类型,可选：一维码，二维码，一/二维码
-                .setPrompt("请对准二维码")// 设置提示语
-                .setCameraId(0)// 选择摄像头,可使用前置或者后置
-                .setBeepEnabled(true)// 是否开启声音,扫完码之后会"哔"的一声
-                .setBarcodeImageEnabled(false)// 扫完码之后生成二维码的图片
-                .initiateScan();// 初始化扫码
+
     }
 
 

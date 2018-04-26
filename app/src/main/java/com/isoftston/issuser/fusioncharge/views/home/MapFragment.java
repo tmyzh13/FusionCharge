@@ -45,6 +45,7 @@ import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.ToastMgr;
 import com.corelibs.utils.rxbus.RxBus;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
@@ -60,6 +61,7 @@ import com.isoftston.issuser.fusioncharge.presenter.MapPresenter;
 import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.ChagerStatueActivity;
+import com.isoftston.issuser.fusioncharge.views.ChargeCaptureActivity;
 import com.isoftston.issuser.fusioncharge.views.ChargeDetailsActivity;
 import com.isoftston.issuser.fusioncharge.views.GuildActivity;
 import com.isoftston.issuser.fusioncharge.views.ParkActivity;
@@ -646,6 +648,14 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     @OnClick(R.id.iv_scan)
     public void goScan() {
-
+        //进入扫一扫界面
+        new IntentIntegrator(getActivity())
+                .setCaptureActivity(ChargeCaptureActivity.class)
+                .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)// 扫码的类型,可选：一维码，二维码，一/二维码
+                .setPrompt("请对准二维码")// 设置提示语
+                .setCameraId(0)// 选择摄像头,可使用前置或者后置
+                .setBeepEnabled(true)// 是否开启声音,扫完码之后会"哔"的一声
+                .setBarcodeImageEnabled(false)// 扫完码之后生成二维码的图片
+                .initiateScan();// 初始化扫码
     }
 }

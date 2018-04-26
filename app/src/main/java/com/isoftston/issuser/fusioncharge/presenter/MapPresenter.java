@@ -147,7 +147,7 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
                     }
                 });
     }
-    public static String token="536f99d2d8a04ff3a837d6a1048bf64f";
+    public static String token="928d34ab5776449292ff26823662177f";
     public void getCheckStatue(String virtualId,String gunCode){
         RequestChargeStateBean bean =new RequestChargeStateBean();
         bean.virtualId="000001";

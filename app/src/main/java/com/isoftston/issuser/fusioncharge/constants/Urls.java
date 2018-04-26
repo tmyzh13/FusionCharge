@@ -48,4 +48,7 @@ public class Urls {
     public static final String STOP_CHARGER="charging/stop";
     //开始充电
     public static final String START_CHARGER="charging/start";
+
+    //扫码充电
+    public static final String SCAN_CHARGE = "charging/scan";
 }

@@ -14,6 +14,21 @@
                     }
                 }
             ]
+        },
+        {
+            "outputFile": "C:\\Users\\issuser\\AndroidStudioProjects\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-ru\\values-ru.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\issuser\\AndroidStudioProjects\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\bundles\\debug\\res\\values-ru\\values-ru.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,117,164,306",
+                        "endColumns": "61,46,141,125",
+                        "endOffsets": "112,159,301,427"
+                    }
+                }
+            ]
         }
     ]
 }
