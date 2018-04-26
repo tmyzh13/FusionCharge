@@ -19,11 +19,9 @@ import com.isoftston.issuser.fusioncharge.utils.Tools;
 
 public class HomeListAdpter extends QuickAdapter<MapDataBean> {
 
-    MyLocationBean myLocationBean;
 
     public HomeListAdpter(Context context){
         super(context, R.layout.item_home_list);
-        myLocationBean=PreferencesHelper.getData(MyLocationBean.class);
     }
 
     @Override

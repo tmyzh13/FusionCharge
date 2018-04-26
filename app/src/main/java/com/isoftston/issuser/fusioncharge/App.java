@@ -2,6 +2,7 @@ package com.isoftston.issuser.fusioncharge;
 
 import android.app.Application;
 import android.os.StrictMode;
+import android.support.multidex.MultiDexApplication;
 
 import com.corelibs.api.ApiFactory;
 import com.corelibs.common.Configuration;
@@ -14,7 +15,7 @@ import com.isoftston.issuser.fusioncharge.constants.Urls;
  * Created by issuser on 2018/4/18.
  */
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     @Override
     public void onCreate() {

@@ -15,6 +15,8 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -123,6 +126,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     private AMap aMap;
     private AppointmentTimeOutDialog appointmentTimeOutDialog;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_main;
@@ -147,19 +151,19 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         ll_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ll_hint.getVisibility()==View.VISIBLE){
+                if (ll_hint.getVisibility() == View.VISIBLE) {
                     ll_hint.setVisibility(View.GONE);
                     tv_appointment_address.setText(getString(R.string.home_appointment_hint));
-                }else{
+                } else {
                     ll_hint.setVisibility(View.VISIBLE);
-                    if(homeAppointmentBean!=null){
+                    if (homeAppointmentBean != null) {
                         tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
                     }
 
                 }
             }
         });
-        appointmentTimeOutDialog=new AppointmentTimeOutDialog(getContext());
+        appointmentTimeOutDialog = new AppointmentTimeOutDialog(getContext());
 
         RxBus.getDefault().toObservable(HomeRefreshBean.class, Constant.HOME_STATUE_REFRESH)
                 .compose(this.<HomeRefreshBean>bindToLifecycle())
@@ -169,20 +173,20 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     public void receive(HomeRefreshBean data) {
 
                         //支付成功了 屏蔽未支付提示
-                        if(data.type==0){
+                        if (data.type == 0) {
                             rl_not_pay.setVisibility(View.GONE);
-                        }else if(data.type==1){
+                        } else if (data.type == 1) {
                             ll_appontment.setVisibility(View.GONE);
                         }
 
                     }
                 });
-        RxBus.getDefault().toObservable(Object.class,Constant.APPOINTMENT_TIME_OUT)
+        RxBus.getDefault().toObservable(Object.class, Constant.APPOINTMENT_TIME_OUT)
                 .compose(this.bindToLifecycle())
                 .subscribe(new RxBusSubscriber<Object>() {
                     @Override
                     public void receive(Object data) {
-                        if(AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)){
+                        if (AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)) {
                             appointmentTimeOutDialog.show();
                             appointmentTimeOutDialog.setIvDeleteListener(new View.OnClickListener() {
                                 @Override
@@ -218,24 +222,41 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     }
                 });
 
-        if(UserHelper.getSavedUser()!=null&&!Tools.isNull(UserHelper.getSavedUser().token)){
-           getHomeStatue();
+        if (UserHelper.getSavedUser() != null && !Tools.isNull(UserHelper.getSavedUser().token)) {
+            getHomeStatue();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+//            // 检查该权限是否已经获取
+//            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_PHONE_STATE}, 10);
+//            // 权限是否已经 授权 GRANTED---授权  DINIED---拒绝
+////            if (i != PackageManager.PERMISSION_GRANTED) {
+////                // 如果没有授予该权限，就去提示用户请求
+//////                showDialogTipUserRequestPermission();
+////            }
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(getContext(), "没有权限,请手动开启定位权限", Toast.LENGTH_SHORT).show();
+                // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义）
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE}, 10);
+            }
         }
     }
 
     //获取未支付 充电  预约情况
-    private void getHomeStatue(){
+    private void getHomeStatue() {
         //presenter.getUserOrderStatue();
         presenter.getUserChargeStatue();
 //        presenter.getUserAppointment();
     }
 
     private void initMapData() {
-
-
         presenter.getData();
-
-
     }
 
 
@@ -301,9 +322,34 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     }
 
+    //Android6.0申请权限的回调方法
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.e("yzh", "1111232312312===" + requestCode);
+        switch (requestCode) {
+
+            // requestCode即所声明的权限获取码，在checkSelfPermission时传入
+            case 10:
+                Log.e("yzh", "1111111111111");
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 获取到权限，作相应处理（调用定位SDK应当确保相关权限均被授权，否则可能引起定位失败）
+                    Log.e("yzh", "eeeeeeeeeeeeeee");
+                    presenter.getData();
+                } else {
+                    // 没有获取到权限，做特殊处理
+                    Toast.makeText(getContext(), "获取位置权限失败，请手动开启", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
     @OnClick(R.id.tv_pay)
     public void goPay() {
-        startActivity(PayActivity.getLauncher(getContext(),homeOrderBean.orderRecordNum));
+        startActivity(PayActivity.getLauncher(getContext(), homeOrderBean.orderRecordNum));
     }
 
     @Override
@@ -322,118 +368,19 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     public void onResume() {
         super.onResume();
         map.onResume();
-        Log.e("yzh","onResume");
-        if (Build.VERSION.SDK_INT >= 23
-                && getContext().getApplicationInfo().targetSdkVersion >= 23) {
-            if (isNeedCheck) {
-                checkPermissions(needPermissions);
-            }
-        }
+        Log.e("yzh", "onResume");
+//        if (Build.VERSION.SDK_INT >= 23
+//                && getContext().getApplicationInfo().targetSdkVersion >= 23) {
+//            if (isNeedCheck) {
+//                Log.e("yzh","checkPerminssions");
+//                checkPermissions(needPermissions);
+//            }
+//        }
 
 
     }
 
-    /**
-     * @param permissions
-     * @since 2.5.0
-     */
-    private void checkPermissions(String... permissions) {
-        try {
-            if (Build.VERSION.SDK_INT >= 23
-                    && getContext().getApplicationInfo().targetSdkVersion >= 23) {
-                List<String> needRequestPermissonList = findDeniedPermissions(permissions);
-                if (null != needRequestPermissonList
-                        && needRequestPermissonList.size() > 0) {
-                    String[] array = needRequestPermissonList.toArray(new String[needRequestPermissonList.size()]);
-                    Method method = getClass().getMethod("requestPermissions", new Class[]{String[].class,
-                            int.class});
 
-                    method.invoke(this, array, PERMISSON_REQUESTCODE);
-                }
-            }
-        } catch (Throwable e) {
-        }
-    }
-
-    private List<String> findDeniedPermissions(String[] permissions) {
-        List<String> needRequestPermissonList = new ArrayList<String>();
-        if (Build.VERSION.SDK_INT >= 23
-                && getContext().getApplicationInfo().targetSdkVersion >= 23) {
-            try {
-                for (String perm : permissions) {
-                    Method checkSelfMethod = getClass().getMethod("checkSelfPermission", String.class);
-                    Method shouldShowRequestPermissionRationaleMethod = getClass().getMethod("shouldShowRequestPermissionRationale",
-                            String.class);
-                    if ((Integer) checkSelfMethod.invoke(this, perm) != PackageManager.PERMISSION_GRANTED
-                            || (Boolean) shouldShowRequestPermissionRationaleMethod.invoke(this, perm)) {
-                        needRequestPermissonList.add(perm);
-                    }
-                }
-            } catch (Throwable e) {
-
-            }
-        }
-        return needRequestPermissonList;
-    }
-
-    /**
-     * 检测是否所有的权限都已经授权
-     *
-     * @param grantResults
-     * @return
-     * @since 2.5.0
-     */
-    private boolean verifyPermissions(int[] grantResults) {
-        for (int result : grantResults) {
-            if (result != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @TargetApi(23)
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] paramArrayOfInt) {
-        if (requestCode == PERMISSON_REQUESTCODE) {
-            if (!verifyPermissions(paramArrayOfInt)) {
-//                showMissingPermissionDialog();
-                isNeedCheck = false;
-            }
-        }
-    }
-
-    /**
-     * 显示提示信息
-     *
-     * @since 2.5.0
-     */
-//    private void showMissingPermissionDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.notifyTitle);
-//        builder.setMessage(R.string.notifyMsg);
-//
-//        // 拒绝, 退出应用
-//        builder.setNegativeButton(R.string.cancel,
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        finish();
-//                    }
-//                });
-//
-//        builder.setPositiveButton(R.string.setting,
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        startAppSettings();
-//                    }
-//                });
-//
-//        builder.setCancelable(false);
-//
-//        builder.show();
-//    }
     @Override
     public void onPause() {
         super.onPause();
@@ -495,6 +442,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 if (followMove) {
                     aMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
                 }
+                if (list != null && list.size() != 0) {
+                    presenter.getData();
+                }
             } else {
                 String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
                 Log.e("AmapErr", errText);
@@ -531,13 +481,14 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     @Override
     public void renderMapData(List<MapDataBean> list) {
         this.list = list;
-        MyLocationBean bean =PreferencesHelper.getData(MyLocationBean.class);
+        MyLocationBean bean = PreferencesHelper.getData(MyLocationBean.class);
         for (int i = 0; i < list.size(); i++) {
             //距离筛选
-            if(Tools.GetDistance(list.get(i).latitude,list.get(i).longitude,bean.latitude,bean.longtitude)> ChoiceManager.getInstance().getDistance()){
-                continue;
+            if (bean != null) {
+                if (Tools.GetDistance(list.get(i).latitude, list.get(i).longitude, bean.latitude, bean.longtitude) > ChoiceManager.getInstance().getDistance()) {
+                    continue;
+                }
             }
-
             MarkerOptions markerOption = new MarkerOptions();
             LatLng latLng = new LatLng(list.get(i).latitude, list.get(i).longitude);
             markerOption.position(latLng);
@@ -574,8 +525,8 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             tv_map_info_score.setText(mapInfoBean.averageScore + getString(R.string.score));
         }
         //要单算距离
-        MyLocationBean bean =PreferencesHelper.getData(MyLocationBean.class);
-        tv_map_info_distance.setText(Tools.GetDistance(currentMapDataBean.latitude,currentMapDataBean.longitude,bean.latitude,bean.longtitude)+"KM");
+        MyLocationBean bean = PreferencesHelper.getData(MyLocationBean.class);
+        tv_map_info_distance.setText(Tools.GetDistance(currentMapDataBean.latitude, currentMapDataBean.longitude, bean.latitude, bean.longtitude) + "KM");
         tv_map_info_pile_num.setText(mapInfoBean.pileNum + "");
         tv_map_info_gun_num.setText(mapInfoBean.gunNum + "");
         tv_map_info_free_num.setText(mapInfoBean.freeNum + "");
@@ -609,7 +560,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     public void hasNoPayOrder(boolean has, HomeOrderBean bean) {
         if (has) {
             rl_not_pay.setVisibility(View.VISIBLE);
-            homeOrderBean=bean;
+            homeOrderBean = bean;
         } else {
             rl_not_pay.setVisibility(View.GONE);
         }
@@ -639,7 +590,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     @Override
     public void renderAppoinmentInfo(HomeAppointmentBean bean) {
 
-        homeAppointmentBean=bean;
+        homeAppointmentBean = bean;
 
 //        ll_appontment.setVisibility(View.VISIBLE);
         tv_pile_num.setText(bean.runCode);
@@ -647,13 +598,13 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         tv_gun_num.setText(bean.gunCode);
         tv_appointment_address.setText(getString(R.string.home_appointment_hint));
 
-        if(bean.reserveEndTime<=bean.nowTime){
+        if (bean.reserveEndTime <= bean.nowTime) {
             ll_appontment.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             ll_appontment.setVisibility(View.VISIBLE);
-            long surplusTime=bean.reserveEndTime-bean.nowTime;
-            PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,surplusTime+"");
-            PreferencesHelper.saveData(Constant.APPOINTMENT_DURING,bean.reserveDuration);
+            long surplusTime = bean.reserveEndTime - bean.nowTime;
+            PreferencesHelper.saveData(Constant.TIME_APPOINTMENT, surplusTime + "");
+            PreferencesHelper.saveData(Constant.APPOINTMENT_DURING, bean.reserveDuration);
             tv_appointment_time.setText(Tools.formatMinute(surplusTime));
             Intent intent = new Intent(getContext(), TimerService.class);
             getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -661,47 +612,48 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     }
 
     private HomeChargeOrderBean homeChargeOrderBean;
+
     @Override
     public void renderHomeChargerOrder(HomeChargeOrderBean bean) {
         rl_charger_order.setVisibility(View.VISIBLE);
-        homeChargeOrderBean =bean;
+        homeChargeOrderBean = bean;
     }
 
     private TimerService timerService;
-    private ServiceConnection mConnection =new ServiceConnection() {
+    private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            TimerService.ServiceBinder binder =(TimerService.ServiceBinder)service;
-            timerService=binder.getService();
+            TimerService.ServiceBinder binder = (TimerService.ServiceBinder) service;
+            timerService = binder.getService();
             timerService.timerHour();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             timerService.cancelTimerAppointment();
-            timerService=null;
+            timerService = null;
         }
     };
 
     @OnClick(R.id.iv_appointment_guaild)
-    public void goAppointmentGuaild(){
-        startActivity(GuildActivity.getLauncher(getContext(), homeAppointmentBean.latitude, homeAppointmentBean.longitude,homeAppointmentBean,false));
+    public void goAppointmentGuaild() {
+        startActivity(GuildActivity.getLauncher(getContext(), homeAppointmentBean.latitude, homeAppointmentBean.longitude, homeAppointmentBean, false));
     }
 
     @OnClick(R.id.iv_guaild)
     public void goGuaild() {
         if (currentMapDataBean != null) {
-            boolean choiceNotAppointment=false;
-            if(homeAppointmentBean!=null){
-                if(homeAppointmentBean.latitude!=currentMapDataBean.latitude||homeAppointmentBean.longitude!=currentMapDataBean.longitude){
-                    choiceNotAppointment=true;
-                }else{
-                    choiceNotAppointment=false;
+            boolean choiceNotAppointment = false;
+            if (homeAppointmentBean != null) {
+                if (homeAppointmentBean.latitude != currentMapDataBean.latitude || homeAppointmentBean.longitude != currentMapDataBean.longitude) {
+                    choiceNotAppointment = true;
+                } else {
+                    choiceNotAppointment = false;
                 }
-            }else{
-                choiceNotAppointment=false;
+            } else {
+                choiceNotAppointment = false;
             }
-            startActivity(GuildActivity.getLauncher(getContext(), currentMapDataBean.latitude, currentMapDataBean.longitude,null,choiceNotAppointment));
+            startActivity(GuildActivity.getLauncher(getContext(), currentMapDataBean.latitude, currentMapDataBean.longitude, null, choiceNotAppointment));
 //            startActivity(ParkActivity.getLauncher(getContext()));
         }
 
@@ -715,9 +667,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     @OnClick(R.id.iv_scan)
     public void goScan() {
 
-        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
+        if (UserHelper.getSavedUser() == null || Tools.isNull(UserHelper.getSavedUser().token)) {
             startActivity(LoginActivity.getLauncher(getContext()));
-        }else{
+        } else {
             //进入扫一扫界面
             new IntentIntegrator(getActivity())
                     .setCaptureActivity(ChargeCaptureActivity.class)
@@ -731,13 +683,13 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     }
 
     @OnClick(R.id.tv_go_charger)
-    public void goCharger(){
-        startActivity(ChagerStatueActivity.getLauncher(getContext(),homeChargeOrderBean));
+    public void goCharger() {
+        startActivity(ChagerStatueActivity.getLauncher(getContext(), homeChargeOrderBean));
     }
 
     @Override
     public void goLogin() {
-        Log.e("yzh","goLogin");
+        Log.e("yzh", "goLogin");
         startActivity(LoginActivity.getLauncher(getContext()));
     }
 }

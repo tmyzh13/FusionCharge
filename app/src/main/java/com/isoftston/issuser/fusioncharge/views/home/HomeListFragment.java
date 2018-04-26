@@ -104,15 +104,22 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
         //添加一遍距离 并且做一边筛选
         MyLocationBean bean=PreferencesHelper.getData(MyLocationBean.class);
         List<MapDataBean> temp=new ArrayList<>();
-        for(int i=0;i<list.size();i++ ){
-            double distance=Tools.GetDistance(bean.latitude,bean.longtitude,list.get(i).latitude,list.get(i).longitude);
-            list.get(i).distance=distance;
-            //如果大于distance范围过滤
-            if(distance<= ChoiceManager.getInstance().getDistance()){
-                temp.add(list.get(i));
+        if(bean!=null){
+            for(int i=0;i<list.size();i++ ){
+                double distance=Tools.GetDistance(bean.latitude,bean.longtitude,list.get(i).latitude,list.get(i).longitude);
+                list.get(i).distance=distance;
+                //如果大于distance范围过滤
+                if(distance<= ChoiceManager.getInstance().getDistance()){
+                    temp.add(list.get(i));
+                }
             }
+            adapter.replaceAll(temp);
+        }else{
+            adapter.replaceAll(list);
         }
-        adapter.replaceAll(temp);
+
+
+
 
 //        Log.e("yzh",bean.latitude+"---"+bean.longtitude);
 //        Log.e("yzh","-0---"+ Tools.GetDistance(list.get(0).longitude,list.get(0).latitude,bean.latitude,bean.longtitude));

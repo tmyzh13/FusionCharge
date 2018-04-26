@@ -29,4 +29,5 @@ public class ChargerStatueBean {
     public int isStart;
 //    是否充电结束  1是  0否（默认0）
     public int isStop;
+    public String orderRecordNum;
 }

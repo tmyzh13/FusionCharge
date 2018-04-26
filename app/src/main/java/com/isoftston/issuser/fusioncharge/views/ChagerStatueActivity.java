@@ -165,7 +165,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
                 //结束充电 成功之后在选择进入支付
                 checkStatueLoadingView.setMessage(getString(R.string.charging_statue_ending));
                 checkStatueLoadingView.show();
-                presenter.endCharging(chargerStatueBean.chargingPileId,chargerStatueBean.chargingPileName,chargerStatueBean.virtualId,chargerStatueBean.gunCode,homeChargeOrderBean.orderRecordNum);
+                presenter.endCharging(chargerStatueBean.chargingPileId,chargerStatueBean.chargingPileName,chargerStatueBean.virtualId,chargerStatueBean.gunCode,chargerStatueBean.orderRecordNum);
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
