@@ -177,6 +177,10 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                     ToastMgr.show(getString(R.string.no_charge_gun_cannot_charge));
                     return;
                 }
+                if(chooseStyle == WITH_FULL) {
+                    getData();
+                    return;
+                }
                 String count = etChargeCount.getText().toString();
                 if(!TextUtils.isEmpty(count)){
                     chargePowerCount = Integer.parseInt(count);
@@ -184,36 +188,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                         ToastMgr.show(getString(R.string.please_enter_1_999_int));
                         return;
                     } else {
-                        OrderRequestInfo info = new OrderRequestInfo();
-                        Log.e("zw",scanChargeInfo.toString());
-                        info.setChargingPileName(scanChargeInfo.getChargingPileName());
-                        info.setVirtualId(scanChargeInfo.getVirtualId());
-                        info.setAppUserId(scanChargeInfo.getAppUserId());
-                        info.setGunCode(chooseGun.getGunCode());
-                        info.setControlInfo(chooseStyle + "");
-                        info.setChargingPileId(scanChargeInfo.getChargingPileId());
-                        if(chooseStyle != WITH_FULL){
-                            info.setControlData(chargePowerCount + "");
-                        }
-                        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
-                            startActivity(LoginActivity.getLauncher(this));
-                        } else {
-                            api.getOrderDetail(UserHelper.getSavedUser().token,info)
-                                    .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
-                                    .subscribe(new ResponseSubscriber<BaseData>() {
-                                        @Override
-                                        public void success(BaseData baseData) {
-                                            Log.e("zw","info : success");
-                                            Log.e("zw",baseData.toString());
-                                        }
-
-                                        @Override
-                                        public boolean operationError(BaseData baseData, int status, String message) {
-                                            Log.e("zw","info : fall");
-                                            return super.operationError(baseData, status, message);
-                                        }
-                                    });
-                        }
+                        getData();
                     }
                 } else {
                     ToastMgr.show(getString(R.string.please_input_charge_count));
@@ -223,6 +198,49 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         }
     }
 
+    private void getData(){
+        showLoading();
+
+        OrderRequestInfo info = new OrderRequestInfo();
+        Log.e("zw",scanChargeInfo.toString());
+        info.setChargingPileName(scanChargeInfo.getChargingPileName());
+        //TODO 后续替换
+//        info.setVirtualId("020001");
+        info.setVirtualId(scanChargeInfo.getVirtualId());
+//        info.setAppUserId(71 + "");
+        info.setAppUserId(scanChargeInfo.getAppUserId());
+//        info.setGunCode(2 + "");
+        info.setGunCode(chooseGun.getGunCode());
+//        info.setControlInfo(2 + "");
+        info.setControlInfo(chooseStyle + "");
+//        info.setChargingPileId(1);
+        info.setChargingPileId(scanChargeInfo.getChargingPileId());
+        if(chooseStyle != WITH_FULL){
+//            info.setControlData(320 + "");
+            info.setControlData(chargePowerCount + "");
+        }
+        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
+            startActivity(LoginActivity.getLauncher(this));
+        } else {
+            api.getOrderDetail(UserHelper.getSavedUser().token,info)
+                    .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
+                    .subscribe(new ResponseSubscriber<BaseData>() {
+                        @Override
+                        public void success(BaseData baseData) {
+                            Log.e("zw","info : success");
+                            Log.e("zw",baseData.toString());
+                            hideLoading();
+                        }
+
+                        @Override
+                        public boolean operationError(BaseData baseData, int status, String message) {
+                            hideLoading();
+                            showToast(getString(R.string.wrong_request));
+                            return super.operationError(baseData, status, message);
+                        }
+                    });
+        }
+    }
 
    /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
