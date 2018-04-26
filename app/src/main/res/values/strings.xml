@@ -272,6 +272,7 @@
     <string name="no_user_info">没有获取到信息。</string>
     <string name="unknown_error">未知错误。</string>
     <string name="please_take_qrcode">请对准二维码</string>
+    <string name="wrong_request">请求出现错误！</string>
 
 
 </resources>
