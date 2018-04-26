@@ -27,6 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargingGunBeans;
@@ -166,7 +167,6 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         return null;
     }
 
-    public static String token="2c2a43f713b94e0a9550ccc27f5703bc";
     @OnClick({R.id.iv_charge_cost_ask, R.id.btn_start_charge})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -185,29 +185,35 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                         return;
                     } else {
                         OrderRequestInfo info = new OrderRequestInfo();
+                        Log.e("zw",scanChargeInfo.toString());
                         info.setChargingPileName(scanChargeInfo.getChargingPileName());
                         info.setVirtualId(scanChargeInfo.getVirtualId());
                         info.setAppUserId(scanChargeInfo.getAppUserId());
                         info.setGunCode(chooseGun.getGunCode());
                         info.setControlInfo(chooseStyle + "");
+                        info.setChargingPileId(scanChargeInfo.getChargingPileId());
                         if(chooseStyle != WITH_FULL){
                             info.setControlData(chargePowerCount + "");
                         }
-                        api.getOrderDetail(token,info)
-                                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
-                                .subscribe(new ResponseSubscriber<BaseData>() {
-                                    @Override
-                                    public void success(BaseData baseData) {
-                                        Log.e("zw","info : success");
-                                        Log.e("zw",baseData.toString());
-                                    }
+                        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
+                            startActivity(LoginActivity.getLauncher(this));
+                        } else {
+                            api.getOrderDetail(UserHelper.getSavedUser().token,info)
+                                    .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
+                                    .subscribe(new ResponseSubscriber<BaseData>() {
+                                        @Override
+                                        public void success(BaseData baseData) {
+                                            Log.e("zw","info : success");
+                                            Log.e("zw",baseData.toString());
+                                        }
 
-                                    @Override
-                                    public boolean operationError(BaseData baseData, int status, String message) {
-                                        Log.e("zw","info : fall");
-                                        return super.operationError(baseData, status, message);
-                                    }
-                                });
+                                        @Override
+                                        public boolean operationError(BaseData baseData, int status, String message) {
+                                            Log.e("zw","info : fall");
+                                            return super.operationError(baseData, status, message);
+                                        }
+                                    });
+                        }
                     }
                 } else {
                     ToastMgr.show(getString(R.string.please_input_charge_count));
@@ -262,12 +268,11 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                 break;
                 //充电枪选择
             case R.id.rg_choose_gun:
-                Log.e("zw","i : " + i);
                 int index = i - BASE_ID;
-                Log.e("zw","i : " + (i - BASE_ID));
-                Log.e("zw","size : " + scanChargeInfo.getChargingGunBeans().size());
-                /*chooseGun = scanChargeInfo.getChargingGunBeans().get(i);
-                Log.e("zw","chooseGun : " + chooseGun.getGunNumber() );*/
+
+                chooseGun = scanChargeInfo.getChargingGunBeans().get(index);
+//                chooseGun = scanChargeInfo.getChargingGunBeans().get(i);
+//                Log.e("zw","chooseGun : " + chooseGun.getGunNumber() );
                 break;
         }
     }

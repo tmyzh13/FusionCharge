@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#22000000"
     tools:context="com.isoftston.issuser.fusioncharge.views.ChargeInputNumberActivity">
 
     <com.isoftston.issuser.fusioncharge.weights.NavBar
@@ -13,30 +12,38 @@
         android:layout_height="wrap_content"
         android:id="@+id/nav"></com.isoftston.issuser.fusioncharge.weights.NavBar>
 
-    <EditText
-        android:id="@+id/et_input_number"
-        android:paddingLeft="20dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textSize="@dimen/text_normal"
-        android:background="@drawable/shape_charge_input_number"
-        android:hint="@string/please_input_erweima_number"
-        android:inputType="number"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@mipmap/pic_input_scan_bg">
 
-    <TextView
-        android:id="@+id/sure"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:text="@string/sure"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_normal"
-        android:background="@drawable/shape_charge_input_ok"/>
+        <EditText
+            android:id="@+id/et_input_number"
+            android:paddingLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="120dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="@dimen/text_normal"
+            android:background="@drawable/shape_charge_input_number"
+            android:hint="@string/please_input_erweima_number"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/sure"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/sure"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_normal"
+            android:background="@drawable/shape_charge_input_ok"/>
+    </LinearLayout>
+
 
 </LinearLayout>

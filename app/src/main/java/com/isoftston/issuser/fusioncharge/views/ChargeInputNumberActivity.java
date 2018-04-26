@@ -1,5 +1,6 @@
 package com.isoftston.issuser.fusioncharge.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -11,8 +12,10 @@ import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
 import com.corelibs.utils.PreferencesHelper;
+import com.google.gson.Gson;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.LoginApi;
 import com.isoftston.issuser.fusioncharge.model.apis.MapApi;
 import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
@@ -23,6 +26,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.RequestChargeStateBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestScanBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
+import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 import com.trello.rxlifecycle.ActivityEvent;
 
@@ -72,39 +76,52 @@ public class ChargeInputNumberActivity extends BaseActivity {
             return;
         }
 
-        getData();
+        getData(number);
     }
 
-    public static String token="16d4f37c795f4e0e80df079432285614";
-    private void getData(){
+    private void getData(long number){
         showLoading();
 
-        RequestScanBean bean = new RequestScanBean();
-        bean.setAppUserId( 67 + "");
-        bean.setQrCode("1000000001");
+        if(UserHelper.getSavedUser()==null|| Tools.isNull(UserHelper.getSavedUser().token)){
+            startActivity(LoginActivity.getLauncher(this));
+            hideLoading();
+            return;
+        }
 
-      /*  api.getScanChargeInfo(token,bean)
+        RequestScanBean bean = new RequestScanBean();
+        bean.setAppUserId(UserHelper.getSavedUser().appUserId + "");
+        bean.setQrCode(number + "");
+
+        api.getScanChargeInfo(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<ScanChargeInfo>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<ScanChargeInfo>>() {
                                @Override
                                public void success(BaseData<ScanChargeInfo> baseData) {
-                                    Log.e("zw"," null ? : " + (baseData == null) );
-                                    Log.e("zw",baseData.toString());
+                                   hideLoading();
+                                   if(baseData.data != null) {
+                                       Gson gson = new Gson();
+                                       String data = gson.toJson(baseData.data);
+                                       Intent intent = new Intent(ChargeInputNumberActivity.this,ChargeOrderDetailsActivity.class);
+                                       intent.putExtra("data",data);
+                                       startActivity(intent);
+                                   } else {
+                                       showToast(getString(R.string.no_user_info));
+                                   }
+
+                                   finish();
                                }
 
                                @Override
                                public boolean operationError(BaseData<ScanChargeInfo> scanChargeInfoBaseData, int status, String message) {
                                    hideLoading();
                                    showToast("未获取数据，请重新输入！");
-                                   Log.e("zw"," null ? : " + (scanChargeInfoBaseData.data == null) );
-                                   Log.e("zw",scanChargeInfoBaseData.data.toString());
                                    return super.operationError(scanChargeInfoBaseData, status, message);
                                }
                            }
-                );*/
+                );
 
 
-        LoginApi api1 = ApiFactory.getFactory().create(LoginApi.class);
+     /*   LoginApi api1 = ApiFactory.getFactory().create(LoginApi.class);
         LoginRequestBean bean1 = new LoginRequestBean();
         bean1.phone = "17366206080";
 //        bean.carrier = Tools.getPhoneType();
@@ -121,7 +138,7 @@ public class ChargeInputNumberActivity extends BaseActivity {
                         Log.e("zw",baseData.toString());
 
                     }
-                });
+                });*/
     }
 
     @Override

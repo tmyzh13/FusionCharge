@@ -25,6 +25,7 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestScanBean;
@@ -86,15 +87,15 @@ public class ChargeCaptureActivity extends BaseActivity {
 
     }
 
-    public static String token=ChargeOrderDetailsActivity.token;
     private void showLoadingDialog(String contents){
         showLoading();
 
         RequestScanBean bean = new RequestScanBean();
-        bean.setAppUserId(67 + "");
+        bean.setAppUserId(UserHelper.getSavedUser().appUserId + "");
+        Log.e("zw","UserHelper.getSavedUser().userId : " + UserHelper.getSavedUser().appUserId);
         bean.setQrCode("1000000001");
 
-        api.getScanChargeInfo(token,bean)
+        api.getScanChargeInfo(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<ScanChargeInfo>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<ScanChargeInfo>>() {
                                @Override
@@ -116,24 +117,17 @@ public class ChargeCaptureActivity extends BaseActivity {
 
                                @Override
                                public boolean operationError(BaseData<ScanChargeInfo> scanChargeInfoBaseData, int status, String message) {
-                                   hideLoading();
-
-                                   if(scanChargeInfoBaseData.code == 403) {
-                                       startActivity(new Intent(ChargeCaptureActivity.this,ChargeInputNumberActivity.class));
-                                       finish();
-                                       return super.operationError(scanChargeInfoBaseData, status, message);
-                                   }
-
-                                 String content = TextUtils.isEmpty(scanChargeInfoBaseData.msg) ? getString(R.string.unknown_error) : scanChargeInfoBaseData.msg;
-                                 dialog = new CommonDialog(ChargeCaptureActivity.this,getString(R.string.hint),content,1);
-                                 dialog.show();
-                                 dialog.setPositiveListener(new View.OnClickListener() {
-                                     @Override
-                                     public void onClick(View view) {
-                                         dialog.dismiss();
-                                         finish();
-                                     }
-                                 });
+                                     hideLoading();
+                                     String content = TextUtils.isEmpty(scanChargeInfoBaseData.msg) ? getString(R.string.unknown_error) : scanChargeInfoBaseData.msg;
+                                     dialog = new CommonDialog(ChargeCaptureActivity.this,getString(R.string.hint),content,1);
+                                     dialog.show();
+                                     dialog.setPositiveListener(new View.OnClickListener() {
+                                         @Override
+                                         public void onClick(View view) {
+                                             dialog.dismiss();
+                                             finish();
+                                         }
+                                     });
 
                                    return super.operationError(scanChargeInfoBaseData, status, message);
                                }

@@ -271,6 +271,7 @@
     <string name="please_input_charge_count">请先输入充电数</string>
     <string name="no_user_info">没有获取到信息。</string>
     <string name="unknown_error">未知错误。</string>
+    <string name="please_take_qrcode">请对准二维码</string>
 
 
 </resources>
