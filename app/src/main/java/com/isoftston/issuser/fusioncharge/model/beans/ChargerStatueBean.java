@@ -25,4 +25,8 @@ public class ChargerStatueBean {
     public String serviceFee;
     public String soc;
     public String virtualId;
+//    0失败1成功2检测中
+    public int isStart;
+//    是否充电结束  1是  0否（默认0）
+    public int isStop;
 }

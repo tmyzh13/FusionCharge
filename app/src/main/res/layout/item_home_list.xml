@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_marginLeft="10dp"
                    style="@style/text_normal"
-                    android:text="@string/home_charge_direct_"
+                    android:text="@string/home_charge_alternating_"
                     />
                 <TextView
                     android:id="@+id/tv_alter"

@@ -16,13 +16,13 @@
         android:textSize="16sp"
         android:text="南京雨花台区充电站"
         android:layout_marginTop="20dp"
+        android:id="@+id/tv_address_name"
         />
     <RelativeLayout
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="25dp">
         <com.isoftston.issuser.fusioncharge.weights.CircleProgressView
-
             android:layout_width="190dp"
             android:layout_height="190dp"
             android:id="@+id/progress"
@@ -75,6 +75,7 @@
                 style="@style/text_normal"
                 android:text="0"
                 android:textSize="16sp"
+                android:id="@+id/tv_kw"
                 />
             <TextView
                 android:layout_marginTop="10dp"
@@ -121,6 +122,7 @@
                 style="@style/text_normal"
                 android:text="40%"
                 android:textSize="16sp"
+                android:id="@+id/tv_current_charger"
                 />
             <TextView
                 android:layout_marginTop="10dp"
@@ -165,6 +167,7 @@
                 android:text="11.89度"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:id="@+id/tv_charged_enegy"
                 />
         </RelativeLayout>
         <View
@@ -195,6 +198,7 @@
                 android:textColor="@color/app_blue"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:id="@+id/tv_charged_money"
                 />
         </RelativeLayout>
     </LinearLayout>

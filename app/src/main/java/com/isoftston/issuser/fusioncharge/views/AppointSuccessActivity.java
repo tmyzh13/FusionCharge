@@ -76,4 +76,9 @@ public class AppointSuccessActivity extends BaseActivity {
     protected BasePresenter createPresenter() {
         return null;
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

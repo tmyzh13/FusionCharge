@@ -7,7 +7,9 @@ import android.widget.AdapterView;
 
 import com.corelibs.base.BaseFragment;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
+import com.corelibs.utils.rxbus.RxBus;
 import com.corelibs.views.cube.ptr.PtrFrameLayout;
 import com.corelibs.views.ptr.layout.PtrAutoLoadMoreLayout;
 import com.corelibs.views.ptr.layout.PtrLollipopLayout;
@@ -65,6 +67,15 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
         presenter.setOtherLoading(false);
         presenter.getDatas();
         ptrLayout.setRefreshLoadCallback(this);
+        RxBus.getDefault().toObservable(Object.class, Constant.REFRESH_MAP_OR_LIST_DATA)
+                .compose(this.<Object>bindToLifecycle())
+                .subscribe(new RxBusSubscriber<Object>() {
+
+                    @Override
+                    public void receive(Object data) {
+                        presenter.getDatas();
+                    }
+                });
     }
 
     @Override
@@ -80,6 +91,11 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
     @Override
     public void hideLoading() {
         ptrLayout.complete();
+    }
+
+    @Override
+    public void goLogin() {
+
     }
 
 

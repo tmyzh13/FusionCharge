@@ -37,7 +37,6 @@ public class CircleProgressView extends View{
     //当前进度
     private long progress;
 
-
     public CircleProgressView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();

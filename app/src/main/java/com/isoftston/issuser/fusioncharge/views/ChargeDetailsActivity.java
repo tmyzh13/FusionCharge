@@ -106,4 +106,9 @@ public class ChargeDetailsActivity extends BaseActivity {
         pictureTv.setTextColor(getResources().getColor(R.color.text_main));
         myViewPager.setCurrentItem(2);
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

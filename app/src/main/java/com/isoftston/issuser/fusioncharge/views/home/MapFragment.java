@@ -41,6 +41,7 @@ import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.route.RouteSearch;
 import com.corelibs.base.BaseFragment;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.common.AppManager;
 import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.ToastMgr;
@@ -49,8 +50,10 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeFeeBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeRefreshBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
@@ -64,10 +67,12 @@ import com.isoftston.issuser.fusioncharge.views.ChagerStatueActivity;
 import com.isoftston.issuser.fusioncharge.views.ChargeCaptureActivity;
 import com.isoftston.issuser.fusioncharge.views.ChargeDetailsActivity;
 import com.isoftston.issuser.fusioncharge.views.GuildActivity;
+import com.isoftston.issuser.fusioncharge.views.LoginActivity;
 import com.isoftston.issuser.fusioncharge.views.ParkActivity;
 import com.isoftston.issuser.fusioncharge.views.PayActivity;
 import com.isoftston.issuser.fusioncharge.views.TimerService;
 import com.isoftston.issuser.fusioncharge.views.interfaces.MapHomeView;
+import com.isoftston.issuser.fusioncharge.weights.AppointmentTimeOutDialog;
 import com.isoftston.issuser.fusioncharge.weights.ChargeFeeDialog;
 
 import java.lang.reflect.Method;
@@ -112,9 +117,12 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     TextView tv_map_info_service_fee;
     @Bind(R.id.ll_appointment)
     LinearLayout ll_appontment;
+    @Bind(R.id.rl_charger_order)
+    RelativeLayout rl_charger_order;
+
 
     private AMap aMap;
-
+    private AppointmentTimeOutDialog appointmentTimeOutDialog;
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_main;
@@ -132,10 +140,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             }
         });
 
-//        presenter.getUserOrderStatue();
-        presenter.getUserChargeStatue();
-//        presenter.getUserAppointment();
-        presenter.getCheckStatue("","");
+
         location();
         initMapData();
 
@@ -154,6 +159,8 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 }
             }
         });
+        appointmentTimeOutDialog=new AppointmentTimeOutDialog(getContext());
+
         RxBus.getDefault().toObservable(HomeRefreshBean.class, Constant.HOME_STATUE_REFRESH)
                 .compose(this.<HomeRefreshBean>bindToLifecycle())
                 .subscribe(new RxBusSubscriber<HomeRefreshBean>() {
@@ -168,6 +175,37 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                             ll_appontment.setVisibility(View.GONE);
                         }
 
+                    }
+                });
+        RxBus.getDefault().toObservable(Object.class,Constant.APPOINTMENT_TIME_OUT)
+                .compose(this.bindToLifecycle())
+                .subscribe(new RxBusSubscriber<Object>() {
+                    @Override
+                    public void receive(Object data) {
+                        if(AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)){
+                            appointmentTimeOutDialog.show();
+                            appointmentTimeOutDialog.setIvDeleteListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    appointmentTimeOutDialog.dismiss();
+                                }
+                            });
+                            appointmentTimeOutDialog.setReAppointment(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    appointmentTimeOutDialog.dismiss();
+                                }
+                            });
+                        }
+                    }
+                });
+        RxBus.getDefault().toObservable(Object.class, Constant.REFRESH_MAP_OR_LIST_DATA)
+                .compose(this.<Object>bindToLifecycle())
+                .subscribe(new RxBusSubscriber<Object>() {
+
+                    @Override
+                    public void receive(Object data) {
+                        presenter.getData();
                     }
                 });
     }
@@ -272,6 +310,12 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             if (isNeedCheck) {
                 checkPermissions(needPermissions);
             }
+        }
+
+        if(UserHelper.getSavedUser()!=null&&!Tools.isNull(UserHelper.getSavedUser().token)){
+            //presenter.getUserOrderStatue();
+            presenter.getUserChargeStatue();
+//        presenter.getUserAppointment();
         }
     }
 
@@ -601,6 +645,14 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         }
     }
+
+    private HomeChargeOrderBean homeChargeOrderBean;
+    @Override
+    public void renderHomeChargerOrder(HomeChargeOrderBean bean) {
+        rl_charger_order.setVisibility(View.VISIBLE);
+        homeChargeOrderBean =bean;
+    }
+
     private TimerService timerService;
     private ServiceConnection mConnection =new ServiceConnection() {
         @Override
@@ -648,14 +700,30 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     @OnClick(R.id.iv_scan)
     public void goScan() {
-        //进入扫一扫界面
-        new IntentIntegrator(getActivity())
-                .setCaptureActivity(ChargeCaptureActivity.class)
-                .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)// 扫码的类型,可选：一维码，二维码，一/二维码
-                .setPrompt("请对准二维码")// 设置提示语
-                .setCameraId(0)// 选择摄像头,可使用前置或者后置
-                .setBeepEnabled(true)// 是否开启声音,扫完码之后会"哔"的一声
-                .setBarcodeImageEnabled(false)// 扫完码之后生成二维码的图片
-                .initiateScan();// 初始化扫码
+
+        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
+            startActivity(LoginActivity.getLauncher(getContext()));
+        }else{
+            //进入扫一扫界面
+            new IntentIntegrator(getActivity())
+                    .setCaptureActivity(ChargeCaptureActivity.class)
+                    .setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)// 扫码的类型,可选：一维码，二维码，一/二维码
+                    .setPrompt("请对准二维码")// 设置提示语
+                    .setCameraId(0)// 选择摄像头,可使用前置或者后置
+                    .setBeepEnabled(true)// 是否开启声音,扫完码之后会"哔"的一声
+                    .setBarcodeImageEnabled(false)// 扫完码之后生成二维码的图片
+                    .initiateScan();// 初始化扫码
+        }
+    }
+
+    @OnClick(R.id.tv_go_charger)
+    public void goCharger(){
+        startActivity(ChagerStatueActivity.getLauncher(getContext(),homeChargeOrderBean));
+    }
+
+    @Override
+    public void goLogin() {
+        Log.e("yzh","goLogin");
+        startActivity(LoginActivity.getLauncher(getContext()));
     }
 }

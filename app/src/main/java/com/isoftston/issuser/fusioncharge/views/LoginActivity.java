@@ -210,10 +210,11 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     }
 
     @Override
-    public void loginSuccess(String data) {
+    public void loginSuccess() {
         //loginSuccess
-        SharePrefsUtils.putValue(context,"token",data);
-        startActivity(MainActivity.getLauncher(context));
+//        SharePrefsUtils.putValue(context,"token",data);
+        finish();
+//        startActivity(MainActivity.getLauncher(context));
     }
 
     @Override
@@ -242,6 +243,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                 handler.sendEmptyMessage(4);
                 break;
             case R.id.register_tv:
+                Log.e("yzh","register_tv");
                 handler.sendEmptyMessage(5);
                 break;
             case R.id.get_code_tv:
@@ -252,7 +254,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                 if (type == 1) {
                     getUserInput();
                     //手机号密码登录
-                    presenter.loginAction(0, phoneNumber, MD5Utils.encode(pwd), code);
+                    presenter.loginAction(0, phoneNumber, pwd, code);
                     Log.e(TAG, "----手机号密码登录"+",pwd:"+MD5Utils.encode(pwd));
 
                 } else if (type == 3) {
@@ -318,6 +320,11 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                 popupWindow.dismiss();
             }
         });
+    }
+
+    @Override
+    public void goLogin() {
+
     }
 
 

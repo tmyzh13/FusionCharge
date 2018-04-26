@@ -53,4 +53,9 @@ public class PayCompleteActivity extends BaseActivity {
     public void goComment(){
         //去评价
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

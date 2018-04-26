@@ -161,4 +161,9 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
 
         }
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

@@ -83,4 +83,9 @@ public class CommentsFragment extends BaseFragment {
     protected BasePresenter createPresenter() {
         return null;
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

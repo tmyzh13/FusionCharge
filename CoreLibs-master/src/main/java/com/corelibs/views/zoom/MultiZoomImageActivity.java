@@ -63,6 +63,11 @@ public class MultiZoomImageActivity extends BaseActivity implements View.OnClick
         }
     }
 
+    @Override
+    public void goLogin() {
+
+    }
+
     private void initStyledAttributes() {
         int defaultSideLength = DisplayUtil.dip2px(this, 8);
         int defaultMargin = DisplayUtil.dip2px(this, 3);

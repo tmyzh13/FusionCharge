@@ -4,6 +4,7 @@ import com.isoftston.issuser.fusioncharge.constants.Urls;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.Condition;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
@@ -22,6 +23,7 @@ import butterknife.Bind;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -44,7 +46,7 @@ public interface MapApi {
     Observable<BaseData<HomeOrderBean>> getUserOrderStatue(@Header("AccessToken") String token);
 
     @POST(Urls.GET_USER_CHARGER_STATUE)
-    Observable<BaseData> getUserChargerStatue(@Header("AccessToken") String token);
+    Observable<BaseData<HomeChargeOrderBean>> getUserChargerStatue(@Header("AccessToken") String token);
 
     @POST(Urls.GET_CHECK_STATUE)
     Observable<BaseData> getCheckStatue(@Header("AccessToken") String token, @Body RequestChargeStateBean bean);

@@ -42,7 +42,7 @@ public class TimerService extends Service{
     private Long hourTime;
     private long appointmentTime;
     //更新预约时间
-    private void timeAppointment(){
+    public void timeAppointment(){
         if(isAppointmentCharge){
             return;
         }else{
@@ -57,9 +57,11 @@ public class TimerService extends Service{
                 appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
                 appointmentTime-=1000;
                 PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,appointmentTime+"");
-
+                RxBus.getDefault().send(new Object(),Constant.REFRESH_APPOINTMENT_TIME);
                 if(appointmentTime<=0){
                     Log.e("yzh","cancel");
+                    //预约超时
+                    RxBus.getDefault().send(new Object(),Constant.APPOINTMENT_TIME_OUT);
                     cancelTimerAppointment();
                 }
             }
@@ -110,10 +112,10 @@ public class TimerService extends Service{
 
                     RxBus.getDefault().send(new Object(),Constant.CHARGING_TIME);
                 }
-                if(hourTime>=Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TOTAL))){
-                    Log.e("yzh","cancel");
-                    cancelTimerHour();
-                }
+//                if(hourTime>=Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TOTAL))){
+//                    Log.e("yzh","cancel");
+//                    cancelTimerHour();
+//                }
             }
         },1000,1000);
     }

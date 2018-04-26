@@ -123,4 +123,9 @@ public class ChargeInputNumberActivity extends BaseActivity {
                     }
                 });*/
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

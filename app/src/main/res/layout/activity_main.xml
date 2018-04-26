@@ -127,6 +127,7 @@
                 style="@style/text_normal"
                 android:textColor="@color/white"
                 android:text="李国强"
+                android:id="@+id/tv_user_name"
                 />
             <TextView
                 android:layout_marginLeft="20dp"
@@ -134,6 +135,7 @@
                 style="@style/text_normal"
                 android:textColor="@color/white"
                 android:text="13813827385"
+                android:id="@+id/tv_user_phone"
                 />
         </LinearLayout>
 

@@ -48,6 +48,7 @@ public class CheckStatueLoadingView extends Dialog {
 
         bar = (LoadingView) contentView.findViewById(R.id.view);
 		msg = (TextView) contentView.findViewById(R.id.tv_msg);
+		setCanceledOnTouchOutside(false);
 	}
 
 

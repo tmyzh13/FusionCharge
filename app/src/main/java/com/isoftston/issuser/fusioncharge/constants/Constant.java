@@ -31,5 +31,10 @@ public class Constant {
     public static final String APPOINTMENT_DURING="appointment_during";
     //首页刷新
     public static final String HOME_STATUE_REFRESH="HOME_STATUE_REFRESH";
-
+    //预约超时
+    public static final String APPOINTMENT_TIME_OUT="appointment_time_out";
+    //刷新预约时间
+    public static final String REFRESH_APPOINTMENT_TIME="refresh_appointment_time";
+    //刷新地图和列表数据
+    public static final String REFRESH_MAP_OR_LIST_DATA="refresh_map_or_list_data";
 }

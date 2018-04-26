@@ -92,4 +92,9 @@ public class ForgetPwdActivity extends BaseActivity implements View.OnClickListe
                 break;
         }
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }

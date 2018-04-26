@@ -6,10 +6,12 @@ import com.corelibs.api.ApiFactory;
 import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.MapApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.Condition;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
@@ -19,6 +21,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.RequestChargeStateBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestFeeBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestHomeAppointment;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestOnlyUserId;
+import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.views.interfaces.MapHomeView;
 import com.trello.rxlifecycle.ActivityEvent;
 
@@ -46,8 +49,17 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
     public void getData(){
         Condition condition=new Condition();
         condition.selectType=3;
-//        condition.pileType=1;
-//        condition.chargingMethod=1;
+        if(ChoiceManager.getInstance().getType()==0){
+            condition.pileType=3;
+        }else{
+            condition.pileType= ChoiceManager.getInstance().getType();
+        }
+        if(ChoiceManager.getInstance().getStatue()==0){
+            condition.chargingMethod=3;
+        }else{
+            condition.chargingMethod=ChoiceManager.getInstance().getStatue();
+        }
+
 //        condition.pileName="";
 //        condition.stationName="";
         condition.x1=100;
@@ -104,9 +116,9 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
 
 //        RequestOnlyUserId bean =new RequestOnlyUserId();
 //        bean.userId=1;
-        api.getUserOrderStatue(token)
+        api.getUserOrderStatue(UserHelper.getSavedUser().token)
                 .compose(new ResponseTransformer<>(this.<BaseData<HomeOrderBean>>bindUntilEvent(ActivityEvent.DESTROY)))
-                .subscribe(new ResponseSubscriber<BaseData<HomeOrderBean>>() {
+                .subscribe(new ResponseSubscriber<BaseData<HomeOrderBean>>(view) {
                     @Override
                     public void success(BaseData<HomeOrderBean> baseData) {
                         if(baseData.data==null){
@@ -123,12 +135,14 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
     public void getUserChargeStatue(){
         RequestOnlyUserId bean =new RequestOnlyUserId();
         bean.userId=1;
-        api.getUserChargerStatue(token)
-                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
-                .subscribe(new ResponseSubscriber<BaseData>() {
+        api.getUserChargerStatue(UserHelper.getSavedUser().token)
+                .compose(new ResponseTransformer<>(this.<BaseData<HomeChargeOrderBean>>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData<HomeChargeOrderBean>>(view) {
                     @Override
-                    public void success(BaseData baseData) {
-
+                    public void success(BaseData<HomeChargeOrderBean> baseData) {
+                        if(baseData.data!=null){
+                            view.renderHomeChargerOrder(baseData.data);
+                        }
                     }
                 });
     }
@@ -138,7 +152,7 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
         bean.appUserId="1";
         api.getUserAppointmentRecord(bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<HomeAppointmentBean>>bindUntilEvent(ActivityEvent.DESTROY)))
-                .subscribe(new ResponseSubscriber<BaseData<HomeAppointmentBean>>() {
+                .subscribe(new ResponseSubscriber<BaseData<HomeAppointmentBean>>(view) {
                     @Override
                     public void success(BaseData<HomeAppointmentBean> baseData) {
                         if(baseData.data!=null){
@@ -147,12 +161,12 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
                     }
                 });
     }
-    public static String token="928d34ab5776449292ff26823662177f";
+    public static String token="29ed3f125b9446ebb3e5207a2ad6d3d6";
     public void getCheckStatue(String virtualId,String gunCode){
         RequestChargeStateBean bean =new RequestChargeStateBean();
         bean.virtualId="000001";
         bean.gunCode="1";
-        api.getCheckStatue(token,bean)
+        api.getCheckStatue(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override

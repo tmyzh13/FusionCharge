@@ -22,8 +22,11 @@ import com.bumptech.glide.Glide;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.common.AppManager;
+import com.corelibs.utils.IMEUtil;
 import com.corelibs.utils.PreferencesHelper;
+import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
@@ -62,6 +65,10 @@ public class MainActivity extends BaseActivity {
     CheckBox cb_busy;
     @Bind(R.id.et_distance)
     EditText et_distance;
+    @Bind(R.id.tv_user_name)
+    TextView tv_user_name;
+    @Bind(R.id.tv_user_phone)
+    TextView tv_user_phone;
 
     private Context context = MainActivity.this;
 
@@ -96,6 +103,54 @@ public class MainActivity extends BaseActivity {
 
         Glide.with(context).load("http://imgsrc.baidu.com/baike/pic/item/bd7faf355e43afc1a71e1220.jpg")
                 .override(320, 320).into(iv_user_icon);
+
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                if(ChoiceManager.getInstance().getType()==3){
+                    cb_charge_alternating.setChecked(true);
+                    cb_charge_direct.setChecked(true);
+                }else if(ChoiceManager.getInstance().getType()==2){
+                    cb_charge_alternating.setChecked(true);
+                    cb_charge_direct.setChecked(false);
+                }else if(ChoiceManager.getInstance().getType()==1){
+                    cb_charge_alternating.setChecked(false);
+                    cb_charge_direct.setChecked(true);
+                }else if(ChoiceManager.getInstance().getType()==0){
+                    cb_charge_alternating.setChecked(false);
+                    cb_charge_direct.setChecked(false);
+                }
+                if(ChoiceManager.getInstance().getStatue()==3){
+                    cb_free.setChecked(true);
+                    cb_busy.setChecked(true);
+                }else if(ChoiceManager.getInstance().getStatue()==2){
+                    cb_busy.setChecked(true);
+                    cb_free.setChecked(false);
+                }else if(ChoiceManager.getInstance().getStatue()==1){
+                    cb_busy.setChecked(false);
+                    cb_free.setChecked(true);
+                }else if(ChoiceManager.getInstance().getStatue()==0){
+                    cb_busy.setChecked(false);
+                    cb_free.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                IMEUtil.closeIME(et_distance,context);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
     }
 
     @OnClick(R.id.iv_user)
@@ -103,9 +158,17 @@ public class MainActivity extends BaseActivity {
         if (drawerLayout.isDrawerOpen(main_right_drawer_layout)) {
             drawerLayout.closeDrawer(main_right_drawer_layout);
         }
-        if (TextUtils.isEmpty(PreferencesHelper.getData(Constant.LOGIN_STATUE))) {
+//        if (TextUtils.isEmpty(PreferencesHelper.getData(Constant.LOGIN_STATUE))) {
+//            startActivity(LoginActivity.getLauncher(context));
+//        }
+        if(UserHelper.getSavedUser()==null){
             startActivity(LoginActivity.getLauncher(context));
-        } else {
+        }
+        else {
+            Glide.with(context).load(UserHelper.getSavedUser().photoUrl)
+                    .override(320, 320).into(iv_user_icon);
+            tv_user_name.setText(UserHelper.getSavedUser().nickName);
+            tv_user_phone.setText(UserHelper.getSavedUser().phone);
             drawerLayout.openDrawer(main_left_drawer_layout);
         }
 
@@ -179,23 +242,38 @@ public class MainActivity extends BaseActivity {
         } else {
             ChoiceManager.getInstance().setDistance(Double.parseDouble(et_distance.getText().toString()));
         }
-        String type = "";
-        String statue = "";
+        int type = 0;
+        int statue = 0;
         if (cb_charge_direct.isChecked()) {
-            type += "0";
+            type=1;
         }
         if (cb_charge_alternating.isChecked()) {
-            type += "1";
+            type = 2;
         }
+        if(cb_charge_direct.isChecked()&&cb_charge_alternating.isChecked()){
+            type=3;
+        }
+        if(!cb_charge_direct.isChecked()&&!cb_charge_alternating.isChecked()){
+            type=0;
+        }
+
         if (cb_free.isChecked()) {
-            statue += "0";
+            statue = 1;
         }
         if (cb_busy.isChecked()) {
-            statue += "1";
+            statue = 2;
+        }
+        if(cb_free.isChecked()&&cb_busy.isChecked()){
+            statue=3;
+        }
+        if(!cb_free.isChecked()&&!cb_busy.isChecked()){
+            statue=0;
         }
         ChoiceManager.getInstance().setStatue(statue);
         ChoiceManager.getInstance().setType(type);
         //发送设置
+        drawerLayout.closeDrawer(main_right_drawer_layout);
+        RxBus.getDefault().send(new Object(),Constant.REFRESH_MAP_OR_LIST_DATA);
     }
 
     @OnClick(R.id.tv_reset)
@@ -206,6 +284,9 @@ public class MainActivity extends BaseActivity {
         cb_charge_alternating.setChecked(false);
         et_distance.setText("");
         ChoiceManager.getInstance().resetChoice();
+        //发送设置
+        drawerLayout.closeDrawer(main_right_drawer_layout);
+        RxBus.getDefault().send(new Object(),Constant.REFRESH_MAP_OR_LIST_DATA);
     }
 
     @Override
@@ -250,5 +331,10 @@ public class MainActivity extends BaseActivity {
                 isBackPressed = false;
             }
         }, 2000);
+    }
+
+    @Override
+    public void goLogin() {
+        Log.e("yzh","sssssss111");
     }
 }

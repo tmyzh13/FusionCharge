@@ -196,4 +196,9 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     public void appointSuccess() {
 
     }
+
+    @Override
+    public void goLogin() {
+
+    }
 }
