@@ -52,6 +52,7 @@ public class PayCompleteActivity extends BaseActivity {
     @OnClick(R.id.tv_send_comment)
     public void goComment(){
         //去评价
+        startActivity(PublishCommentActivity.getLauncher(PayCompleteActivity.this));
     }
 
     @Override

@@ -118,6 +118,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".views.ChargeInputNumberActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".views.PublishCommentActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
-
 </manifest>

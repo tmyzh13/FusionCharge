@@ -25,6 +25,9 @@ public class CommentsAdapter extends BaseAdapter {
         this.datas = datas;
         mInflater = LayoutInflater.from(context);
     }
+    public void  setData(List<CommentsBean> datas){
+        this.datas = datas;
+    }
 
     @Override
     public int getCount() {

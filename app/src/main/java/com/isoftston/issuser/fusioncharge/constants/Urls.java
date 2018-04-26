@@ -51,5 +51,9 @@ public class Urls {
 
     //扫码充电
     public static final String SCAN_CHARGE = "charging/scan";
-
+    //发布评论
+    public static final String COMMENT="appChargingPileEvaluate/addAppChargingPileEvaluate";
+    public static final String COMMENT_SORT="appChargingPileEvaluate/queryAppEvaluateTypeByStation";
+    public static final String COMMENT_INFO="appChargingPileEvaluate/queryAppChargingPileEvaluateByStation";
+    public static final String COMMENT_INFO_TYPE="appChargingPileEvaluate/queryAppEvaluateType";
 }

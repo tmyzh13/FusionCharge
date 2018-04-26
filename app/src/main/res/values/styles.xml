@@ -78,4 +78,10 @@
         <item name="android:textSize">@dimen/text_extra</item>
         <item name="android:textColor">@color/black</item>
     </style>
+
+    <style name="lighting_rating_bar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_drawable</item>
+        <item name="android:minHeight">26dp</item>
+        <item name="android:maxHeight">26dp</item>
+    </style>
 </resources>
