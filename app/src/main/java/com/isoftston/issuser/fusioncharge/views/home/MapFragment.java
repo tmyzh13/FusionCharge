@@ -208,9 +208,27 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                         presenter.getData();
                     }
                 });
+        RxBus.getDefault().toObservable(Object.class, Constant.REFRESH_HOME_STATUE)
+                .compose(this.<Object>bindToLifecycle())
+                .subscribe(new RxBusSubscriber<Object>() {
+
+                    @Override
+                    public void receive(Object data) {
+                        getHomeStatue();
+                    }
+                });
+
+        if(UserHelper.getSavedUser()!=null&&!Tools.isNull(UserHelper.getSavedUser().token)){
+           getHomeStatue();
+        }
     }
 
-
+    //获取未支付 充电  预约情况
+    private void getHomeStatue(){
+        //presenter.getUserOrderStatue();
+        presenter.getUserChargeStatue();
+//        presenter.getUserAppointment();
+    }
 
     private void initMapData() {
 
@@ -312,11 +330,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             }
         }
 
-        if(UserHelper.getSavedUser()!=null&&!Tools.isNull(UserHelper.getSavedUser().token)){
-            //presenter.getUserOrderStatue();
-            presenter.getUserChargeStatue();
-//        presenter.getUserAppointment();
-        }
+
     }
 
     /**

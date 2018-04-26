@@ -37,4 +37,6 @@ public class Constant {
     public static final String REFRESH_APPOINTMENT_TIME="refresh_appointment_time";
     //刷新地图和列表数据
     public static final String REFRESH_MAP_OR_LIST_DATA="refresh_map_or_list_data";
+    //刷新首页的状态
+    public static final String REFRESH_HOME_STATUE="refresh_home_statue";
 }

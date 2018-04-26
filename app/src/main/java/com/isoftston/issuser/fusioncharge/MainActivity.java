@@ -203,7 +203,7 @@ public class MainActivity extends BaseActivity {
             ft.show(mapFragment);
         }
         ft.commit();
-
+        RxBus.getDefault().send(new Object(),Constant.REFRESH_HOME_STATUE);
     }
 
     @OnClick(R.id.tv_list)

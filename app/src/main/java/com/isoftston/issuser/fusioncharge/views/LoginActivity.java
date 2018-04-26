@@ -24,8 +24,10 @@ import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.utils.SharedPreferencesClassHelper;
 import com.corelibs.utils.ToastMgr;
+import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
 import com.isoftston.issuser.fusioncharge.presenter.LoginPresenter;
 import com.isoftston.issuser.fusioncharge.utils.MD5Utils;
@@ -213,6 +215,7 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     public void loginSuccess() {
         //loginSuccess
 //        SharePrefsUtils.putValue(context,"token",data);
+        RxBus.getDefault().send(new Object(), Constant.REFRESH_HOME_STATUE);
         finish();
 //        startActivity(MainActivity.getLauncher(context));
     }
