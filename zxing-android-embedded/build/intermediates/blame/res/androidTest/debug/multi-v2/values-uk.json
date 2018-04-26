@@ -1,21 +1,6 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Administrator\\Desktop\\Android_project\\FusionCharge\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-uk\\values-uk.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\Administrator\\Desktop\\Android_project\\FusionCharge\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\bundles\\debug\\res\\values-uk\\values-uk.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,117,164,306",
-                        "endColumns": "61,46,141,121",
-                        "endOffsets": "112,159,301,423"
-                    }
-                }
-            ]
-        },
-        {
             "outputFile": "C:\\Users\\issuser\\AndroidStudioProjects\\FusionCharge\\zxing-android-embedded\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-uk\\values-uk.xml",
             "map": [
                 {

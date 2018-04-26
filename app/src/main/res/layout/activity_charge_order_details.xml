@@ -79,8 +79,8 @@
 
                     <ImageView
                         android:id="@+id/iv_charge_cost_ask"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:src="@mipmap/pop_ic_ask" />
@@ -140,9 +140,9 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <RadioButton
+                    <!--<RadioButton
                         style="@style/charge_order_detail_radio_button"
-                        android:text="充电枪：12345" />
+                        android:text="充电枪：12345" />-->
                 </RadioGroup>
 
             </LinearLayout>

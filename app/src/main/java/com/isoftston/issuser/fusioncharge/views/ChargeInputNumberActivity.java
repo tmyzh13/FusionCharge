@@ -75,15 +75,15 @@ public class ChargeInputNumberActivity extends BaseActivity {
         getData();
     }
 
-    public static String token="f7377936a0734c1aad1509756826b820";
+    public static String token="16d4f37c795f4e0e80df079432285614";
     private void getData(){
         showLoading();
 
         RequestScanBean bean = new RequestScanBean();
-        bean.setAppUserId(1);
-        bean.setQrCode(1000000001);
+        bean.setAppUserId( 67 + "");
+        bean.setQrCode("1000000001");
 
-        api.getScanChargeInfo(token,bean)
+      /*  api.getScanChargeInfo(token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<ScanChargeInfo>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<ScanChargeInfo>>() {
                                @Override
@@ -101,10 +101,10 @@ public class ChargeInputNumberActivity extends BaseActivity {
                                    return super.operationError(scanChargeInfoBaseData, status, message);
                                }
                            }
-                );
+                );*/
 
 
-        /*LoginApi api1 = ApiFactory.getFactory().create(LoginApi.class);
+        LoginApi api1 = ApiFactory.getFactory().create(LoginApi.class);
         LoginRequestBean bean1 = new LoginRequestBean();
         bean1.phone = "17366206080";
 //        bean.carrier = Tools.getPhoneType();
@@ -121,6 +121,6 @@ public class ChargeInputNumberActivity extends BaseActivity {
                         Log.e("zw",baseData.toString());
 
                     }
-                });*/
+                });
     }
 }

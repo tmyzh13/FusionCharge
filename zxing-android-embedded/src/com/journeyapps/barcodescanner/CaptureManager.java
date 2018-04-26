@@ -448,4 +448,5 @@ public class CaptureManager {
     public void setResultCallBack(ResultCallBack resultCallBack) {
         this.mResultCallBack = resultCallBack;
     }
+
 }

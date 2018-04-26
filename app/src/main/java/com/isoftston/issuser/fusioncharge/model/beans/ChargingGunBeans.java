@@ -4,7 +4,7 @@ package com.isoftston.issuser.fusioncharge.model.beans;
  * Created by zhangwei on 2018/4/26.
  */
 
- class ChargingGunBeans {
+public class ChargingGunBeans {
 
     private int chargingPileId;
     private int currentA;
@@ -134,4 +134,25 @@ package com.isoftston.issuser.fusioncharge.model.beans;
         return voltageC;
     }
 
+    @Override
+    public String toString() {
+        return "ChargingGunBeans{" +
+                "chargingPileId=" + chargingPileId +
+                ", currentA=" + currentA +
+                ", currentB=" + currentB +
+                ", currentC=" + currentC +
+                ", gunCode='" + gunCode + '\'' +
+                ", gunId=" + gunId +
+                ", gunNumber='" + gunNumber + '\'' +
+                ", gunStatus=" + gunStatus +
+                ", gunType=" + gunType +
+                ", isBespeak=" + isBespeak +
+                ", lockBeginTime='" + lockBeginTime + '\'' +
+                ", lockUser='" + lockUser + '\'' +
+                ", parkingSpacesNumber='" + parkingSpacesNumber + '\'' +
+                ", voltageA=" + voltageA +
+                ", voltageB=" + voltageB +
+                ", voltageC=" + voltageC +
+                '}';
+    }
 }

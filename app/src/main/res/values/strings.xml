@@ -246,7 +246,7 @@
 
     <!--充电详情-->
     <string name="charge_detail">充电详情</string>
-    <string name="charge_station_name">充电站：</string>
+    <string name="charge_station_name">充电点：</string>
     <string name="charge_zhuang_number">充电桩编号：</string>
     <string name="charge_cost">充电费：</string>
     <string name="charge_service_cost">服务费：</string>
@@ -264,7 +264,11 @@
     <string name="change_enter_erweima_charge">切换至输入二维码编号充电</string>
     <string name="sure">确定</string>
     <string name="please_input_erweima_number">请输入二维码编号</string>
-
+    <string name="no_charge_gun_cannot_charge">没有获取到充电枪，无法充电。</string>
+    <string name="please_enter_1_999_int">请输入1到999之间的整数</string>
+    <string name="please_input_charge_count">请先输入充电数</string>
+    <string name="no_user_info">没有获取到信息。</string>
+    <string name="unknown_error">未知错误。</string>
 
 
 </resources>

@@ -6,23 +6,23 @@ package com.isoftston.issuser.fusioncharge.model.beans;
 
 public class RequestScanBean {
 
-    private long qrCode;
+    private String qrCode;
 
-    private int appUserId;
+    private String appUserId;
 
-    public long getQrCode() {
+    public String getQrCode() {
         return qrCode;
     }
 
-    public void setQrCode(long qrCode) {
+    public void setQrCode(String qrCode) {
         this.qrCode = qrCode;
     }
 
-    public int getAppUserId() {
+    public String getAppUserId() {
         return appUserId;
     }
 
-    public void setAppUserId(int appUserId) {
+    public void setAppUserId(String appUserId) {
         this.appUserId = appUserId;
     }
 }

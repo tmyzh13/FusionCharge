@@ -19,83 +19,103 @@ public class ScanChargeInfo {
     private double serviceFee;
     private String startTime;
     private String virtualId;
+    private String stationName;
+
+    public String getAppUserId() {
+        return appUserId;
+    }
+
     public void setAppUserId(String appUserId) {
         this.appUserId = appUserId;
     }
-    public String getAppUserId() {
-        return appUserId;
+
+    public List<ChargingGunBeans> getChargingGunBeans() {
+        return chargingGunBeans;
     }
 
     public void setChargingGunBeans(List<ChargingGunBeans> chargingGunBeans) {
         this.chargingGunBeans = chargingGunBeans;
     }
-    public List<ChargingGunBeans> getChargingGunBeans() {
-        return chargingGunBeans;
+
+    public int getChargingPileId() {
+        return chargingPileId;
     }
 
     public void setChargingPileId(int chargingPileId) {
         this.chargingPileId = chargingPileId;
     }
-    public int getChargingPileId() {
-        return chargingPileId;
+
+    public String getChargingPileName() {
+        return chargingPileName;
     }
 
     public void setChargingPileName(String chargingPileName) {
         this.chargingPileName = chargingPileName;
     }
-    public String getChargingPileName() {
-        return chargingPileName;
+
+    public String getEndTime() {
+        return endTime;
     }
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-    public String getEndTime() {
-        return endTime;
+
+    public double getFee() {
+        return fee;
     }
 
     public void setFee(double fee) {
         this.fee = fee;
     }
-    public double getFee() {
-        return fee;
+
+    public String getFeeName() {
+        return feeName;
     }
 
     public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-    public String getFeeName() {
-        return feeName;
+
+    public String getRunCode() {
+        return runCode;
     }
 
     public void setRunCode(String runCode) {
         this.runCode = runCode;
     }
-    public String getRunCode() {
-        return runCode;
+
+    public double getServiceFee() {
+        return serviceFee;
     }
 
     public void setServiceFee(double serviceFee) {
         this.serviceFee = serviceFee;
     }
-    public double getServiceFee() {
-        return serviceFee;
+
+    public String getStartTime() {
+        return startTime;
     }
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-    public String getStartTime() {
-        return startTime;
+
+    public String getVirtualId() {
+        return virtualId;
     }
 
     public void setVirtualId(String virtualId) {
         this.virtualId = virtualId;
     }
-    public String getVirtualId() {
-        return virtualId;
+
+    public String getStationName() {
+        return stationName;
     }
 
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
 
     @Override
     public String toString() {
@@ -111,6 +131,7 @@ public class ScanChargeInfo {
                 ", serviceFee=" + serviceFee +
                 ", startTime='" + startTime + '\'' +
                 ", virtualId='" + virtualId + '\'' +
+                ", stationName='" + stationName + '\'' +
                 '}';
     }
 }
