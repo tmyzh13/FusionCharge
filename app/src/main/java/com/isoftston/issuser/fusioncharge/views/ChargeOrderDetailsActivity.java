@@ -31,6 +31,7 @@ import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargingGunBeans;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.OrderRequestInfo;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
@@ -229,6 +230,12 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                         public void success(BaseData baseData) {
                             Log.e("zw","info : success");
                             Log.e("zw",baseData.toString());
+
+                            HomeChargeOrderBean homeChargeOrderBean = new HomeChargeOrderBean();
+                            homeChargeOrderBean.virtualId = scanChargeInfo.getVirtualId();
+                            homeChargeOrderBean.chargeGunNum = chooseGun.getGunCode();
+                            startActivity(ChagerStatueActivity.getLauncher(ChargeOrderDetailsActivity.this,homeChargeOrderBean));
+
                             hideLoading();
                         }
 
