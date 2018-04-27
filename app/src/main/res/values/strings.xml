@@ -284,6 +284,9 @@
     <string name="useing_no_charge">使用中（未充电）</string>
     <string name="appoingment_ing">预约中</string>
     <string name="stop_server">停止服务</string>
+    <string name="please_input_key_value">请输入关键词查询</string>
+    <string name="search_station_destation">目的地</string>
+    <string name="charging_end_fail">充电结束失败</string>
 
     <string name="oder">订单编号：</string>
     <string name="charge_pile_address">电桩地址</string>

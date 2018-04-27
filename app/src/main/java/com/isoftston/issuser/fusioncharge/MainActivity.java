@@ -31,8 +31,11 @@ import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.LoginActivity;
+import com.isoftston.issuser.fusioncharge.views.SearchStationTitleActivity;
+import com.isoftston.issuser.fusioncharge.views.SearchStationTitleActivity;
 import com.isoftston.issuser.fusioncharge.views.home.HomeListFragment;
 import com.isoftston.issuser.fusioncharge.views.home.MapFragment;
+import com.isoftston.issuser.fusioncharge.views.interfaces.MyOrderActivity;
 import com.isoftston.issuser.fusioncharge.views.interfaces.MyOrderActivity;
 
 import butterknife.Bind;
@@ -70,6 +73,8 @@ public class MainActivity extends BaseActivity {
     TextView tv_user_name;
     @Bind(R.id.tv_user_phone)
     TextView tv_user_phone;
+    @Bind(R.id.iv_search)
+    ImageView search;
 
     private Context context = MainActivity.this;
 
@@ -296,6 +301,11 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.my_order_tv)
     public void toMyOrder(){
         startActivity(MyOrderActivity.getLauncher(MainActivity.this));
+    }
+
+    @OnClick(R.id.iv_search)
+    public void goSearch(){
+        startActivity(SearchStationTitleActivity.getLauncher(MainActivity.this));
     }
 
     @Override

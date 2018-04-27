@@ -4,6 +4,7 @@ import com.corelibs.api.ApiFactory;
 import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.GuaildApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestCancelAppointment;
@@ -35,7 +36,7 @@ public class GuaildPresenter extends BasePresenter<GuaildView> {
         bean.appUserId=appUserId;
         bean.gunCode=gunCode;
         bean.chargingPileId=chargingPileId;
-        api.cancelAppointment(bean)
+        api.cancelAppointment(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindToLifeCycle()))
                 .subscribe(new ResponseSubscriber<BaseData>(view) {
                     @Override

@@ -46,6 +46,7 @@ public class TimerService extends Service{
     //更新预约时间
     public void timeAppointment(){
         if(isAppointmentCharge){
+            Log.e("yzh","已经开始");
             return;
         }else{
             isAppointmentCharge=true;
@@ -53,7 +54,7 @@ public class TimerService extends Service{
         if(timerSec==null){
             timerSec=new Timer();
         }
-        timer.schedule(new TimerTask() {
+        timerSec.schedule(new TimerTask() {
             @Override
             public void run() {
                 if(Tools.isNull(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))){
@@ -62,6 +63,7 @@ public class TimerService extends Service{
                     appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
                 }
                 appointmentTime-=1000;
+                Log.e("yzh","sssss----"+appointmentTime);
                 PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,appointmentTime+"");
                 RxBus.getDefault().send(new Object(),Constant.REFRESH_APPOINTMENT_TIME);
                 if(appointmentTime<=0){
@@ -71,10 +73,10 @@ public class TimerService extends Service{
                     cancelTimerAppointment();
                 }
             }
-        },1000,1000);
+        },1000,10000);
     }
     public void cancelTimerAppointment(){
-        if(timer!=null){
+        if(timerSec!=null){
             timerSec.cancel();
             timerSec=null;
             isAppointmentCharge=false;

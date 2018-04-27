@@ -25,5 +25,5 @@ public interface ChargeStatueApi {
     Observable<BaseData> startCharge(@Body RequestStartChargerBean bean);
 
     @POST(Urls.STOP_CHARGER)
-    Observable<BaseData> stopCharge(@Header("AccessToken") String token,@Body RequestEndChargerBean bean);
+    Observable<BaseData<String>> stopCharge(@Header("AccessToken") String token,@Body RequestEndChargerBean bean);
 }

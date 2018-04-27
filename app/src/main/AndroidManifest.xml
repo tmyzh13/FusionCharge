@@ -41,7 +41,8 @@
         </activity>
         <activity
             android:name=".views.LoginActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".views.ChagerStatueActivity"
             android:screenOrientation="portrait" />
@@ -126,7 +127,13 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".views.PublishCommentActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize">
+        </activity>
+        <activity
+            android:name=".views.SearchStationTitleActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize">
         </activity>
         <activity android:name=".views.interfaces.MyOrderActivity" android:screenOrientation="portrait"/>
     </application>

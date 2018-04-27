@@ -29,13 +29,16 @@ import com.amap.api.services.route.RouteSearch;
 import com.amap.api.services.route.WalkRouteResult;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.common.AppManager;
 import com.corelibs.subscriber.ResponseSubscriber;
 import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.ToastMgr;
 import com.corelibs.utils.rxbus.RxBus;
+import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeRefreshBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
@@ -47,6 +50,9 @@ import com.isoftston.issuser.fusioncharge.views.interfaces.GuaildView;
 import com.isoftston.issuser.fusioncharge.weights.AppointmentTimeOutDialog;
 import com.isoftston.issuser.fusioncharge.weights.CommonDialog;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -90,11 +96,12 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
     private Context context=GuildActivity.this;
     private DrivingRouteOverLay drivingRouteOverlay;
     private double endLatitude,endLongitude;
-
+    private long appointmentTime;
     private HomeAppointmentBean homeAppointmentBean;
     private CommonDialog commonDialog;
     private boolean choiceNotAppointment;
     private AppointmentTimeOutDialog appointmentTimeOutDialog;
+    private Timer timerAppointment;
 
     public static Intent getLauncher(Context context,double latitude,double longitude,HomeAppointmentBean bean,boolean choiceNotAppoinment){
         Intent intent =new Intent(context,GuildActivity.class);
@@ -117,6 +124,7 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
         navBar.setNavTitle(getString(R.string.guilding));
         navBar.setImageBackground(R.drawable.nan_bg);
 
+        timerAppointment=new Timer();
         commonDialog=new CommonDialog(context,"",2);
 
         endLatitude=getIntent().getDoubleExtra("la",0);
@@ -155,7 +163,7 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
                         public void onClick(View v) {
                             commonDialog.dismiss();
                             //调用接口
-                            presenter.cancelAppointment("1","1","1","1");
+                            presenter.cancelAppointment(homeAppointmentBean.reserveId+"", UserHelper.getSavedUser().appUserId+"",homeAppointmentBean.gunCode,homeAppointmentBean.chargingPileId+"");
                         }
                     });
                 }
@@ -168,9 +176,49 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
             tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
             tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
             //设置时间开始计时
-            Intent intent = new Intent(this, TimerService.class);
-            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-
+//            Intent intent = new Intent(this, TimerService.class);
+//            bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+            timerAppointment.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if(homeAppointmentBean!=null){
+                        if(Tools.isNull(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))){
+                            appointmentTime=0;
+                        }else{
+                            appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
+                        }
+                        appointmentTime-=1000;
+                        Log.e("yzh","sssss----"+appointmentTime);
+                        PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,appointmentTime+"");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
+                            }
+                        });
+                        if(appointmentTime<=0){
+                            Log.e("yzh","cancel");
+                            //预约超时
+                            appointmentTimeOutDialog.show();
+                            appointmentTimeOutDialog.setIvDeleteListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    appointmentTimeOutDialog.dismiss();
+                                    finish();
+                                }
+                            });
+                            appointmentTimeOutDialog.setReAppointment(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    appointmentTimeOutDialog.dismiss();
+                                    finish();
+                                }
+                            });
+//                        cancelTimerAppointment();
+                        }
+                    }
+                }
+            },1000,1000);
         }else{
 
         }
@@ -221,10 +269,11 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
             }
         });
         RxBus.getDefault().toObservable(Object.class,Constant.REFRESH_APPOINTMENT_TIME)
-                .compose(this.<Object>bindToLifecycle())
+                .compose(this.bindToLifecycle())
                 .subscribe(new RxBusSubscriber<Object>() {
                     @Override
                     public void receive(Object data) {
+                        Log.e("yzh","guailds");
                         tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
                     }
                 });
@@ -295,7 +344,9 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
     public void onDestroy() {
         super.onDestroy();
         map.onDestroy();
-
+        if(timerAppointment!=null){
+            timerAppointment=null;
+        }
     }
 
     @Override

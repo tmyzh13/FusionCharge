@@ -38,18 +38,29 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
     }
 
     public void getDatas(){
+        if(otherLoading){
+        }else{
+            view.showLoading();
+        }
+        doGetDatas(newCondition());
+    }
+
+    public void getDatas(String stationName){
+        Condition condition = newCondition();
+        condition.stationName =stationName;
+        doGetDatas(condition);
+    }
+
+    private Condition newCondition(){
         Condition condition=new Condition();
         condition.x1=100;
         condition.x2=200;
         condition.y1=30;
         condition.y2=40;
         condition.selectType=3;
-        if(otherLoading){
-
-        }else{
-            view.showLoading();
-        }
-
+        return condition;
+    }
+    private void doGetDatas(Condition condition) {
         api.getMapDatas(condition)
                 .compose(new ResponseTransformer<>(this.<BaseData<List<MapDataBean>>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<List<MapDataBean>>>(view) {
@@ -58,6 +69,5 @@ public class HomeListPresenter extends BasePresenter<HomeListView> {
                         view.rendData(baseData.data);
                     }
                 });
-
     }
 }

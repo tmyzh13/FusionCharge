@@ -65,4 +65,7 @@ public class Urls {
 
     //充电站信息
     public static final String CHARGE_PILE_DETAIL="appMap/info";
+
+    //我的订单
+    public static final String MY_ORDER="user/queryAllChargeOrder";
 }
