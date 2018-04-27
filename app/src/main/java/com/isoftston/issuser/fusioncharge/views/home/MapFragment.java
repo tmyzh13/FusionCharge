@@ -160,6 +160,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     ll_hint.setVisibility(View.VISIBLE);
                     if (homeAppointmentBean != null) {
                         tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
+                        Log.e("yzh","");
                     }
 
                 }
