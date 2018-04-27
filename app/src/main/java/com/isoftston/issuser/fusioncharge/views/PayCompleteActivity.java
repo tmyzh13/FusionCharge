@@ -24,9 +24,12 @@ public class PayCompleteActivity extends BaseActivity {
     NavBar nav;
 //    @Bind(R.id.view)
 //    LoadingView view;
+    private Context context=PayCompleteActivity.this;
+    private String orderNum;
 
-    public static Intent getLauncher(Context context){
+    public static Intent getLauncher(Context context,String orderNum){
         Intent intent =new Intent(context,PayCompleteActivity.class);
+        intent.putExtra("order",orderNum);
         return intent;
     }
 
@@ -40,6 +43,7 @@ public class PayCompleteActivity extends BaseActivity {
         nav.setNavTitle(getString(R.string.pay_complete));
         nav.setImageBackground(R.drawable.nan_bg);
 
+        orderNum=getIntent().getStringExtra("order");
 //        view=new LoadingView(PayCompleteActivity.this);
 //        view.startAnimation(0,100,3000);
     }

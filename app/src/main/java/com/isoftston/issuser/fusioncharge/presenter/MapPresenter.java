@@ -141,7 +141,9 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
                     @Override
                     public void success(BaseData<HomeChargeOrderBean> baseData) {
                         if(baseData.data!=null){
-                            view.renderHomeChargerOrder(baseData.data);
+                            view.renderHomeChargerOrder(true,baseData.data);
+                        }else{
+                            view.renderHomeChargerOrder(false,null);
                         }
                     }
                 });
@@ -149,14 +151,16 @@ public class MapPresenter extends BasePresenter<MapHomeView> {
 
     public void getUserAppointment(){
         RequestHomeAppointment bean =new RequestHomeAppointment();
-        bean.appUserId="1";
-        api.getUserAppointmentRecord(bean)
+        bean.appUserId=UserHelper.getSavedUser().appUserId+"";
+        api.getUserAppointmentRecord(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<HomeAppointmentBean>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<HomeAppointmentBean>>(view) {
                     @Override
                     public void success(BaseData<HomeAppointmentBean> baseData) {
                         if(baseData.data!=null){
-                            view.renderAppoinmentInfo(baseData.data);
+                            view.renderAppoinmentInfo(true,baseData.data);
+                        }else{
+                            view.renderAppoinmentInfo(false,null);
                         }
                     }
                 });

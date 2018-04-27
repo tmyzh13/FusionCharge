@@ -276,5 +276,8 @@
     <string name="time_out">连接超时。</string>
     <string name="no_data">未获取到数据！</string>
 
-
+    <string name="login_fail">登录失效</string>
+    <string name="has_no_pay_order">有未支付订单</string>
+    <string name="has_charging_order">有充电中的订单</string>
+    <string name="has_appointment">有预约</string>
 </resources>

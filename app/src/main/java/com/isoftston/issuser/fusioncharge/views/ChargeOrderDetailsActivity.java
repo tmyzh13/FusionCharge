@@ -329,6 +329,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
 
     @Override
     public void goLogin() {
-
+        ToastMgr.show(getString(R.string.login_fail));
+        startActivity(LoginActivity.getLauncher(ChargeOrderDetailsActivity.this));
     }
 }

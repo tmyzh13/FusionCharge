@@ -63,7 +63,9 @@ import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PileFeeBean;
+import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.presenter.MapPresenter;
+import com.isoftston.issuser.fusioncharge.utils.ActionControl;
 import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.ChagerStatueActivity;
@@ -175,8 +177,11 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                         //支付成功了 屏蔽未支付提示
                         if (data.type == 0) {
                             rl_not_pay.setVisibility(View.GONE);
+                            ActionControl.getInstance(getViewContext()).setHasNoPayOrder(false, null);
                         } else if (data.type == 1) {
+                            //预约结束
                             ll_appontment.setVisibility(View.GONE);
+                            ActionControl.getInstance(getViewContext()).setHasAppointment(false, null);
                         }
 
                     }
@@ -218,7 +223,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
                     @Override
                     public void receive(Object data) {
-                        getHomeStatue();
+                        if (UserHelper.getSavedUser() != null && !Tools.isNull(UserHelper.getSavedUser().token)) {
+                            getHomeStatue();
+                        }
                     }
                 });
 
@@ -444,7 +451,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 if (followMove) {
                     aMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
                 }
-                if (list != null && list.size() != 0) {
+                if (list == null || list.size() == 0) {
                     presenter.getData();
                 }
             } else {
@@ -560,9 +567,11 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     @Override
     public void hasNoPayOrder(boolean has, HomeOrderBean bean) {
+        ActionControl.getInstance(getContext()).setHasNoPayOrder(has, bean);
         if (has) {
             rl_not_pay.setVisibility(View.VISIBLE);
             homeOrderBean = bean;
+
         } else {
             rl_not_pay.setVisibility(View.GONE);
         }
@@ -590,8 +599,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     private HomeAppointmentBean homeAppointmentBean;
 
     @Override
-    public void renderAppoinmentInfo(HomeAppointmentBean bean) {
+    public void renderAppoinmentInfo(boolean has, HomeAppointmentBean bean) {
 
+        ActionControl.getInstance(getContext()).setHasAppointment(has, bean);
         homeAppointmentBean = bean;
 
 //        ll_appontment.setVisibility(View.VISIBLE);
@@ -616,7 +626,8 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     private HomeChargeOrderBean homeChargeOrderBean;
 
     @Override
-    public void renderHomeChargerOrder(HomeChargeOrderBean bean) {
+    public void renderHomeChargerOrder(boolean has, HomeChargeOrderBean bean) {
+        ActionControl.getInstance(getContext()).setHasCharging(has, bean);
         rl_charger_order.setVisibility(View.VISIBLE);
         homeChargeOrderBean = bean;
     }
@@ -691,7 +702,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     @Override
     public void goLogin() {
-        Log.e("yzh", "goLogin");
+        UserHelper.clearUserInfo(UserBean.class);
         startActivity(LoginActivity.getLauncher(getContext()));
     }
 }
