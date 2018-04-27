@@ -8,6 +8,6 @@
         android:id="@+id/charge_pile_iv"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@mipmap/home_bg" />
+         />
 
 </FrameLayout>

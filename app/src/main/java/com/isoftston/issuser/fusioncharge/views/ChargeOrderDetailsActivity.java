@@ -319,10 +319,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                 //充电枪选择
             case R.id.rg_choose_gun:
                 int index = i - BASE_ID;
-
                 chooseGun = scanChargeInfo.getChargingGunBeans().get(index);
-//                chooseGun = scanChargeInfo.getChargingGunBeans().get(i);
-//                Log.e("zw","chooseGun : " + chooseGun.getGunNumber() );
                 break;
         }
     }

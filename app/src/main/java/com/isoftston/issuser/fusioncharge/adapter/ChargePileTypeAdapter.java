@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
 import com.isoftston.issuser.fusioncharge.views.fragments.CommentsFragment;
 import com.isoftston.issuser.fusioncharge.views.fragments.PictureFragment;
 import com.isoftston.issuser.fusioncharge.views.fragments.PositionFragment;
@@ -18,8 +19,11 @@ public class ChargePileTypeAdapter extends FragmentPagerAdapter {
     private PositionFragment positionFragment;
     private CommentsFragment commentsFragment;
 
-    public ChargePileTypeAdapter(FragmentManager fm) {
+    private ChargeStationDetailBean data;
+
+    public ChargePileTypeAdapter(FragmentManager fm, ChargeStationDetailBean bean) {
         super(fm);
+        this.data = bean;
     }
 
     @Override
@@ -28,16 +32,19 @@ public class ChargePileTypeAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             if (pictureFragment == null) {
                 pictureFragment = new PictureFragment();
+                pictureFragment.data = data;
             }
             return pictureFragment;
         } else if (position == 1) {
             if (positionFragment == null) {
                 positionFragment = new PositionFragment();
+                positionFragment.data = data;
             }
             return positionFragment;
         } else if (position == 2) {
             if (commentsFragment == null) {
                 commentsFragment = new CommentsFragment();
+                commentsFragment.data = data;
             }
             return commentsFragment;
         }

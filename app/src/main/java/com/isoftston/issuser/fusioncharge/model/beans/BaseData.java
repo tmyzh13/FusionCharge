@@ -34,4 +34,14 @@ public class BaseData<T> implements Serializable,ResponseHandler.IBaseData {
     public String msg() {
         return msg;
     }
+
+    @Override
+    public String toString() {
+        return "BaseData{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                ", page=" + page +
+                '}';
+    }
 }

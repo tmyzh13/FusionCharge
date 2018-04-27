@@ -29,7 +29,7 @@ public class AppointPresenter extends BasePresenter<AppointView> {
     public void onStart() {
     }
 
-    public void appointAocation() {
+    public void appointAocation(String gunCode,int chargingPileId, String chargingPileName) {
         AppointRequestBean bean = new AppointRequestBean();
 
         api.appoint(bean)

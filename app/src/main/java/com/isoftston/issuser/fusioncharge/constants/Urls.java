@@ -20,7 +20,7 @@ public class Urls {
     public static final String REGISTER = "user/register";
     public static final String GET_CODE = "user/captcha";
     //预约
-    public static final String APPOINT_CHARGE = "user/login";
+    public static final String APPOINT_CHARGE = "charging/reserve";
 
     //首页地图和列表
     public static final String MAP_DATA="appMap/search";

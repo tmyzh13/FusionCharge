@@ -280,4 +280,8 @@
     <string name="has_no_pay_order">有未支付订单</string>
     <string name="has_charging_order">有充电中的订单</string>
     <string name="has_appointment">有预约</string>
+    <string name="useing">使用中（已充电）</string>
+    <string name="useing_no_charge">使用中（未充电）</string>
+    <string name="appoingment_ing">预约中</string>
+    <string name="stop_server">停止服务</string>
 </resources>

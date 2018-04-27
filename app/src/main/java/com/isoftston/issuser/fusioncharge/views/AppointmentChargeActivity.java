@@ -15,6 +15,9 @@ import com.isoftston.issuser.fusioncharge.presenter.AppointPresenter;
 import com.isoftston.issuser.fusioncharge.views.interfaces.AppointView;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import butterknife.Bind;
 
 public class AppointmentChargeActivity extends BaseActivity<AppointView, AppointPresenter> implements View.OnClickListener, AppointView {
@@ -32,6 +35,9 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     TextView userChosedTimeTv;
 
     private int appointTime;
+    private String gunCode;
+    private int chargingPileId;
+    private String chargingPileName;
 
     public static Intent getLauncher(Context context) {
         Intent intent = new Intent(context, AppointmentChargeActivity.class);
@@ -45,6 +51,10 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
 
     @Override
     protected void init(Bundle savedInstanceState) {
+        gunCode = getIntent().getStringExtra("gunCode");
+        chargingPileId = getIntent().getIntExtra("chargingPileId",0);
+        chargingPileName = getIntent().getStringExtra("chargingPileName");
+
         navBar.setColorRes(R.color.app_blue);
         navBar.setNavTitle(context.getString(R.string.appoint_charge));
         clicks();
@@ -67,13 +77,16 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
                 showDialog();
                 break;
             case R.id.complete_appoint_tv:
-                startActivity(AppointSuccessActivity.getLauncher(context,item));
+
+//                startActivity(AppointSuccessActivity.getLauncher(context,item));
+                presenter.appointAocation(gunCode,chargingPileId,chargingPileName);
                 break;
         }
     }
 
     TextView time15mTv, time30mTv, time1hTv, time2hTv, sureTv;
     View line1, line2, line3;
+    //15m  30m   1h  2h
     int item = 1;
 
     public void showDialog() {
@@ -187,7 +200,8 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
                     userChosedTimeTv.setText(R.string.time_2h);
                 }
                 dialog.dismiss();
-                Log.e(TAG, "----choseTime:" + appointTime);
+                getNowTime();
+                getEndTime();
             }
         });
     }
@@ -200,5 +214,21 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     @Override
     public void goLogin() {
 
+    }
+
+    private String getNowTime(){
+        long currentTime = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now = sdf.format(currentTime);
+        Log.e("zw","time : " + now);
+        return now;
+    }
+
+    private String getEndTime(){
+        long endTime = System.currentTimeMillis() + 1000 * 60 * appointTime;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now = sdf.format(endTime);
+        Log.e("zw","time end : " + now);
+        return now;
     }
 }

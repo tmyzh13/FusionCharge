@@ -13,6 +13,10 @@ import android.widget.TextView;
 
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileBean;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargePileDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.GunList;
+import com.isoftston.issuser.fusioncharge.model.beans.PileList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,18 +28,22 @@ import java.util.List;
 
 public class ChargePileAdapter extends BaseAdapter {
     private Context context;
-    private List<ChargePileBean> datas;
+    private List<PileList> datas;
     private LayoutInflater mInflater;
+    private List<GunList> gunList;
 
-    public ChargePileAdapter(Context context, List<ChargePileBean> datas) {
+    private ChargeStationDetailBean bean;
+
+    public ChargePileAdapter(Context context, ChargeStationDetailBean bean) {
         this.context = context;
-        this.datas = datas;
+        this.bean = bean;
+        this.datas = bean.getPileList();
         mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return datas.size();
+        return datas == null ? 0 :datas.size();
     }
 
     @Override
@@ -48,12 +56,9 @@ public class ChargePileAdapter extends BaseAdapter {
         return position;
     }
 
-
-    List<ChargePileBean.ElectricGunBean> gunList = new ArrayList<>();
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ChargePileBean chargePileBean = datas.get(position);
+        PileList chargePileBean = datas.get(position);
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -70,19 +75,19 @@ public class ChargePileAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if (chargePileBean.getStatus() == 0) {
+        if (chargePileBean.getRunStatus() == 0) {
             holder.pileStatusIv.setImageResource(R.mipmap.charge_off);
         } else {
             holder.pileStatusIv.setImageResource(R.mipmap.charge_on);
         }
-        holder.pileNumTv.setText(chargePileBean.getPileNum());
+        holder.pileNumTv.setText(chargePileBean.getRunCode());
         holder.maxPowerTv.setText(chargePileBean.getMaxPower());
-        holder.maxElectronicTv.setText(chargePileBean.getMaxElectric());
+        holder.maxElectronicTv.setText(chargePileBean.getMaxCurrent());
         holder.maxVoltageTv.setText(chargePileBean.getMaxVoltage());
 
-        gunList = chargePileBean.getGunBeanList();
+        gunList = chargePileBean.getGunList();
 
-        ElectricGunAdapter adapter = new ElectricGunAdapter(context, gunList);
+        ElectricGunAdapter adapter = new ElectricGunAdapter(context, gunList,chargePileBean.getName());
         holder.electricGunLv.setAdapter(adapter);
 //        adapter.setData(gunList);
         setListViewHeight(holder.electricGunLv);

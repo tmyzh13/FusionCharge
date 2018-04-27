@@ -25,6 +25,7 @@ import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestChargePileDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
 import com.isoftston.issuser.fusioncharge.weights.MyViewPager;
@@ -88,17 +89,19 @@ public class ChargeDetailsActivity extends BaseActivity {
         bean.setId("1");
         bean.setType(STATION);
         api.getChargePileDetail(UserHelper.getSavedUser().token,bean)
-                .compose(new ResponseTransformer<>(this.<BaseData<ChargePileDetailBean>>bindUntilEvent(ActivityEvent.DESTROY)))
-                .subscribe(new ResponseSubscriber<BaseData<ChargePileDetailBean>>() {
+                .compose(new ResponseTransformer<>(this.<BaseData<ChargeStationDetailBean>>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData<ChargeStationDetailBean>>() {
                     @Override
-                    public void success(BaseData<ChargePileDetailBean> baseData) {
+                    public void success(BaseData<ChargeStationDetailBean> baseData) {
+                        Log.e("zw",TAG + " success : " + baseData.toString());
+                        Log.e("zw",TAG + " success1 : " + baseData.data.toString());
                         initView(baseData.data);
                         hideLoading();
                     }
 
                     @Override
-                    public boolean operationError(BaseData<ChargePileDetailBean> baseData, int status, String message) {
-                        Log.e("zw",baseData.toString());
+                    public boolean operationError(BaseData<ChargeStationDetailBean> baseData, int status, String message) {
+                        Log.e("zw",TAG + " error : " + baseData.toString());
                         hideLoading();
                         showToast(getString(R.string.no_data));
                         finish();
@@ -109,21 +112,23 @@ public class ChargeDetailsActivity extends BaseActivity {
                     public void onError(Throwable e) {
                         super.onError(e);
                         hideLoading();
-                        showToast(getString(R.string.time_out));
+                        showToast(getString(R.string.wrong_request));
                         finish();
                     }
                 });
     }
 
-    private void initView(ChargePileDetailBean bean){
+    private void initView(ChargeStationDetailBean bean){
         chargePileNameTv.setText(bean.getName());
         chargePileAddressTv.setText(bean.getAddress());
+        scoreTv.setText(bean.getAverageScore() + "");
         //计算距离
 //        LatLng positionLatlng = new LatLng(,);
 //        LatLng userLatlng = new LatLng(,);
 //        float distance = AMapUtils.calculateLineDistance(positionLatlng,userLatlng);
-        mAdapter = new ChargePileTypeAdapter(getSupportFragmentManager());
+        mAdapter = new ChargePileTypeAdapter(getSupportFragmentManager(),bean);
         myViewPager.setAdapter(mAdapter);
+
         chosePicture();
     }
 

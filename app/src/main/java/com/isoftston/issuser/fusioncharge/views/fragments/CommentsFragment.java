@@ -18,6 +18,7 @@ import com.corelibs.base.BasePresenter;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapter.CommentSortAdapter;
 import com.isoftston.issuser.fusioncharge.adapter.CommentsAdapter;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentSortBean;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentsBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
@@ -34,6 +35,8 @@ import butterknife.Bind;
 public class CommentsFragment extends BaseFragment<CommentView,CommentPresenter> implements CommentView {
     public static final String TAG = CommentsFragment.class.getSimpleName();
     private Context context = getActivity();
+
+    public ChargeStationDetailBean data;
 
     @Bind(R.id.flow_layout)
     GridView flowLayout;

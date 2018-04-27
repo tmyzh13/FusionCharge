@@ -5,6 +5,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.AppointRequestBean;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -14,5 +15,5 @@ import rx.Observable;
 
 public interface AppointApi {
     @POST(Urls.LOGIN)
-    Observable<BaseData> appoint(@Body AppointRequestBean bean);
+    Observable<BaseData> appoint(@Header("AccessenToken") String token,@Body AppointRequestBean bean);
 }

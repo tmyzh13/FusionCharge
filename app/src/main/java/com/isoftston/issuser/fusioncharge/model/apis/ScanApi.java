@@ -3,6 +3,7 @@ package com.isoftston.issuser.fusioncharge.model.apis;
 import com.isoftston.issuser.fusioncharge.constants.Urls;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.OrderRequestInfo;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestChargePileDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestScanBean;
@@ -29,6 +30,6 @@ public interface ScanApi {
 
     //充电站详情
     @POST(Urls.CHARGE_PILE_DETAIL)
-    Observable<BaseData<ChargePileDetailBean>> getChargePileDetail(@Header("AccessToken") String token, @Body RequestChargePileDetailBean bean);
+    Observable<BaseData<ChargeStationDetailBean>> getChargePileDetail(@Header("AccessToken") String token, @Body RequestChargePileDetailBean bean);
 
 }
