@@ -72,7 +72,7 @@ public class ChargeStatuePresenter extends BasePresenter<ChargerStatueView> {
         bean.gunCode=gunCode;
         bean.stopReason="1";
         bean.orderRecordNum=orderRecordNum;
-        api.stopCharge(bean)
+        api.stopCharge(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindToLifeCycle()))
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override

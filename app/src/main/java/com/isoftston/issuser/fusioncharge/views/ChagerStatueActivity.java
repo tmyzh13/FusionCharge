@@ -22,8 +22,10 @@ import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargerStatueBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
+import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.presenter.ChargeStatuePresenter;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.ChargerStatueView;
@@ -165,7 +167,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
                 //结束充电 成功之后在选择进入支付
                 checkStatueLoadingView.setMessage(getString(R.string.charging_statue_ending));
                 checkStatueLoadingView.show();
-                presenter.endCharging(chargerStatueBean.chargingPileId,chargerStatueBean.chargingPileName,chargerStatueBean.virtualId,chargerStatueBean.gunCode,chargerStatueBean.orderRecordNum);
+                presenter.endCharging(chargerStatueBean.chargingPileId,chargerStatueBean.chargingPileName,homeChargeOrderBean.virtualId,homeChargeOrderBean.chargeGunNum,chargerStatueBean.orderRecordNum);
 //                new Handler().postDelayed(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -238,12 +240,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
         } else if (bean.isStart == 1) {
             checkStatueLoadingView.dismiss();
             //检测中的定时结束
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
-                }
-            },5000);
+            handler.postDelayed(runnable,5000);
 //            timer.cancel();
 //            timer = new Timer();
 //            //开始5s刷新一个数据的定时
@@ -255,13 +252,26 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
 //            }, 1000, 5000);
 
             //成功
+            tv_address_name.setText(bean.chargingPileName);
             tv_kw.setText(bean.kwh);
-            tv_charged_money.setText(bean.money + getString(R.string.yuan));
+            if(!Tools.isNull(bean.money)){
+                tv_charged_money.setText(bean.money + getString(R.string.yuan));
+            }
+
             tv_current_charge.setText(bean.soc+"%");
             tv_charged_enegy.setText(bean.power + getString(R.string.du));
             //05:04:25
-            tv_charge_time.setText(bean.alreadyTime.substring(0,5));
-            PreferencesHelper.saveData(Constant.CHARGING_TIME, Tools.getTimeValue(bean.alreadyTime)+"");
+            if(Tools.isNull(bean.alreadyTime)){
+                tv_charge_time.setText("00:00");
+            }else{
+                tv_charge_time.setText(bean.alreadyTime.substring(0,5));
+            }
+            if(Tools.isNull(bean.alreadyTime)){
+                PreferencesHelper.saveData(Constant.CHARGING_TIME, "0");
+            }else{
+                PreferencesHelper.saveData(Constant.CHARGING_TIME, Tools.getTimeValue(bean.alreadyTime)+"");
+            }
+
             timerService.timerHour();
             if (Tools.isNull(bean.soc)) {
                 progressView.setProgress(0);
@@ -270,6 +280,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
             }
             if (bean.isStop != 0) {
                 timerService.cancelTimerHour();
+                handler.removeCallbacks(runnable);
                 //弹框提示充电结束去支付
                 final CommonDialog dialog = new CommonDialog(context, getString(R.string.hint), getString(R.string.charging_statue_end_go_to_pay), 2);
                 dialog.show();
@@ -277,6 +288,9 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
+                        while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)) {
+                            AppManager.getAppManager().finishActivity();
+                        }
                         startActivity(PayActivity.getLauncher(context, chargerStatueBean.orderRecordNum));
                     }
                 });
@@ -301,18 +315,27 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
 //                    presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
 //                }
 //            }, 1000, 3000);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
-                }
-            },3000);
+            handler.postDelayed(runnable,3000);
         }
     }
+
+    private Runnable runnable=new Runnable() {
+        @Override
+        public void run() {
+            if(homeChargeOrderBean!=null){
+                presenter.getChargeStatue(homeChargeOrderBean.virtualId, homeChargeOrderBean.chargeGunNum);
+            }
+
+        }
+    };
 
     @Override
     public void endChargeSuccess() {
         checkStatueLoadingView.dismiss();
+        handler.removeCallbacks(runnable);
+        timerService.cancelTimerHour();
+        //刷新首页的界面
+        RxBus.getDefault().send(new Object(),Constant.REFRESH_HOME_STATUE);
         commonDialog.setMsg(getString(R.string.charging_statue_end_go_to_pay));
         commonDialog.show();
         commonDialog.setPositiveListener(new View.OnClickListener() {
@@ -345,6 +368,8 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
         super.onDestroy();
         timer.cancel();
         timer = null;
+        handler.removeCallbacks(runnable);
+        handler=null;
     }
 
     @Override
@@ -359,6 +384,8 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
 
     @Override
     public void goLogin() {
-
+        UserHelper.clearUserInfo(UserBean.class);
+        startActivity(LoginActivity.getLauncher(context));
     }
+
 }

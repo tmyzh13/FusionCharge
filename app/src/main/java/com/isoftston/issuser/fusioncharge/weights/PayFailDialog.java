@@ -40,7 +40,12 @@ public class PayFailDialog extends Dialog {
         });
 
         tv_try_again=findViewById(R.id.tv_try_again);
-
+        tv_try_again.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         setCanceledOnTouchOutside(false);
     }
 
