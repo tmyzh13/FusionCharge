@@ -41,6 +41,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.HomeRefreshBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
 import com.isoftston.issuser.fusioncharge.presenter.GuaildPresenter;
 import com.isoftston.issuser.fusioncharge.utils.DrivingRouteOverLay;
+import com.isoftston.issuser.fusioncharge.utils.TimeServiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.GuaildView;
 import com.isoftston.issuser.fusioncharge.weights.AppointmentTimeOutDialog;
@@ -367,6 +368,7 @@ public class GuildActivity  extends BaseActivity<GuaildView,GuaildPresenter> imp
     @Override
     public void cancelAppointmentSuccess() {
         //取消成功
+        TimeServiceManager.getInstance().getTimerService().cancelTimerAppointment();
         HomeRefreshBean bean =new HomeRefreshBean();
         bean.type=1;
         RxBus.getDefault().send(bean,Constant.HOME_STATUE_REFRESH);

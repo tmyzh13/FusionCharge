@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.corelibs.base.BaseActivity;
 import com.corelibs.utils.ToastMgr;
+import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.AppointResponseBean;
 import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
@@ -219,6 +221,7 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     @Override
     public void appointSuccess(AppointResponseBean bean) {
         hideLoading();
+        RxBus.getDefault().send(new Object(), Constant.REFRESH_HOME_STATUE);
         startActivity(AppointSuccessActivity.getLauncher(context,item));
     }
 

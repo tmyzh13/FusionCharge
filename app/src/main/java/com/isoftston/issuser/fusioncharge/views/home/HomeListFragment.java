@@ -17,12 +17,15 @@ import com.corelibs.views.ptr.loadmore.widget.AutoLoadMoreListView;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapters.HomeListAdpter;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.ElectronicPileBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
 import com.isoftston.issuser.fusioncharge.presenter.HomeListPresenter;
 import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
+import com.isoftston.issuser.fusioncharge.views.ChargeDetailsActivity;
+import com.isoftston.issuser.fusioncharge.views.LoginActivity;
 import com.isoftston.issuser.fusioncharge.views.interfaces.HomeListView;
 
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ import butterknife.Bind;
  * Created by issuser on 2018/4/19.
  */
 
-public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresenter> implements HomeListView, PtrLollipopLayout.RefreshCallback, PtrAutoLoadMoreLayout.RefreshLoadCallback {
+public class HomeListFragment extends BaseFragment<HomeListView, HomeListPresenter> implements HomeListView, PtrLollipopLayout.RefreshCallback, PtrAutoLoadMoreLayout.RefreshLoadCallback {
 
     @Bind(R.id.lv_piles)
     AutoLoadMoreListView lv_piles;
@@ -50,7 +53,7 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
 
     @Override
     protected void init(Bundle savedInstanceState) {
-        adapter =new HomeListAdpter(getContext());
+        adapter = new HomeListAdpter(getContext());
 //        List<ElectronicPileBean> list =new ArrayList<>();
 //        for(int i=0;i<10;i++){
 //            list.add(new ElectronicPileBean());
@@ -60,7 +63,12 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
         lv_piles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //
+                //获取详情要token 所以判断
+                if (UserHelper.getSavedUser() == null || Tools.isNull(UserHelper.getSavedUser().token)) {
+                    startActivity(LoginActivity.getLauncher(getContext()));
+                } else {
+                    startActivity(ChargeDetailsActivity.getLauncher(getActivity()));
+                }
             }
         });
         ptrLayout.disableLoading();
@@ -102,23 +110,21 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
     @Override
     public void rendData(List<MapDataBean> list) {
         //添加一遍距离 并且做一边筛选
-        MyLocationBean bean=PreferencesHelper.getData(MyLocationBean.class);
-        List<MapDataBean> temp=new ArrayList<>();
-        if(bean!=null){
-            for(int i=0;i<list.size();i++ ){
-                double distance=Tools.GetDistance(bean.latitude,bean.longtitude,list.get(i).latitude,list.get(i).longitude);
-                list.get(i).distance=distance;
+        MyLocationBean bean = PreferencesHelper.getData(MyLocationBean.class);
+        List<MapDataBean> temp = new ArrayList<>();
+        if (bean != null) {
+            for (int i = 0; i < list.size(); i++) {
+                double distance = Tools.GetDistance(bean.latitude, bean.longtitude, list.get(i).latitude, list.get(i).longitude);
+                list.get(i).distance = distance;
                 //如果大于distance范围过滤
-                if(distance<= ChoiceManager.getInstance().getDistance()){
+                if (distance <= ChoiceManager.getInstance().getDistance()) {
                     temp.add(list.get(i));
                 }
             }
             adapter.replaceAll(temp);
-        }else{
+        } else {
             adapter.replaceAll(list);
         }
-
-
 
 
 //        Log.e("yzh",bean.latitude+"---"+bean.longtitude);
@@ -127,7 +133,7 @@ public class HomeListFragment extends BaseFragment<HomeListView,HomeListPresente
 
     @Override
     public void onRefreshing(PtrFrameLayout frame) {
-        if(!frame.isAutoRefresh()){
+        if (!frame.isAutoRefresh()) {
             presenter.setOtherLoading(true);
             presenter.getDatas();
         }

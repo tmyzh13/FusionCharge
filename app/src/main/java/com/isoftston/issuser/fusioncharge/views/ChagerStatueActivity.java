@@ -27,6 +27,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.ChargerStatueBean;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.presenter.ChargeStatuePresenter;
+import com.isoftston.issuser.fusioncharge.utils.TimeServiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.ChargerStatueView;
 import com.isoftston.issuser.fusioncharge.weights.CheckChargeFailDialog;
@@ -145,8 +146,8 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, TimerService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+//        Intent intent = new Intent(this, TimerService.class);
+//        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -191,17 +192,17 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            TimerService.ServiceBinder binder = (TimerService.ServiceBinder) service;
-            Log.e("yzh", "11111111111");
-            timerService = binder.getService();
+//            TimerService.ServiceBinder binder = (TimerService.ServiceBinder) service;
+//            Log.e("yzh", "11111111111");
+//            timerService = binder.getService();
 
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            Log.e("yzh", "22222222222222");
-            timerService.cancelTimerHour();
-            timerService = null;
+//            Log.e("yzh", "22222222222222");
+//            timerService.cancelTimerHour();
+//            timerService = null;
         }
     };
 
@@ -272,14 +273,15 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
                 PreferencesHelper.saveData(Constant.CHARGING_TIME, Tools.getTimeValue(bean.alreadyTime)+"");
             }
 
-            timerService.timerHour();
+            TimeServiceManager.getInstance().getTimerService().timerHour();
             if (Tools.isNull(bean.soc)) {
                 progressView.setProgress(0);
             } else {
                 progressView.setProgress(Long.parseLong(bean.soc));
             }
             if (bean.isStop != 0) {
-                timerService.cancelTimerHour();
+//                timerService.cancelTimerHour();
+                TimeServiceManager.getInstance().getTimerService().cancelTimerHour();
                 handler.removeCallbacks(runnable);
                 //弹框提示充电结束去支付
                 final CommonDialog dialog = new CommonDialog(context, getString(R.string.hint), getString(R.string.charging_statue_end_go_to_pay), 2);
@@ -333,7 +335,8 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
     public void endChargeSuccess() {
         checkStatueLoadingView.dismiss();
         handler.removeCallbacks(runnable);
-        timerService.cancelTimerHour();
+//        timerService.cancelTimerHour();
+        TimeServiceManager.getInstance().getTimerService().cancelTimerHour();
         //刷新首页的界面
         RxBus.getDefault().send(new Object(),Constant.REFRESH_HOME_STATUE);
         commonDialog.setMsg(getString(R.string.charging_statue_end_go_to_pay));

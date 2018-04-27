@@ -23,7 +23,10 @@ public class TimeServiceManager {
         return instance;
     }
 
-    private void setTimerService(TimerService timerService){
+    public  void setTimerService(TimerService timerService){
         this.timerService=timerService;
+    }
+    public TimerService getTimerService(){
+        return timerService;
     }
 }
