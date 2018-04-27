@@ -67,7 +67,7 @@ public class HomeListFragment extends BaseFragment<HomeListView, HomeListPresent
                 if (UserHelper.getSavedUser() == null || Tools.isNull(UserHelper.getSavedUser().token)) {
                     startActivity(LoginActivity.getLauncher(getContext()));
                 } else {
-                    startActivity(ChargeDetailsActivity.getLauncher(getActivity()));
+                    startActivity(ChargeDetailsActivity.getLauncher(getActivity(), list_datas.get(position).id + "", list_datas.get(position).type));
                 }
             }
         });
@@ -106,6 +106,7 @@ public class HomeListFragment extends BaseFragment<HomeListView, HomeListPresent
 
     }
 
+    private List<MapDataBean> list_datas;
 
     @Override
     public void rendData(List<MapDataBean> list) {
@@ -121,8 +122,10 @@ public class HomeListFragment extends BaseFragment<HomeListView, HomeListPresent
                     temp.add(list.get(i));
                 }
             }
+            list_datas = temp;
             adapter.replaceAll(temp);
         } else {
+            list_datas = list;
             adapter.replaceAll(list);
         }
 

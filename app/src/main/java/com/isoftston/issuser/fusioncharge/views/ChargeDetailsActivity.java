@@ -17,6 +17,7 @@ import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.corelibs.utils.PreferencesHelper;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapter.ChargePileTypeAdapter;
 import com.isoftston.issuser.fusioncharge.adapter.ElectricGunAdapter;
@@ -26,6 +27,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.MyLocationBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PileList;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestChargePileDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
@@ -70,9 +72,12 @@ public class ChargeDetailsActivity extends BaseActivity {
     private double latitude;
     private double longitude;
     private String id;
+    private String type;
 
-    public static Intent getLauncher(Context context) {
+    public static Intent getLauncher(Context context,String id,String type) {
         Intent intent = new Intent(context, ChargeDetailsActivity.class);
+        intent.putExtra("id",id);
+        intent.putExtra("type",type);
         return intent;
     }
 
@@ -88,10 +93,14 @@ public class ChargeDetailsActivity extends BaseActivity {
         navBar.setColorRes(R.color.app_blue);
         navBar.setNavTitle(context.getString(R.string.charging_pile_detail));
 
-        latitude = getIntent().getDoubleExtra("latitude",0);
-        longitude = getIntent().getDoubleExtra("longitude",0);
+//        latitude = getIntent().getDoubleExtra("latitude",0);
+//        longitude = getIntent().getDoubleExtra("longitude",0);
+        MyLocationBean bean = PreferencesHelper.getData(MyLocationBean.class);
+        latitude=bean.latitude;
+        longitude=bean.longtitude;
         id = getIntent().getStringExtra("id");
-
+        type=getIntent().getStringExtra("type");
+        Log.e("yzh","type--"+type);
         getData();
     }
 
@@ -99,10 +108,10 @@ public class ChargeDetailsActivity extends BaseActivity {
         showLoading();
         RequestChargePileDetailBean bean = new RequestChargePileDetailBean();
 
-        bean.setId("1");
-        bean.setType(STATION);
+        bean.setId(id);
+        bean.setType(type);
 
-        if(bean.getType() == STATION){
+        if(bean.getType() .equals( STATION)){
              api.getChargeStationDetail(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<ChargeStationDetailBean>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<ChargeStationDetailBean>>() {
@@ -131,7 +140,7 @@ public class ChargeDetailsActivity extends BaseActivity {
                         finish();
                     }
                 });
-        } else if(bean.getType() == PILE) {
+        } else if(bean.getType() .equals( PILE)) {
             api.getChargePileDetail(UserHelper.getSavedUser().token,bean)
                     .compose(new ResponseTransformer<>(this.<BaseData<PileList>>bindUntilEvent(ActivityEvent.DESTROY)))
                     .subscribe(new ResponseSubscriber<BaseData<PileList>>() {

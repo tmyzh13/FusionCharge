@@ -162,7 +162,7 @@ public class SearchStationTitleActivity extends BaseActivity<HomeListView,HomeLi
     }
     private void goDetailActivity(Bundle bundle){
         //go detail
-        Intent intent = ChargeDetailsActivity.getLauncher(SearchStationTitleActivity.this);
+        Intent intent =new Intent(SearchStationTitleActivity.this,ChargeDetailsActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
         CachedSearchTitleUtils.addHistoryData(new CachedSearchTitleUtils.CachedData(bundle.getString(KEY_TITLE),bundle.getString(KEY_TYPE)

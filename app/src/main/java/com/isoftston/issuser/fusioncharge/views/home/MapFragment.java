@@ -151,7 +151,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 rl_bottom_detail.setVisibility(View.GONE);
             }
         });
-        timerAppointment=new Timer();
+        timerAppointment = new Timer();
         Intent intent = new Intent(getContext(), TimerService.class);
         getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         location();
@@ -160,7 +160,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         ll_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("yzh","---"+(ll_hint.getVisibility() == View.VISIBLE));
+                Log.e("yzh", "---" + (ll_hint.getVisibility() == View.VISIBLE));
                 if (ll_hint.getVisibility() == View.VISIBLE) {
                     ll_hint.setVisibility(View.GONE);
                     tv_appointment_address.setText(getString(R.string.home_appointment_hint));
@@ -168,7 +168,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     ll_hint.setVisibility(View.VISIBLE);
                     if (homeAppointmentBean != null) {
                         tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
-                        Log.e("yzh","-----");
+                        Log.e("yzh", "-----");
                     }
 
                 }
@@ -240,12 +240,12 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     }
                 });
 
-        RxBus.getDefault().toObservable(Object.class,Constant.REFRESH_APPOINTMENT_TIME)
+        RxBus.getDefault().toObservable(Object.class, Constant.REFRESH_APPOINTMENT_TIME)
                 .compose(this.bindToLifecycle())
                 .subscribe(new RxBusSubscriber<Object>() {
                     @Override
                     public void receive(Object data) {
-                        Log.e("yzh","receive--"+Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
+                        Log.e("yzh", "receive--" + Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
                         tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
                     }
                 });
@@ -278,23 +278,23 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         timerAppointment.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(homeAppointmentBean!=null){
-                    if(Tools.isNull(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))){
-                        appointmentTime=0;
-                    }else{
-                        appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
+                if (homeAppointmentBean != null) {
+                    if (Tools.isNull(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))) {
+                        appointmentTime = 0;
+                    } else {
+                        appointmentTime = Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
                     }
-                    appointmentTime-=1000;
-                    Log.e("yzh","sssss----"+appointmentTime);
-                    PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,appointmentTime+"");
+                    appointmentTime -= 1000;
+                    Log.e("yzh", "sssss----" + appointmentTime);
+                    PreferencesHelper.saveData(Constant.TIME_APPOINTMENT, appointmentTime + "");
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
                         }
                     });
-                    if(appointmentTime<=0){
-                        Log.e("yzh","cancel");
+                    if (appointmentTime <= 0) {
+                        Log.e("yzh", "cancel");
                         //预约超时
                         if (AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)) {
                             appointmentTimeOutDialog.show();
@@ -315,9 +315,11 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     }
                 }
             }
-        },1000,1000);
+        }, 1000, 1000);
     }
+
     private long appointmentTime;
+
     //获取未支付 充电  预约情况
     private void getHomeStatue() {
         presenter.getUserOrderStatue();
@@ -425,15 +427,15 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (map != null) {
+        if (null != map) {
             map.onDestroy();
         }
 
         if (null != mlocationClient) {
             mlocationClient.onDestroy();
         }
-        if(timerAppointment!=null){
-            timerAppointment=null;
+        if (null != timerAppointment) {
+            timerAppointment = null;
         }
     }
 
@@ -668,7 +670,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         ActionControl.getInstance(getContext()).setHasAppointment(has, bean);
         homeAppointmentBean = bean;
 
-        if(has){
+        if (has) {
             tv_pile_num.setText(bean.runCode);
             tv_pile_name.setText(bean.chargingPileName);
             tv_gun_num.setText(bean.gunCode);
@@ -686,7 +688,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             }
             ll_appontment.setVisibility(View.VISIBLE);
 //            TimeServiceManager.getInstance().getTimerService().timeAppointment();
-        }else{
+        } else {
             ll_appontment.setVisibility(View.GONE);
         }
 
@@ -694,23 +696,22 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     }
 
 
-
     private HomeChargeOrderBean homeChargeOrderBean;
 
     @Override
     public void renderHomeChargerOrder(boolean has, HomeChargeOrderBean bean) {
         ActionControl.getInstance(getContext()).setHasCharging(has, bean);
-        if(has){
+        if (has) {
             rl_charger_order.setVisibility(View.VISIBLE);
             homeChargeOrderBean = bean;
             TimeServiceManager.getInstance().getTimerService().timerHour();
-        }else{
+        } else {
             rl_charger_order.setVisibility(View.GONE);
         }
 
     }
 
-//    private TimerService timerService;
+    //    private TimerService timerService;
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -753,10 +754,10 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     @OnClick(R.id.enter_charge_station_iv)
     public void enterChargeStation() {
         //获取详情要token 所以判断
-        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
+        if (UserHelper.getSavedUser() == null || Tools.isNull(UserHelper.getSavedUser().token)) {
             startActivity(LoginActivity.getLauncher(getContext()));
-        }else{
-            startActivity(ChargeDetailsActivity.getLauncher(getActivity()));
+        } else {
+            startActivity(ChargeDetailsActivity.getLauncher(getActivity(), currentMapDataBean.id + "", currentMapDataBean.type));
         }
 
     }
@@ -787,6 +788,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     @Override
     public void goLogin() {
         UserHelper.clearUserInfo(UserBean.class);
+        ll_appontment.setVisibility(View.GONE);
+        rl_charger_order.setVisibility(View.GONE);
+        rl_not_pay.setVisibility(View.GONE);
         startActivity(LoginActivity.getLauncher(getContext()));
     }
 }
