@@ -68,16 +68,16 @@ public class AppointSuccessActivity extends BaseActivity {
 
     @OnClick(R.id.action_go_tv)
     public void actionGo() {
-
         while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)){
             AppManager.getAppManager().finishActivity();
         }
-
-
     }
 
     @OnClick(R.id.action_guild_tv)
     public void actionGuild() {
+        while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)){
+            AppManager.getAppManager().finishActivity();
+        }
 //        startActivity(GuildActivity.getLauncher());
     }
 
