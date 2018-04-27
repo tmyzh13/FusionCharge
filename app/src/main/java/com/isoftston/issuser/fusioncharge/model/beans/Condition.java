@@ -10,7 +10,7 @@ public class Condition {
     public int pileType;
     public int chargingMethod;
 //    public String pileName;
-//    public String stationName;
+    public String stationName;
     public double x1;
     public double x2;
     public double y1;

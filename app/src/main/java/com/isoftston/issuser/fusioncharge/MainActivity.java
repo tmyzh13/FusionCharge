@@ -31,6 +31,7 @@ import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.LoginActivity;
+import com.isoftston.issuser.fusioncharge.views.SearchStationTitleActivity;
 import com.isoftston.issuser.fusioncharge.views.home.HomeListFragment;
 import com.isoftston.issuser.fusioncharge.views.home.MapFragment;
 
@@ -69,6 +70,8 @@ public class MainActivity extends BaseActivity {
     TextView tv_user_name;
     @Bind(R.id.tv_user_phone)
     TextView tv_user_phone;
+    @Bind(R.id.iv_search)
+    ImageView search;
 
     private Context context = MainActivity.this;
 
@@ -287,6 +290,11 @@ public class MainActivity extends BaseActivity {
         //发送设置
         drawerLayout.closeDrawer(main_right_drawer_layout);
         RxBus.getDefault().send(new Object(), Constant.REFRESH_MAP_OR_LIST_DATA);
+    }
+
+    @OnClick(R.id.iv_search)
+    public void goSearch(){
+        startActivity(SearchStationTitleActivity.getLauncher(MainActivity.this));
     }
 
     @Override

@@ -126,7 +126,13 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".views.PublishCommentActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize">
+        </activity>
+        <activity
+            android:name=".views.SearchStationTitleActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize">
         </activity>
     </application>
 </manifest>

@@ -87,7 +87,9 @@ public class PublishCommentActivity extends BaseActivity<CommentView,CommentPres
         show.setVisibility(View.VISIBLE);
         publish.setVisibility(View.GONE);
         sort = 0;
-        favor.setClickable(false);
+        favor.setIsIndicator(true);
+        flowGrid.setSelector(R.color.text_white);
+        //favor.setClickable(false);
     }
 
     @Override
@@ -156,10 +158,10 @@ public class PublishCommentActivity extends BaseActivity<CommentView,CommentPres
     public void makeContentSort(View view, int position){
         int num =(int) Math.pow(2,position);
         if ((sort & num) > 0) {
-            sort -= num;
+            sort =sort - 1 - position;
             setTextAndCornerStokeColor((TextView)view, false);
         } else {
-            sort += num;
+            sort =sort +1 + position;
             setTextAndCornerStokeColor((TextView)view, true);
         }
 

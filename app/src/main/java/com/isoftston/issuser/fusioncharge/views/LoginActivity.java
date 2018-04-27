@@ -216,8 +216,9 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         //loginSuccess
 //        SharePrefsUtils.putValue(context,"token",data);
         RxBus.getDefault().send(new Object(), Constant.REFRESH_HOME_STATUE);
+        //startActivity(PublishCommentActivity.getLauncher(context,"1524387088804002"));
         finish();
-//        startActivity(MainActivity.getLauncher(context));
+//
     }
 
     @Override

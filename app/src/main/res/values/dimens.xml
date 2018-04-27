@@ -8,6 +8,7 @@
     <dimen name="dp_18">18dp</dimen>
     <dimen name="dp_10">10dp</dimen>
     <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_8">8dp</dimen>
     <dimen name="dp_30">30dp</dimen>
     <dimen name="dp_40">40dp</dimen>
     <dimen name="dp_0.5">0.5dp</dimen>

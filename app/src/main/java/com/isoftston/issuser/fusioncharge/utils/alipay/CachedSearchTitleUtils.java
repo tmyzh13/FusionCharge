@@ -1,0 +1,66 @@
+package com.isoftston.issuser.fusioncharge.utils.alipay;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by issuser on 2018/4/27.
+ */
+
+public class CachedSearchTitleUtils {
+    private static List<CachedData> historyData = new ArrayList<>();
+    private static int lastTimeHistory = 0;
+    private static final int MAX_NUM_HITORY = 8;
+    public static void addHistoryData(CachedData data) {
+        for (int i=0;i<historyData.size();i++) {
+            if (historyData.get(i).equals(data)) {
+                return;
+            }
+        }
+        if (historyData.size() > MAX_NUM_HITORY) {
+            historyData.set(lastTimeHistory,data);
+            lastTimeHistory = lastTimeHistory + 1;
+            if (lastTimeHistory >= MAX_NUM_HITORY) {
+                lastTimeHistory -= MAX_NUM_HITORY;
+            }
+        } else {
+            historyData.add(data);
+        }
+    }
+    public static void resetHistoryData(){
+        historyData = new ArrayList<>();
+        lastTimeHistory = 0;
+    }
+    public static List<String> getHistoryData(){
+        List<String> list = new ArrayList<>();
+        for (int i=0;i< historyData.size();i++){
+            list.add(historyData.get(i).station);
+        }
+        return list;
+    }
+    public static CachedData getCachedData(int postion){
+        return historyData.get(postion);
+    }
+
+    public static class CachedData{
+        public String station ,type;
+        public double latitude,longitude;
+        public CachedData(String station, String type, double latitude, double longitude) {
+            this.station = station;
+            this.type = type;
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+        public boolean equals(CachedData data){
+            if (data == null){
+                return false;
+            }
+            if (station.equals(data.station) && type.equals(data.type)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+}
