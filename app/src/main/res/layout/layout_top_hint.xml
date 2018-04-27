@@ -40,7 +40,7 @@
                 >
                 <TextView
                     style="@style/text_normal"
-                    android:text="14:59"
+                    android:text="00:00"
                     android:textColor="@color/red"
                     android:id="@+id/tv_appointment_time"
                     />

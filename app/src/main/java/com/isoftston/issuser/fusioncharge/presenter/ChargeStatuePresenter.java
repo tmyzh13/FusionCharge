@@ -4,6 +4,7 @@ import com.corelibs.api.ApiFactory;
 import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.corelibs.utils.ToastMgr;
 import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.ChargeStatueApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
@@ -68,17 +69,21 @@ public class ChargeStatuePresenter extends BasePresenter<ChargerStatueView> {
         bean.chargingPileId=chargeingPileId;
         bean.chargingPileName=chargingPileName;
         bean.virtualId=virtualId;
-        bean.appUserId=67;
+        bean.appUserId=UserHelper.getSavedUser().appUserId;
         bean.gunCode=gunCode;
         bean.stopReason="1";
         bean.orderRecordNum=orderRecordNum;
         api.stopCharge(UserHelper.getSavedUser().token,bean)
-                .compose(new ResponseTransformer<>(this.<BaseData>bindToLifeCycle()))
-                .subscribe(new ResponseSubscriber<BaseData>() {
+                .compose(new ResponseTransformer<>(this.<BaseData<String>>bindToLifeCycle()))
+                .subscribe(new ResponseSubscriber<BaseData<String>>() {
                     @Override
-                    public void success(BaseData baseData) {
+                    public void success(BaseData<String> baseData) {
                         if(baseData!=null&&baseData.data!=null){
-                            view.endChargeSuccess();
+                            if(baseData.data.equals("4")){
+                                view.endChargeSuccess();
+                            }else{
+                                view.endChargeFail();
+                            }
                         }else{
                             view.endChargeFail();
                         }

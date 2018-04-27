@@ -5,6 +5,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestCancelAppointment;
 
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
 import rx.Observable;
@@ -15,5 +16,5 @@ import rx.Observable;
 
 public interface GuaildApi {
     @POST(Urls.CANCEL_APPOINTMENT)
-    Observable<BaseData> cancelAppointment(@Body RequestCancelAppointment bean);
+    Observable<BaseData> cancelAppointment(@Header("AccessToken") String token,@Body RequestCancelAppointment bean);
 }

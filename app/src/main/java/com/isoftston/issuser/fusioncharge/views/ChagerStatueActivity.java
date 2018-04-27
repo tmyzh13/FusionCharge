@@ -18,6 +18,7 @@ import com.corelibs.base.BasePresenter;
 import com.corelibs.common.AppManager;
 import com.corelibs.subscriber.RxBusSubscriber;
 import com.corelibs.utils.PreferencesHelper;
+import com.corelibs.utils.ToastMgr;
 import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
@@ -207,7 +208,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
     };
 
     private ChargerStatueBean chargerStatueBean;
-
+//-1状态
     @Override
     public void renderChargerStatueData(ChargerStatueBean bean) {
         chargerStatueBean=bean;
@@ -279,7 +280,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
             } else {
                 progressView.setProgress(Long.parseLong(bean.soc));
             }
-            if (bean.isStop != 0) {
+            if (bean.isStop == 1) {
 //                timerService.cancelTimerHour();
                 TimeServiceManager.getInstance().getTimerService().cancelTimerHour();
                 handler.removeCallbacks(runnable);
@@ -347,11 +348,13 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
 //                                orderNum 是在传参里面有
 //                                presenter.endCharging();
             startActivity(PayActivity.getLauncher(context,chargerStatueBean.orderRecordNum));
+            commonDialog.dismiss();
             }
         });
         commonDialog.setNagitiveListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                commonDialog.dismiss();
                 checkStatueLoadingView.dismiss();
                 while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)) {
                     AppManager.getAppManager().finishActivity();
@@ -363,6 +366,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
 
     @Override
     public void endChargeFail() {
+        ToastMgr.show(getString(R.string.charging_end_fail));
         checkStatueLoadingView.dismiss();
     }
 

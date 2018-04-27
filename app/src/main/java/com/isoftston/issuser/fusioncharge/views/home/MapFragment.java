@@ -80,11 +80,14 @@ import com.isoftston.issuser.fusioncharge.views.TimerService;
 import com.isoftston.issuser.fusioncharge.views.interfaces.MapHomeView;
 import com.isoftston.issuser.fusioncharge.weights.AppointmentTimeOutDialog;
 import com.isoftston.issuser.fusioncharge.weights.ChargeFeeDialog;
+import com.isoftston.issuser.fusioncharge.weights.CommonDialog;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -129,6 +132,8 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     private AMap aMap;
     private AppointmentTimeOutDialog appointmentTimeOutDialog;
+    private Timer timerAppointment;
+
 
     @Override
     protected int getLayoutId() {
@@ -146,7 +151,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 rl_bottom_detail.setVisibility(View.GONE);
             }
         });
-
+        timerAppointment=new Timer();
         Intent intent = new Intent(getContext(), TimerService.class);
         getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         location();
@@ -155,6 +160,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         ll_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("yzh","---"+(ll_hint.getVisibility() == View.VISIBLE));
                 if (ll_hint.getVisibility() == View.VISIBLE) {
                     ll_hint.setVisibility(View.GONE);
                     tv_appointment_address.setText(getString(R.string.home_appointment_hint));
@@ -162,10 +168,12 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     ll_hint.setVisibility(View.VISIBLE);
                     if (homeAppointmentBean != null) {
                         tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
-                        Log.e("yzh","");
+                        Log.e("yzh","-----");
                     }
 
                 }
+//                CommonDialog dialog=new CommonDialog(getContext(),"","222222222",2);
+//                dialog.show();
             }
         });
         appointmentTimeOutDialog = new AppointmentTimeOutDialog(getContext());
@@ -221,7 +229,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     }
                 });
         RxBus.getDefault().toObservable(Object.class, Constant.REFRESH_HOME_STATUE)
-                .compose(this.<Object>bindToLifecycle())
+                .compose(this.bindToLifecycle())
                 .subscribe(new RxBusSubscriber<Object>() {
 
                     @Override
@@ -233,10 +241,11 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 });
 
         RxBus.getDefault().toObservable(Object.class,Constant.REFRESH_APPOINTMENT_TIME)
-                .compose(this.<Object>bindToLifecycle())
+                .compose(this.bindToLifecycle())
                 .subscribe(new RxBusSubscriber<Object>() {
                     @Override
                     public void receive(Object data) {
+                        Log.e("yzh","receive--"+Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
                         tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
                     }
                 });
@@ -266,8 +275,49 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             }
 
         }
+        timerAppointment.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(homeAppointmentBean!=null){
+                    if(Tools.isNull(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))){
+                        appointmentTime=0;
+                    }else{
+                        appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
+                    }
+                    appointmentTime-=1000;
+                    Log.e("yzh","sssss----"+appointmentTime);
+                    PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,appointmentTime+"");
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
+                        }
+                    });
+                    if(appointmentTime<=0){
+                        Log.e("yzh","cancel");
+                        //预约超时
+                        if (AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)) {
+                            appointmentTimeOutDialog.show();
+                            appointmentTimeOutDialog.setIvDeleteListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    appointmentTimeOutDialog.dismiss();
+                                }
+                            });
+                            appointmentTimeOutDialog.setReAppointment(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    appointmentTimeOutDialog.dismiss();
+                                }
+                            });
+                        }
+//                        cancelTimerAppointment();
+                    }
+                }
+            }
+        },1000,1000);
     }
-
+    private long appointmentTime;
     //获取未支付 充电  预约情况
     private void getHomeStatue() {
         presenter.getUserOrderStatue();
@@ -381,6 +431,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
         if (null != mlocationClient) {
             mlocationClient.onDestroy();
+        }
+        if(timerAppointment!=null){
+            timerAppointment=null;
         }
     }
 
@@ -632,13 +685,15 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
             }
             ll_appontment.setVisibility(View.VISIBLE);
-            TimeServiceManager.getInstance().getTimerService().timeAppointment();
+//            TimeServiceManager.getInstance().getTimerService().timeAppointment();
         }else{
             ll_appontment.setVisibility(View.GONE);
         }
 
 
     }
+
+
 
     private HomeChargeOrderBean homeChargeOrderBean;
 

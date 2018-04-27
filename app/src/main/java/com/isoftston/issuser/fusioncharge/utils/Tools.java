@@ -256,12 +256,12 @@ public class Tools {
     }
 
     public static String formatMinute(long time){
-        String min = time / (1000 * 60*60) + "";
-        long sec = time % (1000 * 60*60);
+        String min = time / (1000 * 60) + "";
+        long sec = time % (1000 * 60);
         if (min.length() < 2) {
             min = "0" + min + "";
         }
-        String secStr=sec/(1000*60)+"";
+        String secStr=sec/(1000)+"";
         if(secStr.length()<2){
             secStr="0"+secStr;
         }
