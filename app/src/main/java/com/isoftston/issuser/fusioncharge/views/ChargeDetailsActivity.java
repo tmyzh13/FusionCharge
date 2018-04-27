@@ -26,11 +26,15 @@ import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PileList;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestChargePileDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
 import com.isoftston.issuser.fusioncharge.weights.MyViewPager;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 import com.trello.rxlifecycle.ActivityEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -97,7 +101,9 @@ public class ChargeDetailsActivity extends BaseActivity {
 
         bean.setId("1");
         bean.setType(STATION);
-        api.getChargePileDetail(UserHelper.getSavedUser().token,bean)
+
+        if(bean.getType() == STATION){
+             api.getChargeStationDetail(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<ChargeStationDetailBean>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<ChargeStationDetailBean>>() {
                     @Override
@@ -125,6 +131,48 @@ public class ChargeDetailsActivity extends BaseActivity {
                         finish();
                     }
                 });
+        } else if(bean.getType() == PILE) {
+            api.getChargePileDetail(UserHelper.getSavedUser().token,bean)
+                    .compose(new ResponseTransformer<>(this.<BaseData<PileList>>bindUntilEvent(ActivityEvent.DESTROY)))
+                    .subscribe(new ResponseSubscriber<BaseData<PileList>>() {
+                        @Override
+                        public void success(BaseData<PileList> baseData) {
+                            PileList pileList = baseData.data;
+                            ChargeStationDetailBean bean = new ChargeStationDetailBean();
+                            bean.setAddress(pileList.getAddress());
+                            bean.setName(pileList.getName());
+                            bean.setAverageScore(pileList.getAverageScore());
+                            bean.setLatitude(Double.parseDouble(pileList.getLatitude()));
+                            bean.setLongitude(Double.parseDouble(pileList.getLongitude()));
+                            bean.setPhotoUrl(pileList.getPhotoUrl());
+                            List<PileList> list = new ArrayList<>();
+                            list.add(pileList);
+                            bean.setPileList(list);
+                            initView(bean);
+                            Log.e("zw",TAG + " success1 : " + baseData.data.toString());
+                            hideLoading();
+                        }
+
+                        @Override
+                        public boolean operationError(BaseData<PileList> baseData, int status, String message) {
+                            Log.e("zw",TAG + " error : " + baseData.toString());
+                            hideLoading();
+                            showToast(getString(R.string.no_data));
+                            finish();
+                            return super.operationError(baseData, status, message);
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            super.onError(e);
+                            hideLoading();
+                            showToast(getString(R.string.wrong_request));
+                            finish();
+                        }
+                    });
+        }
+
+
     }
 
     private void initView(ChargeStationDetailBean bean){

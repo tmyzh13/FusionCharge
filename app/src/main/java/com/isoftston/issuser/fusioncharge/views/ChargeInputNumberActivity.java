@@ -11,31 +11,24 @@ import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
-import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.ToastMgr;
 import com.google.gson.Gson;
 import com.isoftston.issuser.fusioncharge.R;
-import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.model.UserHelper;
-import com.isoftston.issuser.fusioncharge.model.apis.LoginApi;
-import com.isoftston.issuser.fusioncharge.model.apis.MapApi;
 import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
-import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
-import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
-import com.isoftston.issuser.fusioncharge.model.beans.RequestChargeStateBean;
+import com.isoftston.issuser.fusioncharge.model.beans.Condition;
+import com.isoftston.issuser.fusioncharge.model.beans.NullPostBean;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestMyOrderBean;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestMyOrderChildBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestScanBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
 import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
-import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 import com.trello.rxlifecycle.ActivityEvent;
 
-import java.util.List;
-
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ChargeInputNumberActivity extends BaseActivity {
@@ -94,6 +87,7 @@ public class ChargeInputNumberActivity extends BaseActivity {
         bean.setAppUserId(UserHelper.getSavedUser().appUserId + "");
         bean.setQrCode(number + "");
 
+        //正确
         api.getScanChargeInfo(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<ScanChargeInfo>>bindUntilEvent(ActivityEvent.DESTROY)))
                 .subscribe(new ResponseSubscriber<BaseData<ScanChargeInfo>>() {
@@ -151,6 +145,33 @@ public class ChargeInputNumberActivity extends BaseActivity {
 
                     }
                 });*/
+//        testt();
+    }
+
+    private void testt(){
+
+        RequestMyOrderBean bean = new RequestMyOrderBean();
+        bean.setRp("10");
+        bean.setPage("1");
+        RequestMyOrderChildBean bean1 = new RequestMyOrderChildBean();
+        bean1.setAppUserId(UserHelper.getSavedUser().appUserId + "");
+        bean.setCondition(bean1);
+
+        api.getMyOrder(UserHelper.getSavedUser().token,bean)
+                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData>() {
+                    @Override
+                    public void success(BaseData baseData) {
+                        Log.e("zw"," success : " + baseData.toString());
+                    }
+
+                    @Override
+                    public boolean operationError(BaseData baseData, int status, String message) {
+                        Log.e("zw"," base : " + baseData.toString());
+
+                        return super.operationError(baseData, status, message);
+                    }
+                });
     }
 
     @Override

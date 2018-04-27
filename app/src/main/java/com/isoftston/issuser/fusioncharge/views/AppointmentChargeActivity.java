@@ -47,6 +47,8 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     private String chargingPileName;
     private double latitude;
     private double longitude;
+    private String runCode;
+    private String address;
 
     public static Intent getLauncher(Context context) {
         Intent intent = new Intent(context, AppointmentChargeActivity.class);
@@ -63,6 +65,9 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
         gunCode = getIntent().getStringExtra("gunCode");
         chargingPileId = getIntent().getIntExtra("chargingPileId",0);
         chargingPileName = getIntent().getStringExtra("chargingPileName");
+        runCode = getIntent().getStringExtra("runCode");
+        address = getIntent().getStringExtra("address");
+
         latitude = getIntent().getDoubleExtra("latitude",0);
         longitude = getIntent().getDoubleExtra("longitude",0);
 
@@ -226,7 +231,18 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     public void appointSuccess(AppointResponseBean bean) {
         hideLoading();
         RxBus.getDefault().send(new Object(), Constant.REFRESH_HOME_STATUE);
-        startActivity(AppointSuccessActivity.getLauncher(context,item));
+//        startActivity(AppointSuccessActivity.getLauncher(context,item));
+        Intent intent = new Intent(this,AppointSuccessActivity.class);
+        intent.putExtra("item",item);
+        intent.putExtra("gunCode",gunCode);
+        intent.putExtra("chargingPileId",chargingPileId);
+        intent.putExtra("chargingPileName",chargingPileName);
+        intent.putExtra("latitude",latitude);
+        intent.putExtra("longitude",longitude);
+        intent.putExtra("address",address);
+        intent.putExtra("runCode",runCode);
+        startActivity(intent);
+        this.finish();
     }
 
     @Override

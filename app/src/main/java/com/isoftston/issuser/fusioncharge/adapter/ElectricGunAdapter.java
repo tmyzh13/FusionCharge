@@ -13,6 +13,7 @@ import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.GunList;
+import com.isoftston.issuser.fusioncharge.model.beans.PileList;
 import com.isoftston.issuser.fusioncharge.views.AppointmentChargeActivity;
 
 import java.util.List;
@@ -26,13 +27,19 @@ public class ElectricGunAdapter extends BaseAdapter {
     private List<GunList> datas;
     private LayoutInflater mInflater;
     private String pileName;
+    private String runCode;
+    private String address;
 
     private double latitude,longitude;
 
-    public ElectricGunAdapter(Context context, List<GunList> datas,String pileName,double latitude,double longitude) {
-        this.pileName = pileName;
+    public ElectricGunAdapter(Context context, List<GunList> datas, PileList pileList,String address, double latitude, double longitude) {
+        this.runCode = pileList.getRunCode();
+        this.pileName = pileList.getName();
         this.context = context;
         this.datas = datas;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.address = address;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -91,6 +98,8 @@ public class ElectricGunAdapter extends BaseAdapter {
                 intent.putExtra("chargingPileName",pileName);
                 intent.putExtra("latitude",latitude);
                 intent.putExtra("longitude",longitude);
+                intent.putExtra("address",address);
+                intent.putExtra("runCode",runCode);
                 context.startActivity(intent);
             }
         });

@@ -247,7 +247,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                     @Override
                     public void success(BaseData baseData) {
                         Log.e("zw","info : success");
-                        Log.e("zw",baseData.toString());
+                        Log.e("zw",baseData.data.toString());
 
                         HomeChargeOrderBean homeChargeOrderBean = new HomeChargeOrderBean();
                         homeChargeOrderBean.virtualId = scanChargeInfo.getVirtualId();

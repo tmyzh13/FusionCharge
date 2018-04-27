@@ -13,6 +13,7 @@ import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.beans.HomeAppointmentBean;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
@@ -36,6 +37,13 @@ public class AppointSuccessActivity extends BaseActivity {
     TextView actionGuildTv;
 
     private int time;
+    private String gunCode;
+    private int chargingPileId;
+    private String chargingPileName;
+    private double latitude;
+    private double longitude;
+    private String runCode;
+    private String address;
 
     public static Intent getLauncher(Context context, int time) {
         Intent intent = new Intent(context, AppointSuccessActivity.class);
@@ -63,6 +71,15 @@ public class AppointSuccessActivity extends BaseActivity {
             arriveOnTimeTv.setText(R.string.appoint_2h);
         }
         appiontDateTv.setText(Tools.getYearMonthDate());
+
+        gunCode = getIntent().getStringExtra("gunCode");
+        chargingPileId = getIntent().getIntExtra("chargingPileId",0);
+        chargingPileName = getIntent().getStringExtra("chargingPileName");
+        runCode = getIntent().getStringExtra("runCode");
+        address = getIntent().getStringExtra("address");
+
+        latitude = getIntent().getDoubleExtra("latitude",0);
+        longitude = getIntent().getDoubleExtra("longitude",0);
     }
 
 
@@ -78,7 +95,23 @@ public class AppointSuccessActivity extends BaseActivity {
         while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)){
             AppManager.getAppManager().finishActivity();
         }
-//        startActivity(GuildActivity.getLauncher());
+
+        HomeAppointmentBean bean = new HomeAppointmentBean();
+        bean.chargingAddress = address;
+        bean.chargingPileId = chargingPileId;
+        bean.chargingPileName = chargingPileName;
+        bean.gunCode = gunCode;
+        bean.latitude = latitude;
+        bean.longitude = longitude;
+        bean.runCode = runCode;
+
+        Log.e("zw","address : " + address + "  id : " + chargingPileId
+                 + " name : " + chargingPileName + " gunCode : " + gunCode + ",lat : " + latitude
+                + " ,lon : " + longitude + " ,runCode : " + runCode);
+
+        startActivity(GuildActivity.getLauncher(this,latitude,longitude,bean,false));
+        this.finish();
+
     }
 
     @Override

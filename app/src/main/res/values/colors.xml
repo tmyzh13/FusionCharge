@@ -6,6 +6,7 @@
 
     <color name="app_blue">#3b74fa</color>
     <color name="line">#e6e6e6</color>
+    <color name="line1">#88e6e6e6</color>
     <color name="transparent_black">#88000000</color>
     <color name="app_bg">#ededed</color>
     <!-- 文字主要色调 -->
