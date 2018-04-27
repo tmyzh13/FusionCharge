@@ -67,8 +67,8 @@ public class CachedSearchTitleUtils {
 
     public static class CachedData{
         public String station ,type;
-        public Long id;
-        public CachedData(String station, String type, Long id) {
+        public String id;
+        public CachedData(String station, String type, String id) {
             this.station = station;
             this.type = type;
             this.id = id;
@@ -77,7 +77,7 @@ public class CachedSearchTitleUtils {
             if (data == null){
                 return false;
             }
-            if (id == data.id) {
+            if (id.equals(data.id)) {
                 return true;
             } else {
                 return false;

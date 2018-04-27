@@ -2,6 +2,7 @@ package com.isoftston.issuser.fusioncharge.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,11 +45,12 @@ public class SearchHistoryOrResultAdapter extends BaseAdapter {
     public Bundle getIntent(int position){
         Bundle bd = new Bundle();
         if (isHistoryData) {
-            bd.putLong(SearchStationTitleActivity.KEY_ID,CachedSearchTitleUtils.getCachedData(position-1).id);
+            Log.e("yzh","id=="+CachedSearchTitleUtils.getCachedData(position-1).id);
+            bd.putString(SearchStationTitleActivity.KEY_ID,CachedSearchTitleUtils.getCachedData(position-1).id+"");
             bd.putString(SearchStationTitleActivity.KEY_TYPE,CachedSearchTitleUtils.getCachedData(position-1).type);
             bd.putString(SearchStationTitleActivity.KEY_TITLE,CachedSearchTitleUtils.getCachedData(position-1).station);
         } else {
-            bd.putLong(SearchStationTitleActivity.KEY_ID,resultData.get(position-1).id);
+            bd.putString(SearchStationTitleActivity.KEY_ID,resultData.get(position-1).id+"");
             bd.putString(SearchStationTitleActivity.KEY_TYPE,resultData.get(position-1).type);
             bd.putString(SearchStationTitleActivity.KEY_TITLE,resultData.get(position-1).title);
         }

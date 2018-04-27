@@ -19,6 +19,7 @@ import com.corelibs.base.BaseActivity;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapter.SearchHistoryOrResultAdapter;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.presenter.HomeListPresenter;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
@@ -162,12 +163,18 @@ public class SearchStationTitleActivity extends BaseActivity<HomeListView,HomeLi
     }
     private void goDetailActivity(Bundle bundle){
         //go detail
-        Intent intent =new Intent(SearchStationTitleActivity.this,ChargeDetailsActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
-        CachedSearchTitleUtils.addHistoryData(new CachedSearchTitleUtils.CachedData(bundle.getString(KEY_TITLE),bundle.getString(KEY_TYPE)
-                ,bundle.getLong(KEY_ID)));
-        isHistoryDataUpdate = true;
+        if (UserHelper.getSavedUser() == null || Tools.isNull(UserHelper.getSavedUser().token)){
+            startActivity(LoginActivity.getLauncher(SearchStationTitleActivity.this));
+        }else{
+            Intent intent =new Intent(SearchStationTitleActivity.this,ChargeDetailsActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            CachedSearchTitleUtils.addHistoryData(new CachedSearchTitleUtils.CachedData(bundle.getString(KEY_TITLE),bundle.getString(KEY_TYPE)
+                    ,bundle.getString(KEY_ID)));
+            isHistoryDataUpdate = true;
+        }
+
+
     }
 
     @OnClick(R.id.tv_clear_history)
