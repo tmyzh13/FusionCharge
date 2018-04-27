@@ -10,8 +10,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.corelibs.base.BaseActivity;
+import com.corelibs.utils.ToastMgr;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
+import com.isoftston.issuser.fusioncharge.model.beans.AppointResponseBean;
+import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.presenter.AppointPresenter;
+import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.AppointView;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
@@ -34,7 +39,7 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     @Bind(R.id.chosed_time_tv)
     TextView userChosedTimeTv;
 
-    private int appointTime;
+    private int appointTime = 15;
     private String gunCode;
     private int chargingPileId;
     private String chargingPileName;
@@ -77,9 +82,14 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
                 showDialog();
                 break;
             case R.id.complete_appoint_tv:
+                showLoading();
 
-//                startActivity(AppointSuccessActivity.getLauncher(context,item));
-                presenter.appointAocation(gunCode,chargingPileId,chargingPileName);
+
+                if(UserHelper.getSavedUser()==null|| Tools.isNull(UserHelper.getSavedUser().token)){
+                    startActivity(LoginActivity.getLauncher(this));
+                    return;
+                }
+                presenter.appointAocation(gunCode,chargingPileId,chargingPileName,getNowTime(),getEndTime(),appointTime);
                 break;
         }
     }
@@ -207,13 +217,16 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     }
 
     @Override
-    public void appointSuccess() {
-
+    public void appointSuccess(AppointResponseBean bean) {
+        hideLoading();
+        startActivity(AppointSuccessActivity.getLauncher(context,item));
     }
 
     @Override
     public void goLogin() {
-
+        ToastMgr.show(getString(R.string.login_fail));
+        UserHelper.clearUserInfo(UserBean.class);
+        startActivity(LoginActivity.getLauncher(AppointmentChargeActivity.this));
     }
 
     private String getNowTime(){

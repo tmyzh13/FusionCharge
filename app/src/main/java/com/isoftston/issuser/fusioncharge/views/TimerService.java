@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.corelibs.utils.PreferencesHelper;
@@ -104,7 +105,11 @@ public class TimerService extends Service{
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                hourTime=Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME));
+                if(TextUtils.isEmpty(PreferencesHelper.getData(Constant.CHARGING_TIME))){
+                    hourTime = 0L;
+                } else {
+                    hourTime=Long.parseLong(PreferencesHelper.getData(Constant.CHARGING_TIME));
+                }
                 Log.e("yzh","timerHour----"+PreferencesHelper.getData(Constant.CHARGING_TIME));
                 hourTime+=1000;
                 PreferencesHelper.saveData(Constant.CHARGING_TIME,hourTime+"");
