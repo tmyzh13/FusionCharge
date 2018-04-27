@@ -160,6 +160,7 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     ll_hint.setVisibility(View.VISIBLE);
                     if (homeAppointmentBean != null) {
                         tv_appointment_address.setText(homeAppointmentBean.chargingAddress);
+                        Log.e("yzh","");
                     }
 
                 }
@@ -259,9 +260,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     //获取未支付 充电  预约情况
     private void getHomeStatue() {
-        //presenter.getUserOrderStatue();
+        presenter.getUserOrderStatue();
         presenter.getUserChargeStatue();
-//        presenter.getUserAppointment();
+        presenter.getUserAppointment();
     }
 
     private void initMapData() {
@@ -604,23 +605,29 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         ActionControl.getInstance(getContext()).setHasAppointment(has, bean);
         homeAppointmentBean = bean;
 
-//        ll_appontment.setVisibility(View.VISIBLE);
-        tv_pile_num.setText(bean.runCode);
-        tv_pile_name.setText(bean.chargingPileName);
-        tv_gun_num.setText(bean.gunCode);
-        tv_appointment_address.setText(getString(R.string.home_appointment_hint));
+        if(has){
+            tv_pile_num.setText(bean.runCode);
+            tv_pile_name.setText(bean.chargingPileName);
+            tv_gun_num.setText(bean.gunCode);
+            tv_appointment_address.setText(getString(R.string.home_appointment_hint));
 
-        if (bean.reserveEndTime <= bean.nowTime) {
+            if (bean.reserveEndTime <= bean.nowTime) {
+                ll_appontment.setVisibility(View.VISIBLE);
+            } else {
+                ll_appontment.setVisibility(View.VISIBLE);
+                long surplusTime = bean.reserveEndTime - bean.nowTime;
+                PreferencesHelper.saveData(Constant.TIME_APPOINTMENT, surplusTime + "");
+                PreferencesHelper.saveData(Constant.APPOINTMENT_DURING, bean.reserveDuration);
+                tv_appointment_time.setText(Tools.formatMinute(surplusTime));
+                Intent intent = new Intent(getContext(), TimerService.class);
+                getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+            }
             ll_appontment.setVisibility(View.VISIBLE);
-        } else {
-            ll_appontment.setVisibility(View.VISIBLE);
-            long surplusTime = bean.reserveEndTime - bean.nowTime;
-            PreferencesHelper.saveData(Constant.TIME_APPOINTMENT, surplusTime + "");
-            PreferencesHelper.saveData(Constant.APPOINTMENT_DURING, bean.reserveDuration);
-            tv_appointment_time.setText(Tools.formatMinute(surplusTime));
-            Intent intent = new Intent(getContext(), TimerService.class);
-            getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        }else{
+            ll_appontment.setVisibility(View.GONE);
         }
+
+
     }
 
     private HomeChargeOrderBean homeChargeOrderBean;
@@ -628,8 +635,13 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
     @Override
     public void renderHomeChargerOrder(boolean has, HomeChargeOrderBean bean) {
         ActionControl.getInstance(getContext()).setHasCharging(has, bean);
-        rl_charger_order.setVisibility(View.VISIBLE);
-        homeChargeOrderBean = bean;
+        if(has){
+            rl_charger_order.setVisibility(View.VISIBLE);
+            homeChargeOrderBean = bean;
+        }else{
+            rl_charger_order.setVisibility(View.GONE);
+        }
+
     }
 
     private TimerService timerService;

@@ -12,4 +12,5 @@ public interface PayView  extends BaseView{
     void renderData(PayInfoBean bean);
     void paySuccess();
     void payBalanceNotEnough();
+    void payFail();
 }

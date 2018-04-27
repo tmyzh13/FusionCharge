@@ -34,6 +34,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.ChargingGunBeans;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeChargeOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.OrderRequestInfo;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
+import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 import com.journeyapps.barcodescanner.CaptureActivity;
@@ -217,7 +218,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         Log.e("zw",scanChargeInfo.toString());
         info.setChargingPileName(scanChargeInfo.getChargingPileName());
         //TODO 后续替换
-        info.setVirtualId("020001");
+        info.setVirtualId("0004d2");
 //        info.setVirtualId(scanChargeInfo.getVirtualId());
 //        info.setAppUserId(71 + "");
         info.setAppUserId(scanChargeInfo.getAppUserId());
@@ -225,11 +226,13 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         info.setGunCode(chooseGun.getGunCode());
 //        info.setControlInfo(2 + "");
         info.setControlInfo(chooseStyle + "");
-        info.setChargingPileId(4);
+        info.setChargingPileId(14);
 //        info.setChargingPileId(scanChargeInfo.getChargingPileId());
         if(chooseStyle != WITH_FULL){
 //            info.setControlData(320 + "");
             info.setControlData(chargePowerCount + "");
+        }else{
+            info.setControlData("0");
         }
         //设置充电模式，交流为慢，直流为快
         if(chooseGun.getGunType() == CHARGE_GUN_FAST){
@@ -327,6 +330,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
     @Override
     public void goLogin() {
         ToastMgr.show(getString(R.string.login_fail));
+        UserHelper.clearUserInfo(UserBean.class);
         startActivity(LoginActivity.getLauncher(ChargeOrderDetailsActivity.this));
     }
 }

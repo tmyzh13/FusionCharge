@@ -14,7 +14,6 @@
     <TextView
         style="@style/text_normal"
         android:textSize="16sp"
-        android:text="南京雨花台区充电站"
         android:layout_marginTop="20dp"
         android:id="@+id/tv_address_name"
         />
@@ -164,7 +163,6 @@
             </LinearLayout>
             <TextView
                 style="@style/text_normal"
-                android:text="11.89度"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:id="@+id/tv_charged_enegy"
@@ -194,7 +192,6 @@
             </LinearLayout>
             <TextView
                 style="@style/text_normal"
-                android:text="67.39元"
                 android:textColor="@color/app_blue"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"

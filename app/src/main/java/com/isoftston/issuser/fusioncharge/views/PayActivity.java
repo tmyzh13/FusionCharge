@@ -27,9 +27,11 @@ import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapters.PayStyleAdpter;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.HomeRefreshBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PayStyleBean;
+import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.presenter.PayPresenter;
 import com.isoftston.issuser.fusioncharge.utils.alipay.AuthResult;
 import com.isoftston.issuser.fusioncharge.utils.alipay.OrderInfoUtil2_0;
@@ -335,7 +337,13 @@ public class PayActivity extends BaseActivity<PayView,PayPresenter> implements P
     }
 
     @Override
-    public void goLogin() {
+    public void payFail() {
+        dialog.show();
+    }
 
+    @Override
+    public void goLogin() {
+        UserHelper.clearUserInfo(UserBean.class);
+        startActivity(LoginActivity.getLauncher(context));
     }
 }

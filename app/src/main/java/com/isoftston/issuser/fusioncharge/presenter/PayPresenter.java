@@ -6,6 +6,7 @@ import com.corelibs.api.ApiFactory;
 import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
+import com.corelibs.utils.ToastMgr;
 import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.MapApi;
 import com.isoftston.issuser.fusioncharge.model.apis.PayApi;
@@ -68,6 +69,8 @@ public class PayPresenter extends BasePresenter<PayView> {
                             //余额不足
                             Log.e("yzh","余额不足");
                             view.payBalanceNotEnough();
+                        }else{
+                            view.payFail();
                         }
                         return true;
                     }

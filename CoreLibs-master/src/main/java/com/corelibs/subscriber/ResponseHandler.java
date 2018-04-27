@@ -101,7 +101,7 @@ public class ResponseHandler<T> {
             } else if (e instanceof HttpException) {
                 view.showToastMessage(view.getViewContext().getString(R.string.network_server_error));
             } else if (e instanceof SocketTimeoutException) {
-                view.showToastMessage(view.getViewContext().getString(R.string.network_timeout));
+                view.showToastMessage("连接超时");
             } else {
                 view.showToastMessage(view.getViewContext().getString(R.string.network_other));
             }
