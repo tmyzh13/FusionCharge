@@ -137,8 +137,6 @@ public class ChargeCaptureActivity extends BaseActivity {
                                          });
                                      }
 
-
-
                                    return super.operationError(scanChargeInfoBaseData, status, message);
                                }
 
@@ -241,6 +239,8 @@ public class ChargeCaptureActivity extends BaseActivity {
 
     @Override
     public void goLogin() {
-
+        ToastMgr.show(getString(R.string.login_fail));
+        UserHelper.clearUserInfo(UserBean.class);
+        startActivity(LoginActivity.getLauncher(ChargeCaptureActivity.this));
     }
 }

@@ -43,6 +43,8 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
     private String gunCode;
     private int chargingPileId;
     private String chargingPileName;
+    private double latitude;
+    private double longitude;
 
     public static Intent getLauncher(Context context) {
         Intent intent = new Intent(context, AppointmentChargeActivity.class);
@@ -59,6 +61,8 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
         gunCode = getIntent().getStringExtra("gunCode");
         chargingPileId = getIntent().getIntExtra("chargingPileId",0);
         chargingPileName = getIntent().getStringExtra("chargingPileName");
+        latitude = getIntent().getDoubleExtra("latitude",0);
+        longitude = getIntent().getDoubleExtra("longitude",0);
 
         navBar.setColorRes(R.color.app_blue);
         navBar.setNavTitle(context.getString(R.string.appoint_charge));

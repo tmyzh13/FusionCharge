@@ -27,7 +27,9 @@ public class ElectricGunAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private String pileName;
 
-    public ElectricGunAdapter(Context context, List<GunList> datas,String pileName) {
+    private double latitude,longitude;
+
+    public ElectricGunAdapter(Context context, List<GunList> datas,String pileName,double latitude,double longitude) {
         this.pileName = pileName;
         this.context = context;
         this.datas = datas;
@@ -87,6 +89,8 @@ public class ElectricGunAdapter extends BaseAdapter {
                 intent.putExtra("gunCode",gunBean.getGunCode());
                 intent.putExtra("chargingPileId",gunBean.getChargingPileId());
                 intent.putExtra("chargingPileName",pileName);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
                 context.startActivity(intent);
             }
         });

@@ -87,7 +87,7 @@ public class ChargePileAdapter extends BaseAdapter {
 
         gunList = chargePileBean.getGunList();
 
-        ElectricGunAdapter adapter = new ElectricGunAdapter(context, gunList,chargePileBean.getName());
+        ElectricGunAdapter adapter = new ElectricGunAdapter(context, gunList,chargePileBean.getName(),bean.getLatitude(),bean.getLongitude());
         holder.electricGunLv.setAdapter(adapter);
 //        adapter.setData(gunList);
         setListViewHeight(holder.electricGunLv);

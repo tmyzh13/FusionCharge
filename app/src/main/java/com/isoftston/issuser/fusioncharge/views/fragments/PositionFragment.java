@@ -26,10 +26,7 @@ public class PositionFragment extends BaseFragment {
     @Bind(R.id.charge_pile_Lv)
     ListView chargePileLv;
     private ChargePileAdapter chargePileAdapter;
-    private List<ChargePileBean> chargePileList;
 //    private List<ChargePileBean.ElectricGunBean> gunList;
-
-    private List<PileList> piles;
 
     @Override
     protected int getLayoutId() {

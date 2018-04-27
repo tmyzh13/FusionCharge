@@ -12,6 +12,7 @@ import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
 import com.corelibs.utils.PreferencesHelper;
+import com.corelibs.utils.ToastMgr;
 import com.google.gson.Gson;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
@@ -25,6 +26,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestChargeStateBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestScanBean;
 import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
+import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
@@ -153,6 +155,8 @@ public class ChargeInputNumberActivity extends BaseActivity {
 
     @Override
     public void goLogin() {
-
+        ToastMgr.show(getString(R.string.login_fail));
+        UserHelper.clearUserInfo(UserBean.class);
+        startActivity(LoginActivity.getLauncher(ChargeInputNumberActivity.this));
     }
 }

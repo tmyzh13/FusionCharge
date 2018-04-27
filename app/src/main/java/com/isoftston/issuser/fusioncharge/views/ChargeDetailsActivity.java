@@ -63,6 +63,9 @@ public class ChargeDetailsActivity extends BaseActivity {
     MyViewPager myViewPager;
     ChargePileTypeAdapter mAdapter;
     private ScanApi api;
+    private double latitude;
+    private double longitude;
+    private String id;
 
     public static Intent getLauncher(Context context) {
         Intent intent = new Intent(context, ChargeDetailsActivity.class);
@@ -80,12 +83,18 @@ public class ChargeDetailsActivity extends BaseActivity {
 
         navBar.setColorRes(R.color.app_blue);
         navBar.setNavTitle(context.getString(R.string.charging_pile_detail));
+
+        latitude = getIntent().getDoubleExtra("latitude",0);
+        longitude = getIntent().getDoubleExtra("longitude",0);
+        id = getIntent().getStringExtra("id");
+
         getData();
     }
 
     private void getData(){
         showLoading();
         RequestChargePileDetailBean bean = new RequestChargePileDetailBean();
+
         bean.setId("1");
         bean.setType(STATION);
         api.getChargePileDetail(UserHelper.getSavedUser().token,bean)
@@ -122,10 +131,12 @@ public class ChargeDetailsActivity extends BaseActivity {
         chargePileNameTv.setText(bean.getName());
         chargePileAddressTv.setText(bean.getAddress());
         scoreTv.setText(bean.getAverageScore() + "");
-        //计算距离
-//        LatLng positionLatlng = new LatLng(,);
-//        LatLng userLatlng = new LatLng(,);
-//        float distance = AMapUtils.calculateLineDistance(positionLatlng,userLatlng);
+//        计算距离
+        LatLng positionLatlng = new LatLng(latitude,longitude);
+        LatLng userLatlng = new LatLng(bean.getLatitude(),bean.getLongitude());
+        float distance = AMapUtils.calculateLineDistance(positionLatlng,userLatlng);
+        Log.e("zw","distance : " + distance);
+
         mAdapter = new ChargePileTypeAdapter(getSupportFragmentManager(),bean);
         myViewPager.setAdapter(mAdapter);
 
