@@ -244,7 +244,9 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 Toast.makeText(getContext(), "没有权限,请手动开启定位权限", Toast.LENGTH_SHORT).show();
                 // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义）
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE}, 10);
+
             }
+
         }
     }
 

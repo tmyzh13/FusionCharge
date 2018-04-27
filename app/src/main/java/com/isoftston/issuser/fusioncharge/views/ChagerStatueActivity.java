@@ -277,7 +277,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        startActivity(PayActivity.getLauncher(context, homeChargeOrderBean.orderRecordNum));
+                        startActivity(PayActivity.getLauncher(context, chargerStatueBean.orderRecordNum));
                     }
                 });
 
@@ -320,7 +320,7 @@ public class ChagerStatueActivity extends BaseActivity<ChargerStatueView, Charge
             public void onClick(View v) {
 //                                orderNum 是在传参里面有
 //                                presenter.endCharging();
-            startActivity(PayActivity.getLauncher(context,homeChargeOrderBean.orderRecordNum));
+            startActivity(PayActivity.getLauncher(context,chargerStatueBean.orderRecordNum));
             }
         });
         commonDialog.setNagitiveListener(new View.OnClickListener() {
