@@ -44,6 +44,7 @@ public class AppointSuccessActivity extends BaseActivity {
     private double longitude;
     private String runCode;
     private String address;
+    private String reserveId;
 
     public static Intent getLauncher(Context context, int time) {
         Intent intent = new Intent(context, AppointSuccessActivity.class);
@@ -77,6 +78,8 @@ public class AppointSuccessActivity extends BaseActivity {
         chargingPileName = getIntent().getStringExtra("chargingPileName");
         runCode = getIntent().getStringExtra("runCode");
         address = getIntent().getStringExtra("address");
+        reserveId = getIntent().getStringExtra("reserveId");
+
 
         latitude = getIntent().getDoubleExtra("latitude",0);
         longitude = getIntent().getDoubleExtra("longitude",0);
@@ -104,6 +107,7 @@ public class AppointSuccessActivity extends BaseActivity {
         bean.latitude = latitude;
         bean.longitude = longitude;
         bean.runCode = runCode;
+        bean.reserveId = Long.parseLong(reserveId);
 
         Log.e("zw","address : " + address + "  id : " + chargingPileId
                  + " name : " + chargingPileName + " gunCode : " + gunCode + ",lat : " + latitude

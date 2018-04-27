@@ -241,6 +241,7 @@ public class AppointmentChargeActivity extends BaseActivity<AppointView, Appoint
         intent.putExtra("longitude",longitude);
         intent.putExtra("address",address);
         intent.putExtra("runCode",runCode);
+        intent.putExtra("reserveId",bean.getReserveId() + "");
         startActivity(intent);
         this.finish();
     }
