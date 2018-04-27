@@ -274,5 +274,8 @@
     <string name="please_take_qrcode">请对准二维码</string>
     <string name="wrong_request">请求出现错误！</string>
 
-
+    <string name="login_fail">登录失效</string>
+    <string name="has_no_pay_order">有未支付订单</string>
+    <string name="has_charging_order">有充电中的订单</string>
+    <string name="has_appointment">有预约</string>
 </resources>

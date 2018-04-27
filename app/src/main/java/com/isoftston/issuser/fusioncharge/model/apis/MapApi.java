@@ -53,5 +53,5 @@ public interface MapApi {
 
 
     @POST(Urls.GET_USER_APPOINTMENT)
-    Observable<BaseData<HomeAppointmentBean>> getUserAppointmentRecord(@Body RequestHomeAppointment bean);
+    Observable<BaseData<HomeAppointmentBean>> getUserAppointmentRecord(@Header("AccessToken") String token,@Body RequestHomeAppointment bean);
 }

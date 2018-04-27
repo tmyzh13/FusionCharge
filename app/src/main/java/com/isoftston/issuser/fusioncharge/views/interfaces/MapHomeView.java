@@ -24,7 +24,7 @@ public interface MapHomeView extends BaseView{
 
     void hasNoPayOrder(boolean has, HomeOrderBean bean);
 
-    void renderAppoinmentInfo(HomeAppointmentBean bean);
+    void renderAppoinmentInfo(boolean has,HomeAppointmentBean bean);
 
-    void renderHomeChargerOrder(HomeChargeOrderBean bean);
+    void renderHomeChargerOrder(boolean has,HomeChargeOrderBean bean);
 }

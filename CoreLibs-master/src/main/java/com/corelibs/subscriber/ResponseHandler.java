@@ -115,7 +115,6 @@ public class ResponseHandler<T> {
 
     public void handlerGoLogin(){
         if (view != null){
-            Log.e("yzh","ssssssssdsadasd");
             view.showToastMessage("登录失效");
             view.goLogin();
         }

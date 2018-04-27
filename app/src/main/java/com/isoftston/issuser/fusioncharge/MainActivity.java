@@ -112,29 +112,29 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                if(ChoiceManager.getInstance().getType()==3){
+                if (ChoiceManager.getInstance().getType() == 3) {
                     cb_charge_alternating.setChecked(true);
                     cb_charge_direct.setChecked(true);
-                }else if(ChoiceManager.getInstance().getType()==2){
+                } else if (ChoiceManager.getInstance().getType() == 2) {
                     cb_charge_alternating.setChecked(true);
                     cb_charge_direct.setChecked(false);
-                }else if(ChoiceManager.getInstance().getType()==1){
+                } else if (ChoiceManager.getInstance().getType() == 1) {
                     cb_charge_alternating.setChecked(false);
                     cb_charge_direct.setChecked(true);
-                }else if(ChoiceManager.getInstance().getType()==0){
+                } else if (ChoiceManager.getInstance().getType() == 0) {
                     cb_charge_alternating.setChecked(false);
                     cb_charge_direct.setChecked(false);
                 }
-                if(ChoiceManager.getInstance().getStatue()==3){
+                if (ChoiceManager.getInstance().getStatue() == 3) {
                     cb_free.setChecked(true);
                     cb_busy.setChecked(true);
-                }else if(ChoiceManager.getInstance().getStatue()==2){
+                } else if (ChoiceManager.getInstance().getStatue() == 2) {
                     cb_busy.setChecked(true);
                     cb_free.setChecked(false);
-                }else if(ChoiceManager.getInstance().getStatue()==1){
+                } else if (ChoiceManager.getInstance().getStatue() == 1) {
                     cb_busy.setChecked(false);
                     cb_free.setChecked(true);
-                }else if(ChoiceManager.getInstance().getStatue()==0){
+                } else if (ChoiceManager.getInstance().getStatue() == 0) {
                     cb_busy.setChecked(false);
                     cb_free.setChecked(false);
                 }
@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                IMEUtil.closeIME(et_distance,context);
+                IMEUtil.closeIME(et_distance, context);
             }
 
             @Override
@@ -161,10 +161,9 @@ public class MainActivity extends BaseActivity {
 //        if (TextUtils.isEmpty(PreferencesHelper.getData(Constant.LOGIN_STATUE))) {
 //            startActivity(LoginActivity.getLauncher(context));
 //        }
-        if(UserHelper.getSavedUser()==null){
+        if (UserHelper.getSavedUser() == null) {
             startActivity(LoginActivity.getLauncher(context));
-        }
-        else {
+        } else {
             Glide.with(context).load(UserHelper.getSavedUser().photoUrl)
                     .override(320, 320).into(iv_user_icon);
             tv_user_name.setText(UserHelper.getSavedUser().nickName);
@@ -184,6 +183,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.tv_map)
     public void choiceMap() {
+        RxBus.getDefault().send(new Object(), Constant.REFRESH_HOME_STATUE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         tv_map.setTextColor(getResources().getColor(R.color.app_blue));
         tv_list.setTextColor(getResources().getColor(R.color.white));
@@ -203,7 +203,7 @@ public class MainActivity extends BaseActivity {
             ft.show(mapFragment);
         }
         ft.commit();
-        RxBus.getDefault().send(new Object(),Constant.REFRESH_HOME_STATUE);
+
     }
 
     @OnClick(R.id.tv_list)
@@ -245,16 +245,16 @@ public class MainActivity extends BaseActivity {
         int type = 0;
         int statue = 0;
         if (cb_charge_direct.isChecked()) {
-            type=1;
+            type = 1;
         }
         if (cb_charge_alternating.isChecked()) {
             type = 2;
         }
-        if(cb_charge_direct.isChecked()&&cb_charge_alternating.isChecked()){
-            type=3;
+        if (cb_charge_direct.isChecked() && cb_charge_alternating.isChecked()) {
+            type = 3;
         }
-        if(!cb_charge_direct.isChecked()&&!cb_charge_alternating.isChecked()){
-            type=0;
+        if (!cb_charge_direct.isChecked() && !cb_charge_alternating.isChecked()) {
+            type = 0;
         }
 
         if (cb_free.isChecked()) {
@@ -263,17 +263,17 @@ public class MainActivity extends BaseActivity {
         if (cb_busy.isChecked()) {
             statue = 2;
         }
-        if(cb_free.isChecked()&&cb_busy.isChecked()){
-            statue=3;
+        if (cb_free.isChecked() && cb_busy.isChecked()) {
+            statue = 3;
         }
-        if(!cb_free.isChecked()&&!cb_busy.isChecked()){
-            statue=0;
+        if (!cb_free.isChecked() && !cb_busy.isChecked()) {
+            statue = 0;
         }
         ChoiceManager.getInstance().setStatue(statue);
         ChoiceManager.getInstance().setType(type);
         //发送设置
         drawerLayout.closeDrawer(main_right_drawer_layout);
-        RxBus.getDefault().send(new Object(),Constant.REFRESH_MAP_OR_LIST_DATA);
+        RxBus.getDefault().send(new Object(), Constant.REFRESH_MAP_OR_LIST_DATA);
     }
 
     @OnClick(R.id.tv_reset)
@@ -286,7 +286,7 @@ public class MainActivity extends BaseActivity {
         ChoiceManager.getInstance().resetChoice();
         //发送设置
         drawerLayout.closeDrawer(main_right_drawer_layout);
-        RxBus.getDefault().send(new Object(),Constant.REFRESH_MAP_OR_LIST_DATA);
+        RxBus.getDefault().send(new Object(), Constant.REFRESH_MAP_OR_LIST_DATA);
     }
 
     @Override
@@ -335,6 +335,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void goLogin() {
-        Log.e("yzh","sssssss111");
+        Log.e("yzh", "sssssss111");
     }
 }

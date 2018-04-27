@@ -8,7 +8,7 @@ package com.isoftston.issuser.fusioncharge.constants;
 public class Urls {
 
 
-    public static final String ROOT="http://10.40.143.17:8089/charger/api/v1/";//菊
+    public static final String ROOT="http://10.40.143.17:8088/charger/api/v1/";//菊
 //    public static final String ROOT="http://10.40.143.67:8088/charger/api/v1/";//李凯
 //    public static final String ROOT="http://10.40.143.130:8088/charger/api/v1/";//胡明明
 
