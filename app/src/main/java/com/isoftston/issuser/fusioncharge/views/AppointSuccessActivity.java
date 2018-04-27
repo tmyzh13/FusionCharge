@@ -8,7 +8,11 @@ import android.widget.TextView;
 
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.common.AppManager;
+import com.corelibs.utils.rxbus.RxBus;
+import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
@@ -64,12 +68,17 @@ public class AppointSuccessActivity extends BaseActivity {
 
     @OnClick(R.id.action_go_tv)
     public void actionGo() {
-
+        while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)){
+            AppManager.getAppManager().finishActivity();
+        }
     }
 
     @OnClick(R.id.action_guild_tv)
     public void actionGuild() {
-
+        while (!AppManager.getAppManager().currentActivity().getClass().equals(MainActivity.class)){
+            AppManager.getAppManager().finishActivity();
+        }
+//        startActivity(GuildActivity.getLauncher());
     }
 
     @Override

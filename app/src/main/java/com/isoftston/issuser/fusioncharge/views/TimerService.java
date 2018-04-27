@@ -11,6 +11,7 @@ import android.util.Log;
 import com.corelibs.utils.PreferencesHelper;
 import com.corelibs.utils.rxbus.RxBus;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.utils.Tools;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,7 +56,11 @@ public class TimerService extends Service{
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
+                if(Tools.isNull(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))){
+                    appointmentTime=0;
+                }else{
+                    appointmentTime=Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT));
+                }
                 appointmentTime-=1000;
                 PreferencesHelper.saveData(Constant.TIME_APPOINTMENT,appointmentTime+"");
                 RxBus.getDefault().send(new Object(),Constant.REFRESH_APPOINTMENT_TIME);
@@ -102,6 +107,7 @@ public class TimerService extends Service{
 //                }
 //            }
 //        },5*1000,5*1000);
+        Log.e("yzh","schedule");
         timer.schedule(new TimerTask() {
             @Override
             public void run() {

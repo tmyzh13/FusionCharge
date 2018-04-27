@@ -67,6 +67,7 @@ import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
 import com.isoftston.issuser.fusioncharge.presenter.MapPresenter;
 import com.isoftston.issuser.fusioncharge.utils.ActionControl;
 import com.isoftston.issuser.fusioncharge.utils.ChoiceManager;
+import com.isoftston.issuser.fusioncharge.utils.TimeServiceManager;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.ChagerStatueActivity;
 import com.isoftston.issuser.fusioncharge.views.ChargeCaptureActivity;
@@ -146,7 +147,8 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
             }
         });
 
-
+        Intent intent = new Intent(getContext(), TimerService.class);
+        getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         location();
         initMapData();
 
@@ -230,6 +232,14 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                     }
                 });
 
+        RxBus.getDefault().toObservable(Object.class,Constant.REFRESH_APPOINTMENT_TIME)
+                .compose(this.<Object>bindToLifecycle())
+                .subscribe(new RxBusSubscriber<Object>() {
+                    @Override
+                    public void receive(Object data) {
+                        tv_appointment_time.setText(Tools.formatMinute(Long.parseLong(PreferencesHelper.getData(Constant.TIME_APPOINTMENT))));
+                    }
+                });
         if (UserHelper.getSavedUser() != null && !Tools.isNull(UserHelper.getSavedUser().token)) {
             getHomeStatue();
         }
@@ -619,10 +629,10 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
                 PreferencesHelper.saveData(Constant.TIME_APPOINTMENT, surplusTime + "");
                 PreferencesHelper.saveData(Constant.APPOINTMENT_DURING, bean.reserveDuration);
                 tv_appointment_time.setText(Tools.formatMinute(surplusTime));
-                Intent intent = new Intent(getContext(), TimerService.class);
-                getContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
             }
             ll_appontment.setVisibility(View.VISIBLE);
+            TimeServiceManager.getInstance().getTimerService().timeAppointment();
         }else{
             ll_appontment.setVisibility(View.GONE);
         }
@@ -638,25 +648,26 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
         if(has){
             rl_charger_order.setVisibility(View.VISIBLE);
             homeChargeOrderBean = bean;
+            TimeServiceManager.getInstance().getTimerService().timerHour();
         }else{
             rl_charger_order.setVisibility(View.GONE);
         }
 
     }
 
-    private TimerService timerService;
+//    private TimerService timerService;
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             TimerService.ServiceBinder binder = (TimerService.ServiceBinder) service;
-            timerService = binder.getService();
-            timerService.timerHour();
+            TimeServiceManager.getInstance().setTimerService(binder.getService());
+//            TimeServiceManager.getInstance().getTimerService().timerHour();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            timerService.cancelTimerAppointment();
-            timerService = null;
+            TimeServiceManager.getInstance().getTimerService().cancelTimerHour();
+            TimeServiceManager.getInstance().setTimerService(null);
         }
     };
 
@@ -686,7 +697,13 @@ public class MapFragment extends BaseFragment<MapHomeView, MapPresenter> impleme
 
     @OnClick(R.id.enter_charge_station_iv)
     public void enterChargeStation() {
-        startActivity(ChargeDetailsActivity.getLauncher(getActivity()));
+        //获取详情要token 所以判断
+        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
+            startActivity(LoginActivity.getLauncher(getContext()));
+        }else{
+            startActivity(ChargeDetailsActivity.getLauncher(getActivity()));
+        }
+
     }
 
     @OnClick(R.id.iv_scan)
