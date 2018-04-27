@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:background="@color/blue"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/dp_40"
+        android:paddingTop="35dp"
         android:paddingBottom="@dimen/dp_10"
         android:layout_gravity="center">
 
@@ -18,23 +18,27 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content" 
             android:layout_weight="1"
+            android:layout_marginLeft="-7dp"
             android:src="@mipmap/nav_ic_back"
             android:layout_gravity="center" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
             android:background="@drawable/tv_corner_white"
             android:orientation="horizontal"
             android:layout_gravity="center">
 
             <ImageView
                 android:id="@+id/iv_search"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp_20"
-                android:layout_margin="@dimen/dp_10"
+                android:layout_width="@dimen/dp_13"
+                android:layout_height="@dimen/dp_13"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
                 android:layout_gravity="start|center_vertical"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:src="@drawable/frame_search"
                 android:layout_weight="1"
                 />
@@ -42,20 +46,21 @@
                 android:id="@+id/tv_search_content"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="8"
+                android:layout_weight="9"
                 android:layout_gravity="center_vertical"
                 android:background="@null"
                 android:hint="@string/please_input_key_value"
-                android:textSize="@dimen/dp_18"/>
+                android:textSize="@dimen/dp_15"/>
 
             <ImageView
                 android:id="@+id/iv_clear"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/dp_20"
-                android:layout_margin="@dimen/dp_10"
+                android:layout_width="@dimen/dp_13"
+                android:layout_height="@dimen/dp_13"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_5"
                 android:src="@mipmap/pop_ic_del"
                 android:layout_gravity="end|center_vertical"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 android:layout_weight="1"
                 android:visibility="gone"/>
 
@@ -66,19 +71,20 @@
             android:id="@+id/tv_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_15"
             android:layout_weight="1"
             android:text="@string/action_search"
-            android:textSize="@dimen/dp_20"
+            android:textSize="@dimen/dp_16"
             android:layout_gravity="center"
+            android:textColor="@color/text_white"
             android:gravity="end"
             />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_15"
-        android:background="@color/publish_bg_color"/>
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/text_white"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -87,19 +93,21 @@
         android:id="@+id/list_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_15"
-        android:layout_marginRight="@dimen/dp_15"
         android:background="@color/text_white"/>
     </FrameLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:background="@color/publish_bg_color"/>
     <TextView
         android:id="@+id/tv_clear_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_2"
-        android:padding="@dimen/dp_10"
+        android:padding="@dimen/dp_15"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textSize="@dimen/dp_18"
+        android:textSize="@dimen/dp_15"
         android:textColor="@color/black"
         android:text="@string/search_history_clear"
         android:background="@color/text_white"/>

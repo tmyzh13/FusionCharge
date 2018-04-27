@@ -2,9 +2,12 @@ package com.isoftston.issuser.fusioncharge.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -18,6 +21,7 @@ import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapter.SearchHistoryOrResultAdapter;
 import com.isoftston.issuser.fusioncharge.model.beans.MapDataBean;
 import com.isoftston.issuser.fusioncharge.presenter.HomeListPresenter;
+import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.utils.alipay.CachedSearchTitleUtils;
 import com.isoftston.issuser.fusioncharge.views.interfaces.HomeListView;
 
@@ -47,12 +51,13 @@ public class SearchStationTitleActivity extends BaseActivity<HomeListView,HomeLi
     @Bind(R.id.tv_clear_history)
     TextView clearHistory;
 
-    public static final String KEY_STATION = "id";
-    public static final String  KEY_LONGITUDE = "longitude";
-    public static final String  KEY_LATITUDE = "latitude";
+    public static final String KEY_ID = "id";
+    public static final String  KEY_TITLE = "title";
     public static final String KEY_TYPE = "type";
 
     private SearchHistoryOrResultAdapter adapter;
+    private boolean isHistoryDataInit = false;
+    private boolean isHistoryDataUpdate = false;
 
     @OnClick(R.id.iv_back)
     public void goBack(){
@@ -65,6 +70,8 @@ public class SearchStationTitleActivity extends BaseActivity<HomeListView,HomeLi
         tvSearchContent.setHint(R.string.please_input_key_value);
         ivSearch.setVisibility(View.VISIBLE);
         ivClear.setVisibility(View.GONE);
+        clearHistory.setVisibility(View.VISIBLE);
+        listSearch.setDivider(null);
         adapter.resetShowHistoryData();
     }
 
@@ -79,6 +86,9 @@ public class SearchStationTitleActivity extends BaseActivity<HomeListView,HomeLi
         }
         adapter.setResultData(list);
         adapter.notifyDataSetChanged();
+        clearHistory.setVisibility(View.GONE);
+        listSearch.setDivider(new ColorDrawable(Color.GRAY));
+        listSearch.setDividerHeight(1);
     }
 
     @Override
@@ -98,8 +108,23 @@ public class SearchStationTitleActivity extends BaseActivity<HomeListView,HomeLi
     @Override
     protected void onResume() {
         super.onResume();
+        if (!isHistoryDataInit) {
+            CachedSearchTitleUtils.initHistoryData();
+            isHistoryDataInit = true;
+        }
+        isHistoryDataUpdate = false;
         adapter.resetShowHistoryData();
         tvSearchContent.setText("");
+        clearHistory.setVisibility(View.VISIBLE);
+        listSearch.setDivider(null);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isHistoryDataUpdate) {
+            CachedSearchTitleUtils.saveHistoryData();
+        }
     }
 
     @Override
@@ -140,12 +165,10 @@ public class SearchStationTitleActivity extends BaseActivity<HomeListView,HomeLi
         Intent intent = ChargeDetailsActivity.getLauncher(SearchStationTitleActivity.this);
         intent.putExtras(bundle);
         startActivity(intent);
-        if (!DOUBLE_DEFAULT.equals(bundle.getDouble(KEY_LATITUDE,DOUBLE_DEFAULT))) {
-            CachedSearchTitleUtils.addHistoryData(new CachedSearchTitleUtils.CachedData(bundle.getString(KEY_STATION),bundle.getString(KEY_TYPE)
-                    ,bundle.getDouble(KEY_LATITUDE),bundle.getDouble(KEY_LONGITUDE)));
-        }
+        CachedSearchTitleUtils.addHistoryData(new CachedSearchTitleUtils.CachedData(bundle.getString(KEY_TITLE),bundle.getString(KEY_TYPE)
+                ,bundle.getLong(KEY_ID)));
+        isHistoryDataUpdate = true;
     }
-    private static final Double DOUBLE_DEFAULT = 666.6;
 
     @OnClick(R.id.tv_clear_history)
     public void clearHistory(){

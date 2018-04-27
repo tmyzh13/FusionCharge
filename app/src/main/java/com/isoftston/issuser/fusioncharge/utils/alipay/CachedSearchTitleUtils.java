@@ -1,6 +1,8 @@
 package com.isoftston.issuser.fusioncharge.utils.alipay;
 
 
+import com.corelibs.utils.PreferencesHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,26 @@ public class CachedSearchTitleUtils {
     private static List<CachedData> historyData = new ArrayList<>();
     private static int lastTimeHistory = 0;
     private static final int MAX_NUM_HITORY = 8;
+    //private static boolean isCachedChange = false;
+
+    public static void saveHistoryData() {
+        HistoryDataBean bean = new HistoryDataBean();
+        bean.historyData = historyData;
+        PreferencesHelper.saveData(bean);
+    }
+
+    public static class HistoryDataBean {
+        List<CachedData> historyData;
+    }
+
+    public static void initHistoryData(){
+        HistoryDataBean bean = PreferencesHelper.getData(HistoryDataBean.class);
+        if (null == bean) {
+            return;
+        }
+        historyData = bean.historyData;
+        //isCachedChange = false;
+    }
     public static void addHistoryData(CachedData data) {
         for (int i=0;i<historyData.size();i++) {
             if (historyData.get(i).equals(data)) {
@@ -45,18 +67,17 @@ public class CachedSearchTitleUtils {
 
     public static class CachedData{
         public String station ,type;
-        public double latitude,longitude;
-        public CachedData(String station, String type, double latitude, double longitude) {
+        public Long id;
+        public CachedData(String station, String type, Long id) {
             this.station = station;
             this.type = type;
-            this.latitude = latitude;
-            this.longitude = longitude;
+            this.id = id;
         }
         public boolean equals(CachedData data){
             if (data == null){
                 return false;
             }
-            if (station.equals(data.station) && type.equals(data.type)) {
+            if (id == data.id) {
                 return true;
             } else {
                 return false;

@@ -44,18 +44,13 @@ public class SearchHistoryOrResultAdapter extends BaseAdapter {
     public Bundle getIntent(int position){
         Bundle bd = new Bundle();
         if (isHistoryData) {
-            if (position > historyData.size()) {
-                return null;
-            }
-            bd.putString(SearchStationTitleActivity.KEY_STATION,CachedSearchTitleUtils.getCachedData(position-1).station);
+            bd.putLong(SearchStationTitleActivity.KEY_ID,CachedSearchTitleUtils.getCachedData(position-1).id);
             bd.putString(SearchStationTitleActivity.KEY_TYPE,CachedSearchTitleUtils.getCachedData(position-1).type);
-            bd.putDouble(SearchStationTitleActivity.KEY_LATITUDE,CachedSearchTitleUtils.getCachedData(position-1).latitude);
-            bd.putDouble(SearchStationTitleActivity.KEY_LONGITUDE,CachedSearchTitleUtils.getCachedData(position-1).longitude);
+            bd.putString(SearchStationTitleActivity.KEY_TITLE,CachedSearchTitleUtils.getCachedData(position-1).station);
         } else {
-            bd.putString(SearchStationTitleActivity.KEY_STATION,resultData.get(position-1).title);
+            bd.putLong(SearchStationTitleActivity.KEY_ID,resultData.get(position-1).id);
             bd.putString(SearchStationTitleActivity.KEY_TYPE,resultData.get(position-1).type);
-            bd.putDouble(SearchStationTitleActivity.KEY_LATITUDE,resultData.get(position-1).latitude);
-            bd.putDouble(SearchStationTitleActivity.KEY_LONGITUDE,resultData.get(position-1).longitude);
+            bd.putString(SearchStationTitleActivity.KEY_TITLE,resultData.get(position-1).title);
         }
         return bd;
     }
