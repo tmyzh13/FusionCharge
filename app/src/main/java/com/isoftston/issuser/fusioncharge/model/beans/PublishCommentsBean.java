@@ -7,26 +7,26 @@ import java.io.Serializable;
  */
 
 public class PublishCommentsBean implements Serializable {
-    public int userId;
-    public int pileId;
+    public long userId;
+    public long pileId;
     public String evaluateTypeId;
     public float evaluateScore;
     public String evaluateContent;
     public String orderRecordNum;
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public int getPileId() {
+    public long getPileId() {
         return pileId;
     }
 
-    public void setPileId(int pileId) {
+    public void setPileId(long pileId) {
         this.pileId = pileId;
     }
 

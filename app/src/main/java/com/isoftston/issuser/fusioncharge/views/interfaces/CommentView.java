@@ -4,6 +4,7 @@ import com.corelibs.base.BaseView;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentSortBean;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentsBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface CommentView extends BaseView {
     void getCommentSortAndTimes(List<CommentSortBean> times);
     void queryCommentInfo(List<CommentsBean> infos);
     void queryCommentSortType(List<CommentSortBean> sorts);
+    void renderData(PayInfoBean bean);
 }

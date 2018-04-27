@@ -8,6 +8,7 @@ import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
 import com.corelibs.utils.PreferencesHelper;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.CommentApi;
 import com.isoftston.issuser.fusioncharge.model.apis.LoginApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
@@ -15,7 +16,9 @@ import com.isoftston.issuser.fusioncharge.model.beans.CommentSortBean;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentsBean;
 import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
 import com.isoftston.issuser.fusioncharge.model.beans.NullPostBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PublishCommentsBean;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestPayDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.StationBean;
 import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.views.interfaces.CommentView;
@@ -39,7 +42,7 @@ public class CommentPresenter extends BasePresenter<CommentView> {
         api =  ApiFactory.getFactory().create(CommentApi.class);
     }
 
-    private String token= "5ef7c3f3334c468193f8d62a42cbe4e4";
+    private String token = UserHelper.getSavedUser().token;
     public void publish(PublishCommentsBean bean) {
         api.publish(token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
@@ -86,6 +89,20 @@ public class CommentPresenter extends BasePresenter<CommentView> {
                     public void success(BaseData<List<CommentSortBean>> baseData) {
                         Log.e("queryCommentSortType","---success");
                         view.queryCommentSortType(baseData.data);
+                    }
+                });
+    }
+
+    public void getPayDetailInfo(String orderNum){
+        RequestPayDetailBean bean=new RequestPayDetailBean();
+        bean.orderRecordNum=orderNum;
+        view.showLoading();
+        api.getPayDetail(token,bean)
+                .compose(new ResponseTransformer<>(this.<BaseData<PayInfoBean>>bindToLifeCycle()))
+                .subscribe(new ResponseSubscriber<BaseData<PayInfoBean>>(view) {
+                    @Override
+                    public void success(BaseData<PayInfoBean> baseData) {
+                        view.renderData(baseData.data);
                     }
                 });
     }

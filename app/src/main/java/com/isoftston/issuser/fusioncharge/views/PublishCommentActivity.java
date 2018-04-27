@@ -18,8 +18,10 @@ import android.widget.TextView;
 import com.corelibs.base.BaseActivity;
 import com.isoftston.issuser.fusioncharge.MainActivity;
 import com.isoftston.issuser.fusioncharge.adapter.CommentSortAdapter;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentSortBean;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentsBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PublishCommentsBean;
 import com.isoftston.issuser.fusioncharge.presenter.CommentPresenter;
 import com.isoftston.issuser.fusioncharge.views.interfaces.CommentView;
@@ -76,6 +78,7 @@ public class PublishCommentActivity extends BaseActivity<CommentView,CommentPres
     private int sort = 0;
     private List<CommentSortBean> list= new ArrayList<>();
     private CommentSortAdapter adapter;
+    private long pileId =1;
 
     @Override
     public void commentPublished() {
@@ -98,6 +101,7 @@ public class PublishCommentActivity extends BaseActivity<CommentView,CommentPres
         navBar.setImageBackground(R.drawable.nan_bg);
         sort = 0;
         presenter.queryCommentSortType();
+        presenter.getPayDetailInfo(orderRecordNum);
         adapter = new CommentSortAdapter(mContext,list,true);
         flowGrid.setAdapter(adapter);
         flowGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,8 +113,10 @@ public class PublishCommentActivity extends BaseActivity<CommentView,CommentPres
         //init the TextView content
     }
 
-    public static Intent getLauncher(Context context) {
+    private static String orderRecordNum ="1524387088804002";
+    public static Intent getLauncher(Context context, String orderRecord) {
         Intent intent = new Intent(context, PublishCommentActivity.class);
+        orderRecordNum = orderRecord;
         return intent;
     }
 
@@ -125,9 +131,9 @@ public class PublishCommentActivity extends BaseActivity<CommentView,CommentPres
         bean.setEvaluateScore(favor.getRating());
         bean.setEvaluateContent(edit.getText().toString());
         bean.setEvaluateTypeId(getSortType());
-        bean.setOrderRecordNum("123456789");
-        bean.setPileId(1);
-        bean.setUserId(1);
+        bean.setOrderRecordNum(orderRecordNum);
+        bean.setPileId(pileId);
+        bean.setUserId(UserHelper.getUserId());
 
         presenter.publish(bean);
     }
@@ -213,5 +219,27 @@ public class PublishCommentActivity extends BaseActivity<CommentView,CommentPres
 
     @Override
     public void goLogin() {
+    }
+
+    //private PayInfoBean payInfoBean = new PayInfoBean();
+    @Override
+    public void renderData(PayInfoBean bean) {
+        //payInfoBean = bean;
+        refreshView(bean);
+    }
+
+    private void refreshView(PayInfoBean bean){
+        if (bean == null) {
+            return;
+        }
+        locationName.setText(bean.parkAddress);
+        locationDetail.setText(bean.address);
+        startTime.setText(bean.chargeStartTime);
+        endTime.setText(bean.chargeEndTime);
+        power.setText(Double.toString(bean.chargePowerAmount));
+        money.setText(Double.toString(bean.eneryCharge));
+        tips.setText(Double.toString(bean.serviceCharge));
+        total.setText(Double.toString(bean.consumeTotalMoney));
+        pileId = bean.chargeId;
     }
 }

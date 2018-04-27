@@ -9,7 +9,9 @@ import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentSortBean;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentsBean;
 import com.isoftston.issuser.fusioncharge.model.beans.NullPostBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
 import com.isoftston.issuser.fusioncharge.model.beans.PublishCommentsBean;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestPayDetailBean;
 import com.isoftston.issuser.fusioncharge.model.beans.StationBean;
 
 import java.util.List;
@@ -31,4 +33,7 @@ public interface CommentApi {
 
     @POST(Urls.COMMENT_INFO_TYPE)
     Observable<BaseData<List<CommentSortBean>>> queryCommentSortType(@Header("AccessToken") String token,@Body NullPostBean bean);
+
+    @POST(Urls.GET_PAY_DETAIL)
+    Observable<BaseData<PayInfoBean>> getPayDetail(@Header("AccessToken") String token, @Body RequestPayDetailBean bean);
 }

@@ -20,6 +20,7 @@ import com.isoftston.issuser.fusioncharge.adapter.CommentSortAdapter;
 import com.isoftston.issuser.fusioncharge.adapter.CommentsAdapter;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentSortBean;
 import com.isoftston.issuser.fusioncharge.model.beans.CommentsBean;
+import com.isoftston.issuser.fusioncharge.model.beans.PayInfoBean;
 import com.isoftston.issuser.fusioncharge.presenter.CommentPresenter;
 import com.isoftston.issuser.fusioncharge.views.interfaces.CommentView;
 import com.isoftston.issuser.fusioncharge.weights.FlowLayout;
@@ -136,6 +137,10 @@ public class CommentsFragment extends BaseFragment<CommentView,CommentPresenter>
 
     @Override
     public void goLogin() {
+    }
+
+    @Override
+    public void renderData(PayInfoBean bean) {
 
     }
 }
