@@ -248,11 +248,15 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                     public void success(BaseData baseData) {
                         Log.e("zw","info : success");
                         Log.e("zw",baseData.data.toString());
-
-                        HomeChargeOrderBean homeChargeOrderBean = new HomeChargeOrderBean();
-                        homeChargeOrderBean.virtualId = scanChargeInfo.getVirtualId();
-                        homeChargeOrderBean.chargeGunNum = chooseGun.getGunCode();
-                        startActivity(ChagerStatueActivity.getLauncher(ChargeOrderDetailsActivity.this,homeChargeOrderBean));
+                        int code = Integer.parseInt(baseData.data.toString());
+                        if(code == 4) {
+                            HomeChargeOrderBean homeChargeOrderBean = new HomeChargeOrderBean();
+                            homeChargeOrderBean.virtualId = scanChargeInfo.getVirtualId();
+                            homeChargeOrderBean.chargeGunNum = chooseGun.getGunCode();
+                            startActivity(ChagerStatueActivity.getLauncher(ChargeOrderDetailsActivity.this,homeChargeOrderBean));
+                        } else if( code == 5) {
+                            showToast(getString(R.string.request_refuse));
+                        }
 
                         hideLoading();
                     }

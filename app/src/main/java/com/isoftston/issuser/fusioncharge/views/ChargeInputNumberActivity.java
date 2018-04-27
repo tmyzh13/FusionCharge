@@ -18,6 +18,7 @@ import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.Condition;
+import com.isoftston.issuser.fusioncharge.model.beans.MyOrderData;
 import com.isoftston.issuser.fusioncharge.model.beans.NullPostBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestMyOrderBean;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestMyOrderChildBean;
@@ -72,6 +73,7 @@ public class ChargeInputNumberActivity extends BaseActivity {
         }
 
         getData(number);
+//        testt();
     }
 
     private void getData(long number){
@@ -145,7 +147,7 @@ public class ChargeInputNumberActivity extends BaseActivity {
 
                     }
                 });*/
-//        testt();
+
     }
 
     private void testt(){
@@ -158,15 +160,15 @@ public class ChargeInputNumberActivity extends BaseActivity {
         bean.setCondition(bean1);
 
         api.getMyOrder(UserHelper.getSavedUser().token,bean)
-                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
-                .subscribe(new ResponseSubscriber<BaseData>() {
+                .compose(new ResponseTransformer<>(this.<MyOrderData>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<MyOrderData>() {
                     @Override
-                    public void success(BaseData baseData) {
+                    public void success(MyOrderData baseData) {
                         Log.e("zw"," success : " + baseData.toString());
                     }
 
                     @Override
-                    public boolean operationError(BaseData baseData, int status, String message) {
+                    public boolean operationError(MyOrderData baseData, int status, String message) {
                         Log.e("zw"," base : " + baseData.toString());
 
                         return super.operationError(baseData, status, message);

@@ -3,6 +3,7 @@ package com.isoftston.issuser.fusioncharge.model.apis;
 import com.isoftston.issuser.fusioncharge.constants.Urls;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargeStationDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.MyOrderData;
 import com.isoftston.issuser.fusioncharge.model.beans.OrderRequestInfo;
 import com.isoftston.issuser.fusioncharge.model.beans.PileList;
 import com.isoftston.issuser.fusioncharge.model.beans.RequestChargePileDetailBean;
@@ -40,7 +41,7 @@ public interface ScanApi {
 
     //我的订单
     @POST(Urls.MY_ORDER)
-    Observable<BaseData> getMyOrder(@Header("AccessToken") String token, @Body RequestMyOrderBean bean);
+    Observable<MyOrderData> getMyOrder(@Header("AccessToken") String token, @Body RequestMyOrderBean bean);
 
 
 }
