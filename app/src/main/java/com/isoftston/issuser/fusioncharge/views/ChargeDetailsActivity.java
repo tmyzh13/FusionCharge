@@ -10,14 +10,26 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.maps.AMapUtils;
+import com.amap.api.maps.model.LatLng;
+import com.corelibs.api.ApiFactory;
+import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BaseActivity;
 import com.corelibs.base.BasePresenter;
+import com.corelibs.subscriber.ResponseSubscriber;
 import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.adapter.ChargePileTypeAdapter;
 import com.isoftston.issuser.fusioncharge.adapter.ElectricGunAdapter;
+import com.isoftston.issuser.fusioncharge.model.UserHelper;
+import com.isoftston.issuser.fusioncharge.model.apis.ScanApi;
+import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.ChargePileBean;
+import com.isoftston.issuser.fusioncharge.model.beans.ChargePileDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.RequestChargePileDetailBean;
+import com.isoftston.issuser.fusioncharge.model.beans.ScanChargeInfo;
 import com.isoftston.issuser.fusioncharge.weights.MyViewPager;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
+import com.trello.rxlifecycle.ActivityEvent;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -26,6 +38,9 @@ public class ChargeDetailsActivity extends BaseActivity {
 
     private static final String TAG = ChargeDetailsActivity.class.getSimpleName();
     private Context context = ChargeDetailsActivity.this;
+
+    private final String STATION = "station";
+    private final String PILE = "pile";
 
     @Bind(R.id.nav)
     NavBar navBar;
@@ -46,6 +61,7 @@ public class ChargeDetailsActivity extends BaseActivity {
     @Bind(R.id.my_view_pager)
     MyViewPager myViewPager;
     ChargePileTypeAdapter mAdapter;
+    private ScanApi api;
 
     public static Intent getLauncher(Context context) {
         Intent intent = new Intent(context, ChargeDetailsActivity.class);
@@ -59,8 +75,53 @@ public class ChargeDetailsActivity extends BaseActivity {
 
     @Override
     protected void init(Bundle savedInstanceState) {
+        api = ApiFactory.getFactory().create(ScanApi.class);
+
         navBar.setColorRes(R.color.app_blue);
         navBar.setNavTitle(context.getString(R.string.charging_pile_detail));
+        getData();
+    }
+
+    private void getData(){
+        showLoading();
+        RequestChargePileDetailBean bean = new RequestChargePileDetailBean();
+        bean.setId("1");
+        bean.setType(STATION);
+        api.getChargePileDetail(UserHelper.getSavedUser().token,bean)
+                .compose(new ResponseTransformer<>(this.<BaseData<ChargePileDetailBean>>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData<ChargePileDetailBean>>() {
+                    @Override
+                    public void success(BaseData<ChargePileDetailBean> baseData) {
+                        initView(baseData.data);
+                        hideLoading();
+                    }
+
+                    @Override
+                    public boolean operationError(BaseData<ChargePileDetailBean> baseData, int status, String message) {
+                        Log.e("zw",baseData.toString());
+                        hideLoading();
+                        showToast(getString(R.string.no_data));
+                        finish();
+                        return super.operationError(baseData, status, message);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        hideLoading();
+                        showToast(getString(R.string.time_out));
+                        finish();
+                    }
+                });
+    }
+
+    private void initView(ChargePileDetailBean bean){
+        chargePileNameTv.setText(bean.getName());
+        chargePileAddressTv.setText(bean.getAddress());
+        //计算距离
+//        LatLng positionLatlng = new LatLng(,);
+//        LatLng userLatlng = new LatLng(,);
+//        float distance = AMapUtils.calculateLineDistance(positionLatlng,userLatlng);
         mAdapter = new ChargePileTypeAdapter(getSupportFragmentManager());
         myViewPager.setAdapter(mAdapter);
         chosePicture();

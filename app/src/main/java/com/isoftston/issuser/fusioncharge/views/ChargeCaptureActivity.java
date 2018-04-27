@@ -93,7 +93,7 @@ public class ChargeCaptureActivity extends BaseActivity {
         RequestScanBean bean = new RequestScanBean();
         bean.setAppUserId(UserHelper.getSavedUser().appUserId + "");
         Log.e("zw","UserHelper.getSavedUser().userId : " + UserHelper.getSavedUser().appUserId);
-        bean.setQrCode("1000000001");
+        bean.setQrCode("4000000001");
 
         api.getScanChargeInfo(UserHelper.getSavedUser().token,bean)
                 .compose(new ResponseTransformer<>(this.<BaseData<ScanChargeInfo>>bindUntilEvent(ActivityEvent.DESTROY)))
@@ -118,6 +118,12 @@ public class ChargeCaptureActivity extends BaseActivity {
                                @Override
                                public boolean operationError(BaseData<ScanChargeInfo> scanChargeInfoBaseData, int status, String message) {
                                      hideLoading();
+                                     if(scanChargeInfoBaseData.code == 403) {
+                                         goLogin();
+                                         finish();
+                                         return super.operationError(scanChargeInfoBaseData, status, message);
+                                     }
+
                                      String content = TextUtils.isEmpty(scanChargeInfoBaseData.msg) ? getString(R.string.unknown_error) : scanChargeInfoBaseData.msg;
                                      dialog = new CommonDialog(ChargeCaptureActivity.this,getString(R.string.hint),content,1);
                                      dialog.show();
@@ -130,6 +136,22 @@ public class ChargeCaptureActivity extends BaseActivity {
                                      });
 
                                    return super.operationError(scanChargeInfoBaseData, status, message);
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   super.onError(e);
+                                   hideLoading();
+                                   dialog = new CommonDialog(ChargeCaptureActivity.this,getString(R.string.hint),getString(R.string.time_out),1);
+                                   dialog.show();
+                                   dialog.setPositiveListener(new View.OnClickListener() {
+                                       @Override
+                                       public void onClick(View view) {
+                                           dialog.dismiss();
+                                           finish();
+                                       }
+                                   });
+
                                }
                            }
                 );

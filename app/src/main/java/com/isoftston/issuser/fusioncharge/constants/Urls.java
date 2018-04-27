@@ -8,9 +8,10 @@ package com.isoftston.issuser.fusioncharge.constants;
 public class Urls {
 
 
-    public static final String ROOT="http://10.40.143.17:8089/charger/api/v1/";//菊
+    public static final String ROOT="http://10.40.143.17:8088/charger/api/v1/";//菊
 //    public static final String ROOT="http://10.40.143.67:8088/charger/api/v1/";//李凯
 //    public static final String ROOT="http://10.40.143.130:8088/charger/api/v1/";//胡明明
+//    public static final String ROOT="http://10.40.143.130:8088/charger/api/v1/";//菊1
 
 
     //登录
@@ -56,4 +57,7 @@ public class Urls {
     public static final String COMMENT_SORT="appChargingPileEvaluate/queryAppEvaluateTypeByStation";
     public static final String COMMENT_INFO="appChargingPileEvaluate/queryAppChargingPileEvaluateByStation";
     public static final String COMMENT_INFO_TYPE="appChargingPileEvaluate/queryAppEvaluateType";
+
+    //充电站信息
+    public static final String CHARGE_PILE_DETAIL="appMap/info";
 }

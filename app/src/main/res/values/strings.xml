@@ -273,6 +273,8 @@
     <string name="unknown_error">未知错误。</string>
     <string name="please_take_qrcode">请对准二维码</string>
     <string name="wrong_request">请求出现错误！</string>
+    <string name="time_out">连接超时。</string>
+    <string name="no_data">未获取到数据！</string>
 
 
 </resources>

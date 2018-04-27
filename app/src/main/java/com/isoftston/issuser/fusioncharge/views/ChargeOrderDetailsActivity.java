@@ -57,6 +57,12 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
     public static final int WITH_FULL = 4;
     public static final int WITH_CONTROL = 5;
 
+    public static final String CHARGE_MODE_FAST = "1";
+    public static final String CHARGE_MODE_SLOW = "2";
+
+    public static final int CHARGE_GUN_SLOW = 1;
+    public static final int CHARGE_GUN_FAST = 2;
+
     @Bind(R.id.nav)
     NavBar navBar;
     @Bind(R.id.charge_station_name)
@@ -174,6 +180,10 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
             case R.id.iv_charge_cost_ask:
                 break;
             case R.id.btn_start_charge:
+                if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
+                    startActivity(LoginActivity.getLauncher(this));
+                    return;
+                }
                 if(chooseGun == null) {
                     ToastMgr.show(getString(R.string.no_charge_gun_cannot_charge));
                     return;
@@ -199,6 +209,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         }
     }
 
+    //开始充电
     private void getData(){
         showLoading();
 
@@ -206,47 +217,61 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         Log.e("zw",scanChargeInfo.toString());
         info.setChargingPileName(scanChargeInfo.getChargingPileName());
         //TODO 后续替换
-//        info.setVirtualId("020001");
-        info.setVirtualId(scanChargeInfo.getVirtualId());
+        info.setVirtualId("020001");
+//        info.setVirtualId(scanChargeInfo.getVirtualId());
 //        info.setAppUserId(71 + "");
         info.setAppUserId(scanChargeInfo.getAppUserId());
 //        info.setGunCode(2 + "");
         info.setGunCode(chooseGun.getGunCode());
 //        info.setControlInfo(2 + "");
         info.setControlInfo(chooseStyle + "");
-//        info.setChargingPileId(1);
-        info.setChargingPileId(scanChargeInfo.getChargingPileId());
+        info.setChargingPileId(4);
+//        info.setChargingPileId(scanChargeInfo.getChargingPileId());
         if(chooseStyle != WITH_FULL){
 //            info.setControlData(320 + "");
             info.setControlData(chargePowerCount + "");
         }
-        if(UserHelper.getSavedUser()==null||Tools.isNull(UserHelper.getSavedUser().token)){
-            startActivity(LoginActivity.getLauncher(this));
+        //设置充电模式，交流为慢，直流为快
+        if(chooseGun.getGunType() == CHARGE_GUN_FAST){
+            info.setChargingMode(CHARGE_MODE_FAST);
         } else {
-            api.getOrderDetail(UserHelper.getSavedUser().token,info)
-                    .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
-                    .subscribe(new ResponseSubscriber<BaseData>() {
-                        @Override
-                        public void success(BaseData baseData) {
-                            Log.e("zw","info : success");
-                            Log.e("zw",baseData.toString());
-
-                            HomeChargeOrderBean homeChargeOrderBean = new HomeChargeOrderBean();
-                            homeChargeOrderBean.virtualId = scanChargeInfo.getVirtualId();
-                            homeChargeOrderBean.chargeGunNum = chooseGun.getGunCode();
-                            startActivity(ChagerStatueActivity.getLauncher(ChargeOrderDetailsActivity.this,homeChargeOrderBean));
-
-                            hideLoading();
-                        }
-
-                        @Override
-                        public boolean operationError(BaseData baseData, int status, String message) {
-                            hideLoading();
-                            showToast(getString(R.string.wrong_request));
-                            return super.operationError(baseData, status, message);
-                        }
-                    });
+            info.setChargingMode(CHARGE_MODE_SLOW);
         }
+
+        api.getOrderDetail(UserHelper.getSavedUser().token,info)
+                .compose(new ResponseTransformer<>(this.<BaseData>bindUntilEvent(ActivityEvent.DESTROY)))
+                .subscribe(new ResponseSubscriber<BaseData>() {
+                    @Override
+                    public void success(BaseData baseData) {
+                        Log.e("zw","info : success");
+                        Log.e("zw",baseData.toString());
+
+                        HomeChargeOrderBean homeChargeOrderBean = new HomeChargeOrderBean();
+                        homeChargeOrderBean.virtualId = scanChargeInfo.getVirtualId();
+                        homeChargeOrderBean.chargeGunNum = chooseGun.getGunCode();
+                        startActivity(ChagerStatueActivity.getLauncher(ChargeOrderDetailsActivity.this,homeChargeOrderBean));
+
+                        hideLoading();
+                    }
+
+                    @Override
+                    public boolean operationError(BaseData baseData, int status, String message) {
+                        hideLoading();
+                        if(baseData.code == 403) {
+                            goLogin();
+                        }
+                        showToast(getString(R.string.wrong_request));
+                        return super.operationError(baseData, status, message);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        hideLoading();
+                        showToast(getString(R.string.time_out));
+                    }
+                });
+
     }
 
    /* @Override

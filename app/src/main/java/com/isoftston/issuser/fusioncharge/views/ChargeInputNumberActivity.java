@@ -114,8 +114,18 @@ public class ChargeInputNumberActivity extends BaseActivity {
                                @Override
                                public boolean operationError(BaseData<ScanChargeInfo> scanChargeInfoBaseData, int status, String message) {
                                    hideLoading();
+                                   if(scanChargeInfoBaseData.code == 403) {
+                                       goLogin();
+                                   }
                                    showToast("未获取数据，请重新输入！");
                                    return super.operationError(scanChargeInfoBaseData, status, message);
+                               }
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   super.onError(e);
+                                   hideLoading();
+                                   showToast(getString(R.string.time_out));
                                }
                            }
                 );
