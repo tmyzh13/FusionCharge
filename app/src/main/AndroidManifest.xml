@@ -128,5 +128,6 @@
             android:name=".views.PublishCommentActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".views.interfaces.MyOrderActivity" android:screenOrientation="portrait"/>
     </application>
 </manifest>

@@ -4,22 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.corelibs.base.BaseActivity;
-import com.corelibs.base.BasePresenter;
 import com.corelibs.utils.ToastMgr;
 import com.isoftston.issuser.fusioncharge.R;
+import com.isoftston.issuser.fusioncharge.presenter.LoginPresenter;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.InputNewPwdActivity;
 import com.isoftston.issuser.fusioncharge.views.LoginActivity;
+import com.isoftston.issuser.fusioncharge.weights.CommonDialog;
 import com.isoftston.issuser.fusioncharge.weights.NavBar;
 
 import butterknife.Bind;
 
-public class ForgetPwdActivity extends BaseActivity implements View.OnClickListener {
+public class ForgetPwdActivity extends BaseActivity<LoginView,LoginPresenter> implements View.OnClickListener,LoginView {
 
     private Context context = ForgetPwdActivity.this;
     @Bind(R.id.nav)
@@ -59,8 +61,8 @@ public class ForgetPwdActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    protected LoginPresenter createPresenter() {
+        return new LoginPresenter();
     }
 
     @Override
@@ -71,21 +73,22 @@ public class ForgetPwdActivity extends BaseActivity implements View.OnClickListe
             case R.id.get_message_code_tv:
                 phoneNum = phoneNumEt.getText().toString().trim();
                 if (!TextUtils.isEmpty(phoneNum) && Tools.isChinaPhoneLegal(phoneNum)) {
-                    LoginActivity.MyCountDownTimer timer = new LoginActivity.MyCountDownTimer(getMessageCodeTv, 600000, 1000);
+                    LoginActivity.MyCountDownTimer timer = new LoginActivity.MyCountDownTimer(getMessageCodeTv, 60000, 1000);
                     timer.start();
+                    presenter.getCodeAction(2,phoneNum);
                 } else {
-                    ToastMgr.show(R.string.input_correct_phone);
+                    showHintDialog(getString(R.string.hint),getString(R.string.input_correct_phone));
                     return;
                 }
                 break;
             case R.id.next_tv:
                 phoneNum = phoneNumEt.getText().toString().trim();
                 code = inputMessageCodeEt.getText().toString().trim();
-                if (!TextUtils.isEmpty(phoneNum) && !TextUtils.isEmpty(code)) {
-                    InputNewPwdActivity.getLaunch(context);
-                } else {
-                    ToastMgr.show(R.string.hint_input_code);
+                if (TextUtils.isEmpty(code)) {
+                    showHintDialog(getString(R.string.hint),getString(R.string.hint_input_code));
                     return;
+                } else {
+                    startActivity(InputNewPwdActivity.getLaunch(context,phoneNum, code));
                 }
                 break;
             default:
@@ -93,8 +96,37 @@ public class ForgetPwdActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    private void showHintDialog(String title,String meg) {
+        CommonDialog dialog = new CommonDialog(context,title,meg,1);
+        dialog.show();
+    }
     @Override
     public void goLogin() {
+
+    }
+
+    @Override
+    public void loginSuccess() {
+
+    }
+
+    @Override
+    public void loginFailure() {
+
+    }
+
+    @Override
+    public void registerSuccess() {
+
+    }
+
+    @Override
+    public void registerFailure() {
+
+    }
+
+    @Override
+    public void getCodeSuccess() {
 
     }
 }

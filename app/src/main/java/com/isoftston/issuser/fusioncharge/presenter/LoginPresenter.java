@@ -1,6 +1,5 @@
 package com.isoftston.issuser.fusioncharge.presenter;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.corelibs.api.ApiFactory;
@@ -8,15 +7,13 @@ import com.corelibs.api.ResponseTransformer;
 import com.corelibs.base.BasePresenter;
 import com.corelibs.subscriber.ResponseSubscriber;
 import com.corelibs.utils.PreferencesHelper;
-import com.corelibs.utils.ToastMgr;
-import com.isoftston.issuser.fusioncharge.R;
 import com.isoftston.issuser.fusioncharge.constants.Constant;
 import com.isoftston.issuser.fusioncharge.model.UserHelper;
 import com.isoftston.issuser.fusioncharge.model.apis.LoginApi;
 import com.isoftston.issuser.fusioncharge.model.beans.BaseData;
 import com.isoftston.issuser.fusioncharge.model.beans.LoginRequestBean;
+import com.isoftston.issuser.fusioncharge.model.beans.RestPwdRequestBean;
 import com.isoftston.issuser.fusioncharge.model.beans.UserBean;
-import com.isoftston.issuser.fusioncharge.utils.SharePrefsUtils;
 import com.isoftston.issuser.fusioncharge.utils.Tools;
 import com.isoftston.issuser.fusioncharge.views.interfaces.LoginView;
 import com.trello.rxlifecycle.ActivityEvent;
@@ -39,7 +36,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     }
 
     /**
-     * @param type     0：手机号+密码 1：手机号+验证码 2：华为账号登录
+     * @param type 0：手机号+密码 1：手机号+验证码 2：华为账号登录
      * @param
      * @param
      */
@@ -47,8 +44,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
         LoginRequestBean bean = new LoginRequestBean();
         bean.phone = phone;
-//        bean.carrier = Tools.getPhoneType();
-        bean.carrier = "android";
+        bean.carrier = Tools.getPhoneType();
         bean.type = type;
         if (type == 0) {//密码登录
             bean.passWord = pwd;
@@ -60,23 +56,35 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 .subscribe(new ResponseSubscriber<BaseData<UserBean>>(view) {
                     @Override
                     public void success(BaseData<UserBean> baseData) {
-                        Log.e("loginAction","---success");
-                        PreferencesHelper.saveData(Constant.LOGIN_STATUE,"1");
-                        SharePrefsUtils.putValue(getContext(),"phone",phone);
-                        UserHelper.saveUser(baseData.data);
-                        view.loginSuccess();
 
+                        Log.e("loginAction", "---code:" + baseData.code + ",token:" + baseData.data.token);
+                        if (baseData.code == 0) {
+                            PreferencesHelper.saveData(Constant.LOGIN_STATUE, "1");
+                            PreferencesHelper.saveData("phone", phone);
+                            UserHelper.saveUser(baseData.data);
+                            if (null != PreferencesHelper.getData("phone")) {
+                                PreferencesHelper.remove("phone");
+                            }
+                            if (null != PreferencesHelper.getData("token")) {
+                                PreferencesHelper.remove("token");
+                            }
+                            PreferencesHelper.saveData("token", baseData.data.token);
+                            view.loginSuccess();
+                        } else {
+                            view.loginFailure();
+                        }
                     }
                 });
     }
 
     /**
      * 注册
+     *
      * @param phone
      * @param pwd
      * @param captcha
      */
-    public void registerAction(String phone, String pwd, String captcha){
+    public void registerAction(String phone, String pwd, String captcha) {
         LoginRequestBean bean = new LoginRequestBean();
         bean.phone = phone;
         bean.passWord = pwd;
@@ -86,18 +94,19 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override
                     public void success(BaseData baseData) {
-                        view.registerSuccess(baseData.data.toString());
+                        if (baseData.code == 0) {
+                            view.registerSuccess();
+                        }
                     }
                 });
     }
 
     /**
-     *
-     * @param type type:短信类型（1:获取注册短信验证码;2:获取找回密码短信,3:获取登录验证码）
-    phone:手机号码
+     * @param type  type:短信类型（1:获取注册短信验证码;2:获取找回密码短信,3:获取登录验证码）
+     *              phone:手机号码
      * @param phone
      */
-    public void getCodeAction(int type,String phone){
+    public void getCodeAction(int type, final String phone) {
         LoginRequestBean bean = new LoginRequestBean();
         bean.type = type;
         bean.phone = phone;
@@ -106,22 +115,25 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override
                     public void success(BaseData baseData) {
-                        view.getCodeSuccess(baseData.data.toString());
+                        PreferencesHelper.saveData("phone", phone);
+                        view.getCodeSuccess();
                     }
                 });
     }
 
-    private boolean checkLoginInput(String account, String password) {
-        if (TextUtils.isEmpty(account)) {
-            ToastMgr.show(getContext().getString(R.string.hint_input_phone));
-            return false;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            ToastMgr.show(getContext().getString(R.string.hint_input_password));
-            return false;
-        }
-
-        return true;
+    /**
+     * 重置密码
+     *
+     * @param bean
+     */
+    public void restPwdAction(RestPwdRequestBean bean) {
+        api.restPwd(bean)
+                .compose(new ResponseTransformer<BaseData>())
+                .subscribe(new ResponseSubscriber<BaseData>() {
+                    @Override
+                    public void success(BaseData baseData) {
+                        view.loginSuccess();
+                    }
+                });
     }
 }

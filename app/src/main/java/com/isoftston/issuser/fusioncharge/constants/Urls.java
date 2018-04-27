@@ -18,6 +18,11 @@ public class Urls {
     public static final String LOGIN = "user/login";
     //注册
     public static final String REGISTER = "user/register";
+    //忘记密码
+    public static final String RESET_PWD = "user/restpwd";
+    //修改密码
+    public static final String MODIFY_PWD = "user/modifypwd";
+    //获取验证码
     public static final String GET_CODE = "user/captcha";
     //预约
     public static final String APPOINT_CHARGE = "charging/reserve";

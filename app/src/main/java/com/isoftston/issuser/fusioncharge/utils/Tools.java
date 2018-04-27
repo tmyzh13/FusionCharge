@@ -247,10 +247,10 @@ public class Tools {
                 isUpperCase = true;
             }
         }
-//        String regex = "^[a-zA-Z0-9]{6,16}$";
+        String regex = "^[a-zA-Z0-9]{6,12}$";
 //        String regex = "(?!^[^\\u4E00-\\u9FA5a-zA-Z\\d]+$)^.{6,16}$";
 //        String regex = "^(?![\\d]+$)(?![a-zA-Z]+$)(?![^\\da-zA-Z]+$).{6,20}$";
-        String regex = "([a-zA-Z0-9]+$).{6,20}$";
+//        String regex = "([a-zA-Z0-9]+$).{6,20}$";
         boolean isRight = isDigit && isLowerCase && str.matches(regex);
         return isRight;
     }

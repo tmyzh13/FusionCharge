@@ -284,4 +284,11 @@
     <string name="useing_no_charge">使用中（未充电）</string>
     <string name="appoingment_ing">预约中</string>
     <string name="stop_server">停止服务</string>
+
+    <string name="oder">订单编号：</string>
+    <string name="charge_pile_address">电桩地址</string>
+    <string name="total_fee">总费用</string>
+    <string name="rest_pwd_success">重置密码成功！</string>
+    <string name="pwd2_not_agumention">两次密码不一致！</string>
+    <string name="account_pwd_fault">账号或密码错误，请重新输入</string>
 </resources>

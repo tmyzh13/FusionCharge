@@ -99,6 +99,7 @@
     </LinearLayout>
     <!--左侧滑动栏-->
     <LinearLayout
+        android:clickable="true"
         android:id="@+id/main_left_drawer_layout"
         android:layout_width="300dp"
         android:layout_height="match_parent"
@@ -153,6 +154,7 @@
                 android:src="@mipmap/icn_my_order"/>
 
             <TextView
+                android:id="@+id/my_order_tv"
                 style="@style/text_normal"
                 android:text="@string/home_my_order"
                 android:layout_marginLeft="25dp"
@@ -240,6 +242,7 @@
     <!-- 右侧滑动栏 -->
 
     <LinearLayout
+        android:clickable="true"
         android:id="@+id/main_right_drawer_layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
