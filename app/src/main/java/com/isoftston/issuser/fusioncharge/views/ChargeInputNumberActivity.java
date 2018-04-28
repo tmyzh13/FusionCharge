@@ -80,8 +80,8 @@ public class ChargeInputNumberActivity extends BaseActivity {
         showLoading();
 
         if(UserHelper.getSavedUser()==null|| Tools.isNull(UserHelper.getSavedUser().token)){
-            startActivity(LoginActivity.getLauncher(this));
             hideLoading();
+            startActivity(LoginActivity.getLauncher(this));
             return;
         }
 
@@ -165,11 +165,13 @@ public class ChargeInputNumberActivity extends BaseActivity {
                     @Override
                     public void success(MyOrderData baseData) {
                         Log.e("zw"," success : " + baseData.toString());
+                        Log.e("zw", "my order success : " + baseData.rawRecords.toString());
                     }
 
                     @Override
                     public boolean operationError(MyOrderData baseData, int status, String message) {
                         Log.e("zw"," base : " + baseData.toString());
+                        Log.e("zw","my order error : " + baseData.rawRecords.toString());
 
                         return super.operationError(baseData, status, message);
                     }

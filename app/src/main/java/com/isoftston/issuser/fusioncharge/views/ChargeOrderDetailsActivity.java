@@ -215,7 +215,6 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         showLoading();
 
         OrderRequestInfo info = new OrderRequestInfo();
-        Log.e("zw",scanChargeInfo.toString());
         info.setChargingPileName(scanChargeInfo.getChargingPileName());
         //TODO 后续替换
         info.setVirtualId("0004d2");
@@ -226,6 +225,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         info.setGunCode(chooseGun.getGunCode());
 //        info.setControlInfo(2 + "");
         info.setControlInfo(chooseStyle + "");
+        //TODO 写死状态，后续替换
         info.setChargingPileId(14);
 //        info.setChargingPileId(scanChargeInfo.getChargingPileId());
         if(chooseStyle != WITH_FULL){
@@ -234,7 +234,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
         }else{
             info.setControlData("0");
         }
-        //设置充电模式，交流为慢，直流为快
+        //设置充电模式，交流为慢(1)，直流为快(2)
         if(chooseGun.getGunType() == CHARGE_GUN_FAST){
             info.setChargingMode(CHARGE_MODE_FAST);
         } else {
@@ -246,9 +246,15 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                 .subscribe(new ResponseSubscriber<BaseData>() {
                     @Override
                     public void success(BaseData baseData) {
-                        Log.e("zw","info : success");
-                        Log.e("zw",baseData.data.toString());
-                        int code = Integer.parseInt(baseData.data.toString());
+                        int code = -1;
+                        try {
+                            code = Integer.parseInt(baseData.data.toString());
+                        } catch (Exception e) {
+                            showToast(getString(R.string.wrong_response));
+                            hideLoading();
+                            return;
+                        }
+
                         if(code == 4) {
                             HomeChargeOrderBean homeChargeOrderBean = new HomeChargeOrderBean();
                             homeChargeOrderBean.virtualId = scanChargeInfo.getVirtualId();
@@ -256,6 +262,8 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                             startActivity(ChagerStatueActivity.getLauncher(ChargeOrderDetailsActivity.this,homeChargeOrderBean));
                         } else if( code == 5) {
                             showToast(getString(R.string.request_refuse));
+                        } else {
+                            showToast(getString(R.string.wrong_response));
                         }
 
                         hideLoading();
@@ -267,6 +275,7 @@ public class ChargeOrderDetailsActivity extends BaseActivity implements RadioGro
                         if(baseData.code == 403) {
                             goLogin();
                         }
+                        Log.e("zw",baseData.toString());
                         showToast(getString(R.string.wrong_request));
                         return super.operationError(baseData, status, message);
                     }

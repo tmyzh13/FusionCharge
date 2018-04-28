@@ -24,22 +24,34 @@ public class MyOrderData implements ResponseHandler.IBaseData{
 
     @Override
     public boolean isSuccess() {
-        return false;
+        return code == 0;
     }
 
     @Override
     public int status() {
-        return 0;
+        return code;
     }
 
     @Override
     public Object data() {
-        return null;
+        return rawRecords;
     }
 
     @Override
     public String msg() {
         return null;
+    }
+
+    public String page(){
+        return page;
+    }
+
+    public String rp(){
+        return rp;
+    }
+
+    public String total(){
+        return total;
     }
 
     @Override

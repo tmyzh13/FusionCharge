@@ -48,6 +48,7 @@ public class MyOrderActivity extends BaseActivity {
 
 //        adapter = new OrderListAdapter(context,list);
 //        order_lv.setAdapter(adapter);
+
     }
 
     @Override

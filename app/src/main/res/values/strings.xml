@@ -272,7 +272,7 @@
     <string name="no_user_info">没有获取到信息。</string>
     <string name="unknown_error">未知错误。</string>
     <string name="please_take_qrcode">请对准二维码</string>
-    <string name="wrong_request">请求出现错误！</string>
+    <string name="wrong_request">服务端请求数据返回出错！</string>
     <string name="time_out">连接超时。</string>
     <string name="no_data">未获取到数据！</string>
 
@@ -295,4 +295,5 @@
     <string name="pwd2_not_agumention">两次密码不一致！</string>
     <string name="account_pwd_fault">账号或密码错误，请重新输入</string>
     <string name="request_refuse">请求被拒绝！</string>
+    <string name="wrong_response">返回值出现错误！</string>
 </resources>
